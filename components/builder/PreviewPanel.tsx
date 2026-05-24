@@ -1,12 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import { Mail, MapPin } from "lucide-react";
 import { parseSkills, useBuilderProfile } from "@/lib/stores/builderStore";
+import { getFeaturedProjects, getInitials } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 
 const placeholders = {
   fullName: "Your Name",
   jobTitle: "Your Role",
+  headline: "Your headline or tagline",
   bio: "Your bio will appear here. Share what you do, what you care about, and what makes your work distinctive.",
   skill: "Add skills",
 };
@@ -27,14 +30,19 @@ function contactEmail(fullName: string): string {
 export function PreviewPanel() {
   const profile = useBuilderProfile();
   const skills = parseSkills(profile.skills);
+  const projects = getFeaturedProjects(profile);
   const name = displayValue(profile.fullName, placeholders.fullName);
   const title = displayValue(profile.jobTitle, placeholders.jobTitle);
+  const headline = displayValue(profile.headline, placeholders.headline);
   const bio = displayValue(profile.bio, placeholders.bio);
+  const initials = getInitials(profile.fullName);
   const isPlaceholder = {
     name: !profile.fullName.trim(),
     title: !profile.jobTitle.trim(),
+    headline: !profile.headline.trim(),
     bio: !profile.bio.trim(),
     skills: skills.length === 0,
+    avatar: !profile.avatarUrl,
   };
 
   return (
@@ -57,7 +65,6 @@ export function PreviewPanel() {
             "transition-shadow duration-300"
           )}
         >
-          {/* Preview chrome */}
           <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
             <div className="flex gap-1.5">
               <span className="size-2.5 rounded-full bg-zinc-700" />
@@ -70,7 +77,6 @@ export function PreviewPanel() {
           </div>
 
           <div className="transition-opacity duration-300">
-            {/* Nav */}
             <nav className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4 sm:px-8">
               <span
                 className={cn(
@@ -82,20 +88,49 @@ export function PreviewPanel() {
               </span>
               <div className="hidden gap-6 text-xs text-zinc-500 sm:flex">
                 <span>About</span>
-                <span>Skills</span>
+                <span>Work</span>
                 <span>Contact</span>
               </div>
             </nav>
 
-            {/* Hero */}
             <section className="relative overflow-hidden px-6 py-12 sm:px-8 sm:py-16">
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-600/15 via-transparent to-fuchsia-600/10"
               />
               <div className="relative space-y-4 transition-all duration-300">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400/90">
-                  Portfolio
+                <div className="flex items-center gap-4">
+                  <div
+                    className={cn(
+                      "relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-sm font-semibold",
+                      isPlaceholder.avatar && isPlaceholder.name
+                        ? "border-white/[0.08] bg-white/[0.03] text-zinc-600"
+                        : "border-violet-500/25 bg-violet-500/10 text-white"
+                    )}
+                  >
+                    {profile.avatarUrl ? (
+                      <Image
+                        src={profile.avatarUrl}
+                        alt=""
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    ) : (
+                      initials
+                    )}
+                  </div>
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400/90">
+                    Portfolio
+                  </p>
+                </div>
+                <p
+                  className={cn(
+                    "text-base font-medium leading-snug transition-colors duration-300 sm:text-lg",
+                    isPlaceholder.headline ? "text-zinc-600" : "text-violet-200/90"
+                  )}
+                >
+                  {headline}
                 </p>
                 <h2
                   className={cn(
@@ -116,7 +151,6 @@ export function PreviewPanel() {
               </div>
             </section>
 
-            {/* About */}
             <section className="border-t border-white/[0.06] px-6 py-10 sm:px-8">
               <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
                 About
@@ -131,7 +165,45 @@ export function PreviewPanel() {
               </p>
             </section>
 
-            {/* Skills */}
+            <section className="border-t border-white/[0.06] px-6 py-10 sm:px-8">
+              <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                Featured projects
+              </h3>
+              {projects.length > 0 ? (
+                <ul className="mt-5 space-y-3">
+                  {projects.map((project) => (
+                    <li
+                      key={project.id}
+                      className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors duration-300"
+                    >
+                      <p className="font-medium text-white">{project.title}</p>
+                      {project.description ? (
+                        <p className="mt-1 text-sm text-zinc-500">
+                          {project.description}
+                        </p>
+                      ) : null}
+                      {project.techStack.length > 0 ? (
+                        <ul className="mt-3 flex flex-wrap gap-1.5">
+                          {project.techStack.map((tech) => (
+                            <li
+                              key={tech}
+                              className="rounded-md bg-white/[0.04] px-2 py-0.5 text-[10px] text-zinc-500"
+                            >
+                              {tech}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 text-sm text-zinc-600">
+                  Add projects in the form to preview them here.
+                </p>
+              )}
+            </section>
+
             <section className="border-t border-white/[0.06] px-6 py-10 sm:px-8">
               <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
                 Skills
@@ -155,7 +227,6 @@ export function PreviewPanel() {
               </ul>
             </section>
 
-            {/* Contact */}
             <section className="border-t border-white/[0.06] bg-white/[0.02] px-6 py-10 sm:px-8">
               <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
                 Contact

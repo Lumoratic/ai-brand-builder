@@ -2,9 +2,10 @@
 
 import { parseSkills, useBuilderProfile } from "@/lib/stores/builderStore";
 import {
-  buildProjects,
   buildServices,
   buildStats,
+  getFeaturedProjects,
+  hasFeaturedProjects,
 } from "@/lib/portfolio-utils";
 import { PortfolioAbout } from "@/components/portfolio/PortfolioAbout";
 import { PortfolioContact, PortfolioFooter } from "@/components/portfolio/PortfolioContact";
@@ -19,7 +20,9 @@ export function PortfolioView() {
   const skills = parseSkills(profile.skills);
   const hasSkills = skills.length > 0;
 
-  const projects = buildProjects(profile);
+  const hasProjects = hasFeaturedProjects(profile);
+
+  const projects = getFeaturedProjects(profile);
   const services = buildServices(profile);
   const stats = buildStats(profile);
 
@@ -30,7 +33,7 @@ export function PortfolioView() {
         <PortfolioHero profile={profile} />
         <PortfolioStats stats={stats} />
         <PortfolioAbout profile={profile} />
-        <PortfolioProjects projects={projects} hasSkills={hasSkills} />
+        <PortfolioProjects projects={projects} hasProjects={hasProjects} />
         <PortfolioServices services={services} hasSkills={hasSkills} />
         <PortfolioContact profile={profile} />
       </main>

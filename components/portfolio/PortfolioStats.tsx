@@ -20,7 +20,7 @@ export function PortfolioStats({ stats }: PortfolioStatsProps) {
         variants={staggerContainer}
         {...inView}
         viewport={{ once: true, margin: "-40px" }}
-        className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-3 sm:gap-6"
+        className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6"
       >
         {stats.map((stat) => (
           <motion.div

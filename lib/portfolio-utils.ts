@@ -30,9 +30,26 @@ export function getFirstName(fullName: string): string {
 export type PortfolioProject = {
   id: string;
   title: string;
-  category: string;
   description: string;
+  link?: string;
+  techStack: string[];
 };
+
+export function getFeaturedProjects(profile: BuilderProfile): PortfolioProject[] {
+  return profile.projects
+    .filter((project) => project.title.trim() || project.description.trim())
+    .map((project) => ({
+      id: project.id,
+      title: project.title.trim(),
+      description: project.description.trim(),
+      link: project.link.trim() || undefined,
+      techStack: parseSkills(project.techStack),
+    }));
+}
+
+export function hasFeaturedProjects(profile: BuilderProfile): boolean {
+  return getFeaturedProjects(profile).length > 0;
+}
 
 export type PortfolioService = {
   id: string;
@@ -53,22 +70,6 @@ export type SocialLink = {
   external?: boolean;
 };
 
-export function buildProjects(profile: BuilderProfile): PortfolioProject[] {
-  const skills = parseSkills(profile.skills);
-  const category = profile.jobTitle.trim() || "Focus area";
-  const bioSnippet = profile.bio.trim().split(/[.!?]/)[0]?.trim();
-
-  return skills.slice(0, 3).map((skill) => ({
-    id: skill,
-    title: skill,
-    category,
-    description:
-      bioSnippet && bioSnippet.length > 0
-        ? bioSnippet
-        : `Hands-on ${skill.toLowerCase()} work aligned with my role as ${category.toLowerCase()}.`,
-  }));
-}
-
 export function buildServices(profile: BuilderProfile): PortfolioService[] {
   const skills = parseSkills(profile.skills);
   const role = profile.jobTitle.trim();
@@ -86,8 +87,14 @@ export function buildStats(profile: BuilderProfile): PortfolioStat[] {
   const skills = parseSkills(profile.skills);
   const hasBio = profile.bio.trim().length > 0;
   const hasRole = profile.jobTitle.trim().length > 0;
+  const projectCount = getFeaturedProjects(profile).length;
 
   return [
+    {
+      id: "projects",
+      label: "Featured projects",
+      value: projectCount > 0 ? String(projectCount) : "—",
+    },
     {
       id: "skills",
       label: "Core skills",
@@ -132,7 +139,10 @@ export function hasPortfolioContent(profile: BuilderProfile): boolean {
   return Boolean(
     profile.fullName.trim() ||
       profile.jobTitle.trim() ||
+      profile.headline.trim() ||
       profile.bio.trim() ||
-      profile.skills.trim()
+      profile.skills.trim() ||
+      profile.avatarUrl.trim() ||
+      hasFeaturedProjects(profile)
   );
 }

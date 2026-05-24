@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
   const mounted = useMounted();
   const name = displayValue(profile.fullName, "Your Name");
   const title = displayValue(profile.jobTitle, "Your Role");
+  const headline = profile.headline.trim();
   const bio = profile.bio.trim();
   const email = contactEmail(profile.fullName);
   const initials = getInitials(profile.fullName);
@@ -48,13 +50,24 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             >
               <div
                 className={cn(
-                  "relative flex size-20 shrink-0 items-center justify-center rounded-2xl border text-xl font-semibold tracking-tight sm:size-24 sm:text-2xl",
-                  hasName
+                  "relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border text-xl font-semibold tracking-tight sm:size-24 sm:text-2xl",
+                  profile.avatarUrl || hasName
                     ? "border-violet-500/30 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 text-white shadow-[0_0_40px_-10px_oklch(0.55_0.25_280/0.5)]"
                     : "border-white/[0.08] bg-white/[0.03] text-zinc-600"
                 )}
               >
-                {initials}
+                {profile.avatarUrl ? (
+                  <Image
+                    src={profile.avatarUrl}
+                    alt={hasName ? `${name} profile photo` : "Profile photo"}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                    priority
+                  />
+                ) : (
+                  initials
+                )}
                 {hasName ? (
                   <span className="absolute -bottom-1 -right-1 size-3.5 rounded-full border-2 border-[oklch(0.07_0.012_280)] bg-emerald-500" />
                 ) : null}
@@ -76,10 +89,20 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
               Personal portfolio
             </motion.p>
 
+            {headline ? (
+              <motion.p
+                {...getFadeUp(mounted, 0.12)}
+                className="mt-5 max-w-2xl text-xl font-medium leading-snug tracking-tight text-violet-200/90 sm:text-2xl lg:text-3xl"
+              >
+                {headline}
+              </motion.p>
+            ) : null}
+
             <motion.h1
               {...getFadeUp(mounted, 0.15)}
               className={cn(
-                "mt-5 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.5rem]",
+                headline ? "mt-4" : "mt-5",
+                "text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.5rem]",
                 hasName ? "text-white" : "text-zinc-600"
               )}
             >
@@ -128,10 +151,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             </motion.div>
           </div>
 
-          <motion.div
-            {...getFadeUp(mounted, 0.35)}
-            className="lg:pb-2"
-          >
+          <motion.div {...getFadeUp(mounted, 0.35)} className="lg:pb-2">
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
               Connect
             </p>

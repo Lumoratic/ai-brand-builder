@@ -2,6 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import { AvatarUpload } from "@/components/builder/AvatarUpload";
+import { ProjectsEditor } from "@/components/builder/ProjectsEditor";
+import {
+  builderInputClassName,
+  builderLabelClassName,
+} from "@/components/builder/builder-styles";
 import { Button } from "@/components/ui/button";
 import {
   useBuilderProfile,
@@ -23,14 +29,13 @@ const fields = [
     placeholder: "Senior Product Designer",
     type: "text",
   },
+  {
+    id: "headline" as const,
+    label: "Headline / Tagline",
+    placeholder: "Designing products that feel inevitable.",
+    type: "text",
+  },
 ] as const;
-
-const inputClassName = cn(
-  "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3",
-  "text-sm text-white placeholder:text-zinc-600",
-  "outline-none transition-[border-color,box-shadow,background-color] duration-200",
-  "focus:border-violet-500/40 focus:bg-white/[0.05] focus:ring-2 focus:ring-violet-500/20"
-);
 
 export function FormPanel() {
   const profile = useBuilderProfile();
@@ -53,12 +58,14 @@ export function FormPanel() {
         className="flex flex-1 flex-col gap-8 overflow-y-auto px-6 py-8 sm:px-8"
         onSubmit={(e) => e.preventDefault()}
       >
+        <AvatarUpload
+          fullName={profile.fullName}
+          avatarUrl={profile.avatarUrl}
+        />
+
         {fields.map((field) => (
           <div key={field.id} className="space-y-2.5">
-            <label
-              htmlFor={field.id}
-              className="block text-xs font-medium uppercase tracking-wider text-zinc-500"
-            >
+            <label htmlFor={field.id} className={builderLabelClassName}>
               {field.label}
             </label>
             <input
@@ -67,17 +74,14 @@ export function FormPanel() {
               value={profile[field.id]}
               onChange={(e) => setField(field.id, e.target.value)}
               placeholder={field.placeholder}
-              className={inputClassName}
+              className={builderInputClassName}
               autoComplete="off"
             />
           </div>
         ))}
 
         <div className="space-y-2.5">
-          <label
-            htmlFor="bio"
-            className="block text-xs font-medium uppercase tracking-wider text-zinc-500"
-          >
+          <label htmlFor="bio" className={builderLabelClassName}>
             Short Bio
           </label>
           <textarea
@@ -86,15 +90,14 @@ export function FormPanel() {
             onChange={(e) => setField("bio", e.target.value)}
             placeholder="A brief introduction about your work, passions, and what you're looking for next."
             rows={5}
-            className={cn(inputClassName, "resize-none leading-relaxed")}
+            className={cn(builderInputClassName, "resize-none leading-relaxed")}
           />
         </div>
 
+        <ProjectsEditor />
+
         <div className="space-y-2.5">
-          <label
-            htmlFor="skills"
-            className="block text-xs font-medium uppercase tracking-wider text-zinc-500"
-          >
+          <label htmlFor="skills" className={builderLabelClassName}>
             Skills
           </label>
           <input
@@ -103,7 +106,7 @@ export function FormPanel() {
             value={profile.skills}
             onChange={(e) => setField("skills", e.target.value)}
             placeholder="Figma, React, User Research, Design Systems"
-            className={inputClassName}
+            className={builderInputClassName}
             autoComplete="off"
           />
           <p className="text-xs text-zinc-600">Separate skills with commas</p>
