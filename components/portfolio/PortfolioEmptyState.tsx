@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { portfolioPanelSurface } from "@/components/portfolio/portfolio-layout";
 
 type PortfolioEmptyStateProps = {
   title: string;
@@ -14,12 +15,13 @@ export function PortfolioEmptyState({
   return (
     <div
       className={cn(
-        "rounded-2xl bg-white/[0.015] px-8 py-16 sm:px-12 sm:py-20",
+        portfolioPanelSurface,
+        "px-6 py-12 sm:px-10 sm:py-16 lg:px-12 lg:py-20",
         className
       )}
     >
-      <p className="text-base text-zinc-300">{title}</p>
-      <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-400">
+      <p className="text-base text-zinc-200 sm:text-[17px]">{title}</p>
+      <p className="mt-3 max-w-md text-sm leading-[1.75] text-zinc-300 sm:text-[15px]">
         {description}
       </p>
     </div>

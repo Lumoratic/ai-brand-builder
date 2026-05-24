@@ -28,12 +28,12 @@ export function PortfolioAbout({ profile }: PortfolioAboutProps) {
     >
       <motion.div
         {...getFadeInView(mounted)}
-        className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-20"
+        className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-20"
       >
         <p
           className={cn(
             "max-w-2xl text-lg leading-[1.85] lg:text-xl lg:leading-[1.8]",
-            hasBio ? "text-zinc-200" : "text-zinc-400"
+            hasBio ? "text-zinc-200" : "text-zinc-300"
           )}
         >
           {bio}

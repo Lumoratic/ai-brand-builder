@@ -7,6 +7,7 @@ import type { PortfolioService } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
 import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
+import { portfolioPanelSurface } from "@/components/portfolio/portfolio-layout";
 
 type PortfolioServicesProps = {
   services: PortfolioService[];
@@ -23,24 +24,25 @@ function CapabilityBlock({
   return (
     <article
       className={cn(
-        featured ? "max-w-3xl" : "max-w-xl",
-        featured && "lg:max-w-none lg:pr-16"
+        portfolioPanelSurface,
+        "transition-[border-color,box-shadow] duration-500 hover:border-white/[0.08] hover:shadow-[inset_0_1px_0_0_oklch(1_0_0/0.06),0_20px_40px_-22px_oklch(0_0_0/0.85)]",
+        featured ? "p-7 sm:p-9 lg:p-10" : "p-6 sm:p-8"
       )}
     >
       <h3
         className={cn(
           "font-semibold tracking-[-0.025em] text-white",
           featured
-            ? "text-2xl leading-tight sm:text-3xl"
-            : "text-xl leading-snug sm:text-2xl"
+            ? "text-xl leading-tight sm:text-2xl lg:text-3xl"
+            : "text-lg leading-snug sm:text-xl"
         )}
       >
         {service.title}
       </h3>
       <p
         className={cn(
-          "mt-5 leading-[1.8] text-zinc-300",
-          featured ? "text-base sm:text-[17px]" : "text-sm sm:text-base"
+          "mt-4 leading-[1.8] text-zinc-300 sm:mt-5",
+          featured ? "text-[15px] sm:text-base lg:text-[17px]" : "text-sm sm:text-[15px]"
         )}
       >
         {service.description}
@@ -67,7 +69,7 @@ export function PortfolioServices({ services, hasSkills }: PortfolioServicesProp
           variants={staggerContainer}
           {...inView}
           viewport={{ once: true, margin: "-60px" }}
-          className="space-y-16 lg:space-y-20"
+          className="space-y-5 sm:space-y-6 lg:space-y-8"
         >
           <motion.div variants={staggerItem}>
             <CapabilityBlock service={primary} featured />
@@ -76,7 +78,7 @@ export function PortfolioServices({ services, hasSkills }: PortfolioServicesProp
           {rest.length > 0 ? (
             <motion.div
               variants={staggerContainer}
-              className="grid gap-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-0"
+              className="grid gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-8"
             >
               {rest.map((service) => (
                 <motion.div key={service.id} variants={staggerItem}>

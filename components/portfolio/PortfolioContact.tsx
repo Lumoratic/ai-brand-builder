@@ -28,14 +28,15 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
   return (
     <section
       id="contact"
-      className={cn(
-        "relative overflow-hidden",
-        portfolioSectionY
-      )}
+      className={cn("relative overflow-hidden pb-8 sm:pb-12", portfolioSectionY)}
     >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,oklch(0.4_0.18_280/0.12),transparent_70%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[oklch(0.07_0.012_280)] sm:h-40"
       />
 
       <motion.div
@@ -52,7 +53,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
               ? `Let’s create something meaningful, ${firstName}.`
               : "Let’s create something meaningful together."}
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-300 lg:mx-0 lg:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-300 sm:mt-6 sm:text-base lg:mx-0 lg:text-lg">
             I partner with teams and founders who value clarity, craft, and
             work that earns trust. Tell me about your project — I reply within
             two business days.
@@ -107,19 +108,23 @@ export function PortfolioFooter({ fullName }: PortfolioFooterProps) {
   const firstName = getFirstName(fullName);
 
   return (
-    <footer>
+    <footer className="relative">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 -top-16 h-16 bg-gradient-to-b from-transparent to-[oklch(0.07_0.012_280)] sm:-top-20 sm:h-20"
+      />
       <div
         className={cn(
           portfolioContainerWide,
-          "flex flex-col items-center justify-between gap-4 py-12 sm:flex-row"
+          "relative flex flex-col items-center justify-between gap-4 pb-16 pt-6 sm:flex-row sm:pb-20 sm:pt-8"
         )}
       >
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-400">
           © {firstName} · Personal portfolio
         </p>
         <Link
           href="/builder"
-          className="text-sm text-zinc-500 transition-colors hover:text-zinc-300"
+          className="text-sm text-zinc-400 transition-colors hover:text-zinc-200"
         >
           Built with BrandSpark
         </Link>

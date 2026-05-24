@@ -42,21 +42,26 @@ export function PortfolioSection({
           </p>
           <h2
             className={cn(
-              "mt-5 font-semibold tracking-[-0.03em] text-white",
+              "mt-4 font-semibold tracking-[-0.03em] text-white sm:mt-5",
               featured
-                ? "text-3xl sm:text-4xl lg:text-5xl lg:leading-[1.08]"
+                ? "text-2xl sm:text-4xl lg:text-5xl lg:leading-[1.08]"
                 : "text-2xl sm:text-3xl lg:text-4xl"
             )}
           >
             {title}
           </h2>
           {description ? (
-            <p className="mt-5 max-w-2xl text-base leading-[1.75] text-zinc-300 lg:text-[17px]">
+            <p className="mt-4 max-w-2xl text-[15px] leading-[1.75] text-zinc-300 sm:mt-5 sm:text-base lg:text-[17px]">
               {description}
             </p>
           ) : null}
         </div>
-        <div className={cn("mt-14 lg:mt-16", featured && "mt-16 lg:mt-20")}>
+        <div
+          className={cn(
+            "mt-10 sm:mt-12 lg:mt-14",
+            featured && "mt-10 sm:mt-14 lg:mt-16"
+          )}
+        >
           {children}
         </div>
       </div>

@@ -8,6 +8,10 @@ import type { PortfolioProject } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
 import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
+import {
+  portfolioCardHover,
+  portfolioCardSurface,
+} from "@/components/portfolio/portfolio-layout";
 
 type PortfolioProjectsProps = {
   projects: PortfolioProject[];
@@ -25,7 +29,9 @@ function CinematicThumbnail({
     <div
       className={cn(
         "relative w-full shrink-0 overflow-hidden bg-[oklch(0.06_0.01_280)]",
-        featured ? "aspect-[2/1] sm:aspect-[21/9]" : "aspect-[16/10]"
+        featured
+          ? "aspect-[16/10] sm:aspect-[2/1] lg:aspect-[21/9]"
+          : "aspect-[16/10] sm:aspect-[5/3]"
       )}
     >
       <Image
@@ -33,23 +39,20 @@ function CinematicThumbnail({
         alt=""
         fill
         unoptimized
-        className="object-cover brightness-[0.9] saturate-[0.88] transition-[transform,filter] duration-700 group-hover:scale-[1.015] group-hover:brightness-[0.95]"
+        sizes={featured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 40vw"}
+        className="object-cover object-center brightness-[0.92] saturate-[0.9] transition-[transform,filter] duration-700 group-hover:scale-[1.012] group-hover:brightness-[0.96]"
       />
       <div
         aria-hidden
-        className="absolute inset-0 shadow-[inset_0_0_120px_oklch(0_0_0/0.4)]"
+        className="absolute inset-0 shadow-[inset_0_0_100px_oklch(0_0_0/0.35)]"
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,oklch(1_0_0/0.05),transparent_55%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,oklch(1_0_0/0.06),transparent_50%)]"
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-[oklch(0.075_0.012_280)] via-[oklch(0.075_0.012_280)/0.55] to-transparent"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 h-px bg-white/[0.06]"
+        className="absolute inset-0 bg-gradient-to-t from-[oklch(0.075_0.012_280)] via-[oklch(0.075_0.012_280)/0.65] to-[oklch(0.075_0.012_280)/0.08]"
       />
     </div>
   );
@@ -65,18 +68,22 @@ function PlaceholderThumbnail({
   return (
     <div
       className={cn(
-        "relative shrink-0 overflow-hidden bg-[oklch(0.06_0.01_280)]",
+        "relative shrink-0 overflow-hidden bg-[linear-gradient(160deg,oklch(0.08_0.014_280)_0%,oklch(0.06_0.01_280)_100%)]",
         featured
-          ? "aspect-[16/10] w-full lg:aspect-auto lg:min-h-[280px] lg:w-[44%]"
-          : "aspect-[16/10] w-full"
+          ? "aspect-[16/10] w-full sm:aspect-[2/1] lg:aspect-auto lg:min-h-[240px] lg:w-[42%] lg:aspect-[4/5]"
+          : "aspect-[16/10] w-full sm:aspect-[5/3]"
       )}
     >
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,oklch(0.35_0.12_280/0.12),transparent_60%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_25%_15%,oklch(0.38_0.14_280/0.14),transparent_58%)]"
       />
-      <div className="absolute inset-0 flex items-end p-6 sm:p-8">
-        <span className="text-5xl font-semibold tracking-tighter text-white/[0.04] sm:text-6xl">
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_90%,oklch(0.28_0.1_300/0.08),transparent_50%)]"
+      />
+      <div className="absolute inset-0 flex items-end p-5 sm:p-7">
+        <span className="text-4xl font-semibold tracking-tighter text-white/[0.06] sm:text-5xl lg:text-6xl">
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
@@ -98,9 +105,9 @@ function ProjectCard({
   return (
     <article
       className={cn(
-        "group relative flex h-full overflow-hidden rounded-2xl border border-white/[0.05] bg-[oklch(0.075_0.012_280)]",
-        "transition-[border-color,box-shadow] duration-500",
-        "hover:border-white/[0.08] hover:shadow-[0_20px_50px_-30px_oklch(0_0_0/0.9)]",
+        "group relative flex h-full overflow-hidden",
+        portfolioCardSurface,
+        portfolioCardHover,
         hasThumbnail
           ? "flex-col"
           : featured
@@ -116,9 +123,9 @@ function ProjectCard({
 
       <div
         className={cn(
-          "flex flex-1 flex-col",
-          featured ? "p-8 sm:p-10 lg:p-12" : "p-7 sm:p-8",
-          hasThumbnail && featured && "pt-7 sm:pt-8 lg:pt-9"
+          "relative flex flex-1 flex-col",
+          featured ? "p-6 sm:p-8 lg:p-11" : "p-5 sm:p-7",
+          hasThumbnail && "bg-[linear-gradient(to_bottom,oklch(0.075_0.012_280)_0%,oklch(0.068_0.012_280)_100%)]"
         )}
       >
         <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-zinc-400">
@@ -127,10 +134,10 @@ function ProjectCard({
 
         <h3
           className={cn(
-            "mt-4 font-semibold tracking-[-0.025em] text-white",
+            "mt-3 font-semibold tracking-[-0.025em] text-white sm:mt-4",
             featured
-              ? "text-2xl leading-tight sm:text-3xl lg:text-[2rem]"
-              : "text-xl leading-snug sm:text-2xl"
+              ? "text-xl leading-tight sm:text-2xl lg:text-[2rem]"
+              : "text-lg leading-snug sm:text-xl"
           )}
         >
           {project.title}
@@ -139,8 +146,8 @@ function ProjectCard({
         {project.description ? (
           <p
             className={cn(
-              "mt-5 leading-[1.75] text-zinc-300",
-              featured ? "max-w-xl text-base sm:text-[17px]" : "text-sm sm:text-base"
+              "mt-4 leading-[1.75] text-zinc-300 sm:mt-5",
+              featured ? "max-w-xl text-[15px] sm:text-base lg:text-[17px]" : "text-sm sm:text-[15px]"
             )}
           >
             {project.description}
@@ -148,17 +155,17 @@ function ProjectCard({
         ) : null}
 
         {project.outcome ? (
-          <p className="mt-6 border-l border-white/[0.06] pl-4 text-sm leading-relaxed text-zinc-200">
+          <p className="mt-5 border-l border-white/[0.08] pl-4 text-sm leading-relaxed text-zinc-200 sm:mt-6">
             {project.outcome}
           </p>
         ) : null}
 
         {project.techStack.length > 0 ? (
-          <ul className="mt-8 flex flex-wrap gap-2">
+          <ul className="mt-6 flex flex-wrap gap-2 sm:mt-7">
             {project.techStack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-md bg-white/[0.04] px-2.5 py-1 text-[11px] tracking-wide text-zinc-300"
+                className="rounded-md bg-white/[0.05] px-2.5 py-1 text-[11px] tracking-wide text-zinc-300"
               >
                 {tech}
               </li>
@@ -191,7 +198,7 @@ export function PortfolioProjects({
           variants={staggerContainer}
           {...inView}
           viewport={{ once: true, margin: "-80px" }}
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
           <motion.div variants={staggerItem}>
             <ProjectCard project={featured} index={0} featured />
@@ -199,7 +206,7 @@ export function PortfolioProjects({
           {rest.length > 0 ? (
             <motion.div
               variants={staggerContainer}
-              className="grid gap-8 lg:grid-cols-2"
+              className="grid gap-6 sm:gap-8 lg:grid-cols-2"
             >
               {rest.map((project, index) => (
                 <motion.div key={project.id} variants={staggerItem}>

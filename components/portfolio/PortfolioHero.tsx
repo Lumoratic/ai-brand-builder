@@ -20,6 +20,58 @@ type PortfolioHeroProps = {
   profile: BuilderProfile;
 };
 
+function HeroAvatar({
+  avatarUrl,
+  name,
+  initials,
+  hasName,
+}: {
+  avatarUrl: string;
+  name: string;
+  initials: string;
+  hasName: boolean;
+}) {
+  return (
+    <div className="relative mx-auto lg:mx-0">
+      <div
+        aria-hidden
+        className="absolute -inset-4 rounded-[2.25rem] bg-[radial-gradient(circle,oklch(0.42_0.18_280/0.22),transparent_68%)] sm:-inset-5 sm:rounded-[2.5rem]"
+      />
+      <div
+        className={cn(
+          "relative size-32 overflow-hidden rounded-[1.5rem] sm:size-40 sm:rounded-[1.75rem] lg:size-48 lg:rounded-[2rem]",
+          "ring-1 ring-white/[0.14]",
+          "shadow-[0_0_0_1px_oklch(1_0_0/0.06),0_24px_48px_-12px_oklch(0_0_0/0.75)]"
+        )}
+      >
+        {avatarUrl ? (
+          <Image
+            src={avatarUrl}
+            alt={hasName ? `${name} profile photo` : "Profile photo"}
+            fill
+            unoptimized
+            className="object-cover"
+            priority
+          />
+        ) : (
+          <div className="relative flex size-full items-center justify-center overflow-hidden bg-[linear-gradient(145deg,oklch(0.34_0.16_280)_0%,oklch(0.24_0.12_295)_42%,oklch(0.15_0.06_280)_100%)]">
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,oklch(1_0_0/0.12),transparent_55%)]"
+            />
+            <span className="relative text-3xl font-semibold tracking-tight text-white/95 sm:text-4xl lg:text-[2.75rem]">
+              {initials}
+            </span>
+          </div>
+        )}
+        {hasName ? (
+          <span className="absolute bottom-3.5 right-3.5 size-2.5 rounded-full border-2 border-[oklch(0.1_0.012_280)] bg-emerald-400 shadow-[0_0_8px_oklch(0.72_0.17_160/0.5)] sm:bottom-4 sm:right-4 sm:size-3" />
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export function PortfolioHero({ profile }: PortfolioHeroProps) {
   const mounted = useMounted();
   const name = displayValue(profile.fullName, "Your Name");
@@ -32,7 +84,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
   const hasName = Boolean(profile.fullName.trim());
 
   return (
-    <section className="relative min-h-[88vh] overflow-hidden">
+    <section className="relative overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-30%,oklch(0.42_0.18_280/0.22),transparent_65%)]"
@@ -45,12 +97,12 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
       <div
         className={cn(
           portfolioContainerWide,
-          "relative flex min-h-[88vh] flex-col justify-center py-20 lg:py-28"
+          "relative pt-10 pb-16 sm:pt-14 sm:pb-20 lg:pt-16 lg:pb-24"
         )}
       >
-        <div className="grid items-center gap-14 lg:grid-cols-[1fr_auto] lg:gap-20">
+        <div className="grid items-start gap-10 sm:gap-12 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16">
           <div className="max-w-3xl">
-            <motion.div {...getFadeUp(mounted, 0.05)} className="mb-10">
+            <motion.div {...getFadeUp(mounted, 0.05)} className="mb-6 sm:mb-8">
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400/90">
                 <span className="size-1.5 rounded-full bg-emerald-400" />
                 Open to new projects
@@ -60,7 +112,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             <motion.h1
               {...getFadeUp(mounted, 0.1)}
               className={cn(
-                "text-[clamp(2.75rem,8vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.04em]",
+                "text-[clamp(2.5rem,7.5vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.04em]",
                 hasName ? "text-white" : "text-zinc-700"
               )}
             >
@@ -70,7 +122,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             <motion.p
               {...getFadeUp(mounted, 0.15)}
               className={cn(
-                "mt-5 text-xl font-medium tracking-tight sm:text-2xl lg:text-[1.75rem] lg:leading-tight",
+                "mt-4 text-xl font-medium tracking-tight sm:mt-5 sm:text-2xl lg:text-[1.75rem] lg:leading-tight",
                 profile.jobTitle.trim() ? "text-zinc-300" : "text-zinc-700"
               )}
             >
@@ -80,7 +132,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {headline ? (
               <motion.p
                 {...getFadeUp(mounted, 0.2)}
-                className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-300 sm:text-xl lg:text-2xl lg:leading-snug"
+                className="mt-5 max-w-2xl text-lg leading-relaxed text-zinc-300 sm:mt-6 sm:text-xl lg:text-2xl lg:leading-snug"
               >
                 {headline}
               </motion.p>
@@ -89,7 +141,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {bio ? (
               <motion.p
                 {...getFadeUp(mounted, 0.25)}
-                className="mt-8 max-w-xl text-base leading-[1.75] text-zinc-300 sm:text-lg"
+                className="mt-5 max-w-xl text-base leading-[1.75] text-zinc-300 sm:mt-6 sm:text-lg"
               >
                 {bio.length > 220 ? `${bio.slice(0, 220).trim()}…` : bio}
               </motion.p>
@@ -97,11 +149,11 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
 
             <motion.div
               {...getFadeUp(mounted, 0.3)}
-              className="mt-12 flex flex-wrap items-center gap-4"
+              className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4"
             >
               <Button
                 asChild
-                className="h-12 rounded-full bg-white px-7 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100"
+                className="h-11 rounded-full bg-white px-6 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100 sm:h-12 sm:px-7"
               >
                 <a href="#contact">
                   Discuss a project
@@ -111,7 +163,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
               <Button
                 asChild
                 variant="outline"
-                className="h-12 rounded-full border-white/10 bg-transparent px-7 text-[15px] text-zinc-300 hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
+                className="h-11 rounded-full border-white/10 bg-transparent px-6 text-[15px] text-zinc-300 hover:border-white/20 hover:bg-white/[0.04] hover:text-white sm:h-12 sm:px-7"
               >
                 <a href="#work">See my work</a>
               </Button>
@@ -119,7 +171,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
 
             <motion.div
               {...getFadeUp(mounted, 0.35)}
-              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 pt-8"
+              className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 sm:mt-8 sm:gap-x-6 sm:pt-4"
             >
               {socialLinks.map((link) => (
                 <a
@@ -134,7 +186,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
                 </a>
               ))}
               <span className="hidden text-zinc-600 sm:inline">·</span>
-              <span className="text-sm text-zinc-500">{email}</span>
+              <span className="text-sm text-zinc-400">{email}</span>
             </motion.div>
           </div>
 
@@ -142,32 +194,12 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {...getFadeUp(mounted, 0.15)}
             className="flex justify-center lg:justify-end"
           >
-            <div
-              className={cn(
-                "relative size-40 overflow-hidden rounded-[1.75rem] border sm:size-48 lg:size-56 lg:rounded-[2rem]",
-                profile.avatarUrl || hasName
-                  ? "border-white/10 shadow-[0_0_0_1px_oklch(1_0_0/0.04),0_32px_64px_-16px_oklch(0_0_0/0.6)]"
-                  : "border-white/[0.08] bg-white/[0.02]"
-              )}
-            >
-              {profile.avatarUrl ? (
-                <Image
-                  src={profile.avatarUrl}
-                  alt={hasName ? `${name} profile photo` : "Profile photo"}
-                  fill
-                  unoptimized
-                  className="object-cover"
-                  priority
-                />
-              ) : (
-                <div className="flex size-full items-center justify-center bg-gradient-to-br from-violet-500/10 to-fuchsia-500/5 text-4xl font-semibold tracking-tight text-zinc-600 lg:text-5xl">
-                  {initials}
-                </div>
-              )}
-              {hasName ? (
-                <span className="absolute bottom-4 right-4 size-3 rounded-full border-2 border-[oklch(0.07_0.012_280)] bg-emerald-400" />
-              ) : null}
-            </div>
+            <HeroAvatar
+              avatarUrl={profile.avatarUrl}
+              name={name}
+              initials={initials}
+              hasName={hasName}
+            />
           </motion.div>
         </div>
       </div>
