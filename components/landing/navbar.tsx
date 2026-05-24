@@ -41,8 +41,8 @@ export function Navbar() {
             <Button variant="ghost" className="text-zinc-300 hover:text-white">
               Log in
             </Button>
-            <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
-              Start free
+            <Button asChild className="bg-white text-zinc-900 hover:bg-zinc-100">
+              <Link href="/builder">Start free</Link>
             </Button>
           </div>
 
@@ -86,8 +86,10 @@ export function Navbar() {
                 <Button variant="ghost" className="w-full justify-center">
                   Log in
                 </Button>
-                <Button className="w-full justify-center bg-white text-zinc-900">
-                  Start free
+                <Button asChild className="w-full justify-center bg-white text-zinc-900">
+                  <Link href="/builder" onClick={() => setMobileOpen(false)}>
+                    Start free
+                  </Link>
                 </Button>
               </div>
             </motion.div>
