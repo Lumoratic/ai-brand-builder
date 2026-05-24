@@ -1,4 +1,8 @@
 import { cn } from "@/lib/utils";
+import {
+  portfolioContainer,
+  portfolioSectionY,
+} from "@/components/portfolio/portfolio-layout";
 
 type PortfolioSectionProps = {
   id?: string;
@@ -8,6 +12,7 @@ type PortfolioSectionProps = {
   children: React.ReactNode;
   className?: string;
   alt?: boolean;
+  featured?: boolean;
 };
 
 export function PortfolioSection({
@@ -18,29 +23,43 @@ export function PortfolioSection({
   children,
   className,
   alt = false,
+  featured = false,
 }: PortfolioSectionProps) {
   return (
     <section
       id={id}
       className={cn(
-        "border-t border-white/[0.06] px-4 py-20 sm:px-6 sm:py-24 lg:px-8",
-        alt && "bg-white/[0.015]",
+        "border-t border-white/[0.06]",
+        portfolioSectionY,
+        featured && "bg-[oklch(0.065_0.012_280)]",
+        alt && !featured && "bg-white/[0.012]",
         className
       )}
     >
-      <div className="mx-auto max-w-5xl">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-violet-400/80">
-          {label}
-        </p>
-        <h2 className="mt-4 max-w-2xl text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-          {title}
-        </h2>
-        {description ? (
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-zinc-500 sm:text-base">
-            {description}
+      <div className={portfolioContainer}>
+        <div className={cn("max-w-3xl", featured && "max-w-4xl")}>
+          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-zinc-500">
+            {label}
           </p>
-        ) : null}
-        <div className="mt-12">{children}</div>
+          <h2
+            className={cn(
+              "mt-5 font-semibold tracking-[-0.03em] text-white",
+              featured
+                ? "text-3xl sm:text-4xl lg:text-5xl lg:leading-[1.08]"
+                : "text-2xl sm:text-3xl lg:text-4xl"
+            )}
+          >
+            {title}
+          </h2>
+          {description ? (
+            <p className="mt-5 text-base leading-relaxed text-zinc-500 lg:text-lg">
+              {description}
+            </p>
+          ) : null}
+        </div>
+        <div className={cn("mt-14 lg:mt-16", featured && "mt-16 lg:mt-20")}>
+          {children}
+        </div>
       </div>
     </section>
   );

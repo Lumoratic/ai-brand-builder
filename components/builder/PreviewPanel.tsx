@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Mail, MapPin } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { parseSkills, useBuilderProfile } from "@/lib/stores/builderStore";
 import { getFeaturedProjects, getInitials } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ const placeholders = {
   fullName: "Your Name",
   jobTitle: "Your Role",
   headline: "Your headline or tagline",
-  bio: "Your bio will appear here. Share what you do, what you care about, and what makes your work distinctive.",
+  bio: "Your bio will appear here.",
   skill: "Add skills",
 };
 
@@ -46,220 +46,197 @@ export function PreviewPanel() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-[oklch(0.05_0.01_280)]">
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3 sm:px-6">
-        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+    <div className="flex h-full flex-col bg-[oklch(0.06_0.01_280)]">
+      <div className="flex shrink-0 items-center justify-between border-b border-white/[0.06] px-5 py-3">
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-600">
           Live preview
         </p>
-        <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-emerald-500/80" />
-          <span className="text-xs text-zinc-500">Synced</span>
+        <div className="flex items-center gap-2">
+          <span className="size-1.5 rounded-full bg-emerald-500/80" />
+          <span className="text-[11px] text-zinc-600">Synced</span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-        <div
-          className={cn(
-            "mx-auto max-w-2xl overflow-hidden rounded-2xl border border-white/[0.08]",
-            "bg-[oklch(0.1_0.015_280)] shadow-2xl shadow-black/40",
-            "transition-shadow duration-300"
-          )}
-        >
-          <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
-            <div className="flex gap-1.5">
-              <span className="size-2.5 rounded-full bg-zinc-700" />
-              <span className="size-2.5 rounded-full bg-zinc-700" />
-              <span className="size-2.5 rounded-full bg-zinc-700" />
-            </div>
-            <span className="mx-auto truncate text-[10px] text-zinc-600">
-              {name.toLowerCase().replace(/\s+/g, "") || "portfolio"}.brandspark.io
-            </span>
-          </div>
-
-          <div className="transition-opacity duration-300">
-            <nav className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4 sm:px-8">
-              <span
+      <div className="flex-1 overflow-y-auto">
+        {/* Hero — full bleed */}
+        <section className="relative border-b border-white/[0.05] px-6 py-10 sm:px-8 sm:py-12">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,oklch(0.42_0.18_280/0.15),transparent_70%)]"
+          />
+          <div className="relative grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/15 bg-emerald-500/5 px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider text-emerald-400/90">
+                Open to projects
+              </span>
+              <h2
                 className={cn(
-                  "text-sm font-semibold tracking-tight transition-colors duration-300",
-                  isPlaceholder.name ? "text-zinc-600" : "text-white"
+                  "mt-5 text-3xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-4xl",
+                  isPlaceholder.name ? "text-zinc-700" : "text-white"
                 )}
               >
-                {name.split(" ")[0]}
-              </span>
-              <div className="hidden gap-6 text-xs text-zinc-500 sm:flex">
-                <span>About</span>
-                <span>Work</span>
-                <span>Contact</span>
-              </div>
-            </nav>
-
-            <section className="relative overflow-hidden px-6 py-12 sm:px-8 sm:py-16">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-600/15 via-transparent to-fuchsia-600/10"
-              />
-              <div className="relative space-y-4 transition-all duration-300">
-                <div className="flex items-center gap-4">
-                  <div
-                    className={cn(
-                      "relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-sm font-semibold",
-                      isPlaceholder.avatar && isPlaceholder.name
-                        ? "border-white/[0.08] bg-white/[0.03] text-zinc-600"
-                        : "border-violet-500/25 bg-violet-500/10 text-white"
-                    )}
-                  >
-                    {profile.avatarUrl ? (
-                      <Image
-                        src={profile.avatarUrl}
-                        alt=""
-                        fill
-                        unoptimized
-                        className="object-cover"
-                      />
-                    ) : (
-                      initials
-                    )}
-                  </div>
-                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400/90">
-                    Portfolio
-                  </p>
-                </div>
-                <p
-                  className={cn(
-                    "text-base font-medium leading-snug transition-colors duration-300 sm:text-lg",
-                    isPlaceholder.headline ? "text-zinc-600" : "text-violet-200/90"
-                  )}
-                >
-                  {headline}
-                </p>
-                <h2
-                  className={cn(
-                    "text-3xl font-semibold leading-[1.1] tracking-tight transition-colors duration-300 sm:text-4xl",
-                    isPlaceholder.name ? "text-zinc-600" : "text-white"
-                  )}
-                >
-                  {name}
-                </h2>
-                <p
-                  className={cn(
-                    "text-lg transition-colors duration-300 sm:text-xl",
-                    isPlaceholder.title ? "text-zinc-600" : "text-zinc-400"
-                  )}
-                >
-                  {title}
-                </p>
-              </div>
-            </section>
-
-            <section className="border-t border-white/[0.06] px-6 py-10 sm:px-8">
-              <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                About
-              </h3>
+                {name}
+              </h2>
               <p
                 className={cn(
-                  "mt-4 max-w-lg text-sm leading-relaxed transition-colors duration-300 sm:text-base",
-                  isPlaceholder.bio ? "text-zinc-600" : "text-zinc-300"
+                  "mt-3 text-base font-medium sm:text-lg",
+                  isPlaceholder.title ? "text-zinc-700" : "text-zinc-300"
                 )}
               >
-                {bio}
+                {title}
               </p>
-            </section>
-
-            <section className="border-t border-white/[0.06] px-6 py-10 sm:px-8">
-              <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                Featured projects
-              </h3>
-              {projects.length > 0 ? (
-                <ul className="mt-5 space-y-3">
-                  {projects.map((project) => (
-                    <li
-                      key={project.id}
-                      className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors duration-300"
-                    >
-                      <p className="font-medium text-white">{project.title}</p>
-                      {project.description ? (
-                        <p className="mt-1 text-sm text-zinc-500">
-                          {project.description}
-                        </p>
-                      ) : null}
-                      {project.techStack.length > 0 ? (
-                        <ul className="mt-3 flex flex-wrap gap-1.5">
-                          {project.techStack.map((tech) => (
-                            <li
-                              key={tech}
-                              className="rounded-md bg-white/[0.04] px-2 py-0.5 text-[10px] text-zinc-500"
-                            >
-                              {tech}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-4 text-sm text-zinc-600">
-                  Add projects in the form to preview them here.
-                </p>
-              )}
-            </section>
-
-            <section className="border-t border-white/[0.06] px-6 py-10 sm:px-8">
-              <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                Skills
-              </h3>
-              <ul className="mt-5 flex flex-wrap gap-2.5">
-                {(skills.length > 0 ? skills : [placeholders.skill]).map(
-                  (skill) => (
-                    <li
-                      key={skill}
-                      className={cn(
-                        "rounded-xl border px-3.5 py-2 text-sm transition-all duration-300",
-                        isPlaceholder.skills
-                          ? "border-white/[0.06] bg-white/[0.02] text-zinc-600"
-                          : "border-violet-500/20 bg-violet-500/10 text-violet-200"
-                      )}
-                    >
-                      {skill}
-                    </li>
-                  )
+              <p
+                className={cn(
+                  "mt-4 text-sm leading-relaxed sm:text-base",
+                  isPlaceholder.headline ? "text-zinc-700" : "text-zinc-500"
                 )}
-              </ul>
-            </section>
+              >
+                {headline}
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-white px-3.5 py-1.5 text-xs font-medium text-zinc-900">
+                  Discuss a project
+                  <ArrowUpRight className="size-3" />
+                </span>
+                <span className="rounded-full border border-white/10 px-3.5 py-1.5 text-xs text-zinc-500">
+                  See my work
+                </span>
+              </div>
+            </div>
+            <div
+              className={cn(
+                "relative mx-auto size-24 shrink-0 overflow-hidden rounded-2xl border sm:mx-0 sm:size-28",
+                isPlaceholder.avatar && isPlaceholder.name
+                  ? "border-white/[0.08] bg-white/[0.02]"
+                  : "border-white/10 shadow-lg"
+              )}
+            >
+              {profile.avatarUrl ? (
+                <Image
+                  src={profile.avatarUrl}
+                  alt=""
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex size-full items-center justify-center text-lg font-semibold text-zinc-600">
+                  {initials}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
 
-            <section className="border-t border-white/[0.06] bg-white/[0.02] px-6 py-10 sm:px-8">
-              <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                Contact
-              </h3>
-              <div className="mt-6 space-y-4">
-                <div className="flex items-center gap-3 text-sm text-zinc-400 transition-colors duration-300">
-                  <Mail className="size-4 shrink-0 text-violet-400/80" />
-                  <span
+        {/* Projects — emphasized */}
+        <section className="border-b border-white/[0.05] bg-[oklch(0.065_0.012_280)] px-6 py-10 sm:px-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            Selected work
+          </p>
+          <h3 className="mt-3 text-xl font-semibold tracking-tight text-white">
+            Featured projects
+          </h3>
+          {projects.length > 0 ? (
+            <ul className="mt-6 space-y-4">
+              {projects.map((project, i) => (
+                <li
+                  key={project.id}
+                  className={cn(
+                    "rounded-xl border border-white/[0.07] bg-[oklch(0.08_0.012_280)] p-5 transition-colors",
+                    i === 0 && "p-6"
+                  )}
+                >
+                  <p className="text-[9px] uppercase tracking-wider text-zinc-600">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <p
                     className={cn(
-                      !profile.fullName.trim() && "text-zinc-600"
+                      "mt-2 font-semibold text-white",
+                      i === 0 ? "text-lg" : "text-base"
                     )}
                   >
-                    {contactEmail(profile.fullName)}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-zinc-500">
-                  <MapPin className="size-4 shrink-0 text-violet-400/80" />
-                  <span>Available for opportunities</span>
-                </div>
-                <button
-                  type="button"
-                  className="mt-2 w-full rounded-xl bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition-transform duration-200 hover:bg-zinc-100 active:scale-[0.99] sm:w-auto sm:px-6"
-                >
-                  Get in touch
-                </button>
-              </div>
-            </section>
+                    {project.title}
+                  </p>
+                  {project.description ? (
+                    <p className="mt-2 text-sm leading-relaxed text-zinc-500">
+                      {project.description}
+                    </p>
+                  ) : null}
+                  {project.techStack.length > 0 ? (
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {project.techStack.map((tech) => (
+                        <li
+                          key={tech}
+                          className="rounded-full border border-white/[0.06] px-2 py-0.5 text-[10px] text-zinc-500"
+                        >
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-5 text-sm text-zinc-600">
+              Add projects to preview them here.
+            </p>
+          )}
+        </section>
 
-            <footer className="border-t border-white/[0.06] px-6 py-4 text-center text-[10px] text-zinc-600 sm:px-8">
-              Built with BrandSpark
-            </footer>
+        {/* About */}
+        <section className="border-b border-white/[0.05] px-6 py-10 sm:px-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            About
+          </p>
+          <p
+            className={cn(
+              "mt-4 max-w-prose text-sm leading-[1.75] sm:text-base",
+              isPlaceholder.bio ? "text-zinc-700" : "text-zinc-400"
+            )}
+          >
+            {bio}
+          </p>
+        </section>
+
+        {/* Skills */}
+        <section className="border-b border-white/[0.05] px-6 py-10 sm:px-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            Services
+          </p>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {(skills.length > 0 ? skills : [placeholders.skill]).map((skill) => (
+              <li
+                key={skill}
+                className={cn(
+                  "rounded-full border px-3 py-1 text-xs",
+                  isPlaceholder.skills
+                    ? "border-white/[0.06] text-zinc-700"
+                    : "border-white/[0.08] text-zinc-400"
+                )}
+              >
+                {skill}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Contact CTA */}
+        <section className="px-6 py-12 sm:px-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            Contact
+          </p>
+          <h3 className="mt-3 text-lg font-semibold tracking-tight text-white">
+            Start the conversation
+          </h3>
+          <div className="mt-5 flex items-center gap-3 text-sm text-zinc-500">
+            <Mail className="size-4 shrink-0 text-zinc-600" />
+            {contactEmail(profile.fullName)}
           </div>
-        </div>
+          <div className="mt-6 inline-flex rounded-full bg-white px-4 py-2 text-xs font-medium text-zinc-900">
+            Discuss a project
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export function PortfolioAbout({ profile }: PortfolioAboutProps) {
   const mounted = useMounted();
   const bio = displayValue(
     profile.bio,
-    "Your story goes here. Return to the builder to add a short bio that explains your craft, your approach, and the kind of work you want next."
+    "Share your story in the builder — how you work, what you care about, and the kind of clients you do your best work for."
   );
   const hasBio = Boolean(profile.bio.trim());
 
@@ -24,38 +24,36 @@ export function PortfolioAbout({ profile }: PortfolioAboutProps) {
     <PortfolioSection
       id="about"
       label="About"
-      title="The work behind the work"
-      description="A clear point of view matters more than a long résumé."
+      title="How I approach the work"
     >
       <motion.div
         {...getFadeInView(mounted)}
-        className="grid gap-10 lg:grid-cols-[1fr_280px]"
+        className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-20"
       >
         <p
           className={cn(
-            "max-w-2xl text-base leading-[1.8] sm:text-lg",
+            "max-w-2xl text-lg leading-[1.85] lg:text-xl lg:leading-[1.8]",
             hasBio ? "text-zinc-300" : "text-zinc-600"
           )}
         >
           {bio}
         </p>
-        <div className="space-y-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6">
+        <aside className="space-y-8 border-t border-white/[0.06] pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-600">
-              Based in
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+              Location
             </p>
-            <p className="mt-2 text-sm text-zinc-400">Remote · Worldwide</p>
+            <p className="mt-3 text-sm text-zinc-400">Remote · Worldwide</p>
           </div>
-          <div className="border-t border-white/[0.06] pt-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-600">
-              Working style
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+              Collaboration
             </p>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-              Direct communication, thoughtful delivery, and work that holds up
-              under scrutiny.
+            <p className="mt-3 text-sm leading-relaxed text-zinc-500">
+              Direct, async-friendly, and focused on outcomes clients can feel.
             </p>
           </div>
-        </div>
+        </aside>
       </motion.div>
     </PortfolioSection>
   );

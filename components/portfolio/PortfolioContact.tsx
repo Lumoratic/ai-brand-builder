@@ -4,10 +4,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  portfolioContainer,
+  portfolioContainerWide,
+  portfolioSectionY,
+} from "@/components/portfolio/portfolio-layout";
 import { useMounted } from "@/hooks/use-mounted";
 import { getFadeInView } from "@/lib/motion";
-import { contactEmail, displayValue, getFirstName } from "@/lib/portfolio-utils";
+import { contactEmail, getFirstName } from "@/lib/portfolio-utils";
 import type { BuilderProfile } from "@/lib/stores/builderStore";
+import { cn } from "@/lib/utils";
 
 type PortfolioContactProps = {
   profile: BuilderProfile;
@@ -15,67 +21,77 @@ type PortfolioContactProps = {
 
 export function PortfolioContact({ profile }: PortfolioContactProps) {
   const mounted = useMounted();
-  const name = displayValue(profile.fullName, "there");
   const firstName = getFirstName(profile.fullName);
   const email = contactEmail(profile.fullName);
   const hasName = Boolean(profile.fullName.trim());
 
   return (
-    <section id="contact" className="px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <section
+      id="contact"
+      className={cn(
+        "relative overflow-hidden border-t border-white/[0.06]",
+        portfolioSectionY
+      )}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,oklch(0.4_0.18_280/0.12),transparent_70%)]"
+      />
+
       <motion.div
         {...getFadeInView(mounted)}
         viewport={{ once: true, margin: "-80px" }}
-        className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-white/[0.1] bg-gradient-to-br from-violet-950/50 via-[oklch(0.11_0.02_280)] to-[oklch(0.08_0.012_280)] p-8 sm:p-12 lg:p-16"
+        className={portfolioContainer}
       >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-violet-600/20 blur-[80px]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-24 -left-24 size-72 rounded-full bg-fuchsia-600/10 blur-[80px]"
-        />
+        <div className="mx-auto max-w-4xl text-center lg:max-w-none lg:text-left">
+          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-zinc-500">
+            Start a project
+          </p>
+          <h2 className="mt-6 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl lg:text-5xl lg:leading-[1.08]">
+            {hasName
+              ? `Let’s create something meaningful, ${firstName}.`
+              : "Let’s create something meaningful together."}
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-500 lg:mx-0 lg:text-lg">
+            I partner with teams and founders who value clarity, craft, and
+            work that earns trust. Tell me about your project — I reply within
+            two business days.
+          </p>
 
-        <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-violet-400/80">
-              Let&apos;s work together
-            </p>
-            <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Have a project in mind, {hasName ? firstName : "friend"}?
-            </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-400 sm:text-base">
-              I&apos;m open to thoughtful collaborations, freelance engagements,
-              and full-time roles that value craft and clarity.
-            </p>
+          <div className="mt-12 flex flex-col items-center gap-6 lg:flex-row lg:items-center lg:justify-between">
             <a
               href={`mailto:${email}?subject=Project%20inquiry`}
-              className="mt-8 inline-flex items-center gap-3 text-sm text-zinc-300 transition-colors hover:text-white"
+              className="inline-flex items-center gap-4 text-left transition-opacity hover:opacity-80"
             >
-              <span className="flex size-10 items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.04]">
-                <Mail className="size-4 text-violet-400" />
+              <span className="flex size-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03]">
+                <Mail className="size-5 text-zinc-400" />
               </span>
-              {email}
+              <span>
+                <span className="block text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-600">
+                  Email
+                </span>
+                <span className="mt-1 block text-base text-zinc-300">{email}</span>
+              </span>
             </a>
-          </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-            <Button
-              asChild
-              className="h-12 rounded-full bg-white px-8 text-zinc-900 hover:bg-zinc-100"
-            >
-              <a href={`mailto:${email}?subject=Hello%20${encodeURIComponent(name)}`}>
-                Send an email
-                <ArrowUpRight className="size-4" />
-              </a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="h-12 rounded-full border-white/15 bg-transparent text-white hover:bg-white/5"
-            >
-              <Link href="/builder">Edit portfolio</Link>
-            </Button>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button
+                asChild
+                className="h-12 rounded-full bg-white px-8 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100"
+              >
+                <a href={`mailto:${email}?subject=Project%20inquiry`}>
+                  Start the conversation
+                  <ArrowUpRight className="size-4" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="h-12 rounded-full border-white/10 bg-transparent px-8 text-[15px] text-zinc-400 hover:border-white/20 hover:text-white"
+              >
+                <Link href="/builder">Edit portfolio</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -91,14 +107,19 @@ export function PortfolioFooter({ fullName }: PortfolioFooterProps) {
   const firstName = getFirstName(fullName);
 
   return (
-    <footer className="border-t border-white/[0.06] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-        <p className="text-xs text-zinc-600">
+    <footer className="border-t border-white/[0.05]">
+      <div
+        className={cn(
+          portfolioContainerWide,
+          "flex flex-col items-center justify-between gap-4 py-12 sm:flex-row"
+        )}
+      >
+        <p className="text-sm text-zinc-600">
           © {firstName} · Personal portfolio
         </p>
         <Link
           href="/builder"
-          className="text-xs text-zinc-500 transition-colors hover:text-zinc-300"
+          className="text-sm text-zinc-600 transition-colors hover:text-zinc-400"
         >
           Built with BrandSpark
         </Link>

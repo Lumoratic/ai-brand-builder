@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import { portfolioContainerWide } from "@/components/portfolio/portfolio-layout";
 import { useMounted } from "@/hooks/use-mounted";
 import { getFadeUp } from "@/lib/motion";
 import { getFirstName } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
+  { href: "#about", label: "About" },
   { href: "#services", label: "Services" },
   { href: "#contact", label: "Contact" },
 ] as const;
@@ -26,29 +27,33 @@ export function PortfolioNav({ fullName }: PortfolioNavProps) {
   return (
     <motion.header
       {...getFadeUp(mounted, 0)}
-      className="sticky top-0 z-50 border-b border-white/[0.06] bg-[oklch(0.07_0.012_280)]/85 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b border-white/[0.05] bg-[oklch(0.07_0.012_280)]/80 backdrop-blur-xl"
     >
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex min-w-0 items-center gap-4">
+      <div
+        className={cn(
+          portfolioContainerWide,
+          "flex h-[4.25rem] items-center justify-between gap-6"
+        )}
+      >
+        <div className="flex min-w-0 items-center gap-5">
           <Link
             href="/builder"
-            className="flex shrink-0 items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-zinc-300 sm:text-sm"
+            className="flex shrink-0 items-center gap-2 text-xs text-zinc-600 transition-colors hover:text-zinc-400"
           >
             <ArrowLeft className="size-3.5" />
-            <span className="hidden sm:inline">Builder</span>
+            <span className="hidden sm:inline">Edit</span>
           </Link>
-          <span className="hidden text-zinc-700 sm:inline">|</span>
-          <span className="truncate text-sm font-medium text-white">
+          <span className="truncate text-sm font-medium tracking-tight text-zinc-300">
             {displayName}
           </span>
         </div>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-10 md:flex">
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-xs font-medium text-zinc-500 transition-colors hover:text-white"
+              className="text-[13px] text-zinc-500 transition-colors hover:text-white"
             >
               {item.label}
             </a>
@@ -57,12 +62,9 @@ export function PortfolioNav({ fullName }: PortfolioNavProps) {
 
         <a
           href="#contact"
-          className={cn(
-            "shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5",
-            "text-xs font-medium text-zinc-300 transition-colors hover:border-white/20 hover:text-white"
-          )}
+          className="shrink-0 rounded-full bg-white px-4 py-2 text-[13px] font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
         >
-          Hire me
+          Work with me
         </a>
       </div>
     </motion.header>

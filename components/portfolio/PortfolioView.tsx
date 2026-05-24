@@ -32,8 +32,8 @@ export function PortfolioView() {
       <main>
         <PortfolioHero profile={profile} />
         <PortfolioStats stats={stats} />
-        <PortfolioAbout profile={profile} />
         <PortfolioProjects projects={projects} hasProjects={hasProjects} />
+        <PortfolioAbout profile={profile} />
         <PortfolioServices services={services} hasSkills={hasSkills} />
         <PortfolioContact profile={profile} />
       </main>

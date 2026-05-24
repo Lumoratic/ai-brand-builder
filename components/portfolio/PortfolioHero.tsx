@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { portfolioContainerWide } from "@/components/portfolio/portfolio-layout";
 import { useMounted } from "@/hooks/use-mounted";
 import { getFadeUp } from "@/lib/motion";
 import {
@@ -31,149 +32,142 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
   const hasName = Boolean(profile.fullName.trim());
 
   return (
-    <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-24">
+    <section className="relative min-h-[88vh] overflow-hidden border-b border-white/[0.05]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,oklch(0.45_0.2_280/0.18),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-30%,oklch(0.42_0.18_280/0.22),transparent_65%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 grid-bg opacity-30 mask-[radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,oklch(0.07_0.012_280)_100%)]"
       />
 
-      <div className="relative mx-auto max-w-5xl">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+      <div
+        className={cn(
+          portfolioContainerWide,
+          "relative flex min-h-[88vh] flex-col justify-center py-20 lg:py-28"
+        )}
+      >
+        <div className="grid items-center gap-14 lg:grid-cols-[1fr_auto] lg:gap-20">
           <div className="max-w-3xl">
-            <motion.div
-              {...getFadeUp(mounted, 0.05)}
-              className="mb-8 flex items-center gap-5"
-            >
-              <div
-                className={cn(
-                  "relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border text-xl font-semibold tracking-tight sm:size-24 sm:text-2xl",
-                  profile.avatarUrl || hasName
-                    ? "border-violet-500/30 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 text-white shadow-[0_0_40px_-10px_oklch(0.55_0.25_280/0.5)]"
-                    : "border-white/[0.08] bg-white/[0.03] text-zinc-600"
-                )}
-              >
-                {profile.avatarUrl ? (
-                  <Image
-                    src={profile.avatarUrl}
-                    alt={hasName ? `${name} profile photo` : "Profile photo"}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  initials
-                )}
-                {hasName ? (
-                  <span className="absolute -bottom-1 -right-1 size-3.5 rounded-full border-2 border-[oklch(0.07_0.012_280)] bg-emerald-500" />
-                ) : null}
-              </div>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-emerald-400/90">
-                  Available for work
-                </p>
-                <p className="mt-1 text-sm text-zinc-500">
-                  Freelance &amp; full-time
-                </p>
-              </div>
+            <motion.div {...getFadeUp(mounted, 0.05)} className="mb-10">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400/90">
+                <span className="size-1.5 rounded-full bg-emerald-400" />
+                Open to new projects
+              </span>
             </motion.div>
 
-            <motion.p
-              {...getFadeUp(mounted, 0.1)}
-              className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400/80"
-            >
-              Personal portfolio
-            </motion.p>
-
-            {headline ? (
-              <motion.p
-                {...getFadeUp(mounted, 0.12)}
-                className="mt-5 max-w-2xl text-xl font-medium leading-snug tracking-tight text-violet-200/90 sm:text-2xl lg:text-3xl"
-              >
-                {headline}
-              </motion.p>
-            ) : null}
-
             <motion.h1
-              {...getFadeUp(mounted, 0.15)}
+              {...getFadeUp(mounted, 0.1)}
               className={cn(
-                headline ? "mt-4" : "mt-5",
-                "text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.5rem]",
-                hasName ? "text-white" : "text-zinc-600"
+                "text-[clamp(2.75rem,8vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.04em]",
+                hasName ? "text-white" : "text-zinc-700"
               )}
             >
               {name}
             </motion.h1>
 
             <motion.p
-              {...getFadeUp(mounted, 0.2)}
+              {...getFadeUp(mounted, 0.15)}
               className={cn(
-                "mt-4 text-lg sm:text-xl",
-                profile.jobTitle.trim() ? "text-zinc-400" : "text-zinc-600"
+                "mt-5 text-xl font-medium tracking-tight sm:text-2xl lg:text-[1.75rem] lg:leading-tight",
+                profile.jobTitle.trim() ? "text-zinc-300" : "text-zinc-700"
               )}
             >
               {title}
             </motion.p>
 
+            {headline ? (
+              <motion.p
+                {...getFadeUp(mounted, 0.2)}
+                className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-500 sm:text-xl lg:text-2xl lg:leading-snug"
+              >
+                {headline}
+              </motion.p>
+            ) : null}
+
             {bio ? (
               <motion.p
                 {...getFadeUp(mounted, 0.25)}
-                className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg"
+                className="mt-8 max-w-xl text-base leading-[1.75] text-zinc-500 sm:text-lg"
               >
-                {bio.length > 180 ? `${bio.slice(0, 180).trim()}…` : bio}
+                {bio.length > 220 ? `${bio.slice(0, 220).trim()}…` : bio}
               </motion.p>
             ) : null}
 
             <motion.div
               {...getFadeUp(mounted, 0.3)}
-              className="mt-10 flex flex-wrap gap-3"
+              className="mt-12 flex flex-wrap items-center gap-4"
             >
               <Button
                 asChild
-                className="h-11 rounded-full bg-white px-6 text-zinc-900 hover:bg-zinc-100"
+                className="h-12 rounded-full bg-white px-7 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100"
               >
                 <a href="#contact">
-                  Start a conversation
+                  Discuss a project
                   <ArrowUpRight className="size-4" />
                 </a>
               </Button>
               <Button
                 asChild
                 variant="outline"
-                className="h-11 rounded-full border-white/12 bg-transparent text-white hover:bg-white/5"
+                className="h-12 rounded-full border-white/10 bg-transparent px-7 text-[15px] text-zinc-300 hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
               >
-                <a href="#work">View selected work</a>
+                <a href="#work">See my work</a>
               </Button>
             </motion.div>
-          </div>
 
-          <motion.div {...getFadeUp(mounted, 0.35)} className="lg:pb-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
-              Connect
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <motion.div
+              {...getFadeUp(mounted, 0.35)}
+              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/[0.06] pt-8"
+            >
               {socialLinks.map((link) => (
                 <a
                   key={link.id}
                   href={link.href}
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5",
-                    "text-sm text-zinc-400 transition-all duration-200",
-                    "hover:border-white/15 hover:bg-white/[0.06] hover:text-white"
-                  )}
+                  className="inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-300"
                 >
                   {link.id === "email" ? (
-                    <Mail className="size-3.5 text-violet-400" />
+                    <Mail className="size-3.5 text-zinc-600" />
                   ) : null}
                   {link.label}
                 </a>
               ))}
+              <span className="hidden text-zinc-700 sm:inline">·</span>
+              <span className="text-sm text-zinc-600">{email}</span>
+            </motion.div>
+          </div>
+
+          <motion.div
+            {...getFadeUp(mounted, 0.15)}
+            className="flex justify-center lg:justify-end"
+          >
+            <div
+              className={cn(
+                "relative size-40 overflow-hidden rounded-[1.75rem] border sm:size-48 lg:size-56 lg:rounded-[2rem]",
+                profile.avatarUrl || hasName
+                  ? "border-white/10 shadow-[0_0_0_1px_oklch(1_0_0/0.04),0_32px_64px_-16px_oklch(0_0_0/0.6)]"
+                  : "border-white/[0.08] bg-white/[0.02]"
+              )}
+            >
+              {profile.avatarUrl ? (
+                <Image
+                  src={profile.avatarUrl}
+                  alt={hasName ? `${name} profile photo` : "Profile photo"}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="flex size-full items-center justify-center bg-gradient-to-br from-violet-500/10 to-fuchsia-500/5 text-4xl font-semibold tracking-tight text-zinc-600 lg:text-5xl">
+                  {initials}
+                </div>
+              )}
+              {hasName ? (
+                <span className="absolute bottom-4 right-4 size-3 rounded-full border-2 border-[oklch(0.07_0.012_280)] bg-emerald-400" />
+              ) : null}
             </div>
-            <p className="mt-4 text-xs text-zinc-600">{email}</p>
           </motion.div>
         </div>
       </div>

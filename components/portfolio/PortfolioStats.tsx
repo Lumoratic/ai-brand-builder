@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { portfolioContainer } from "@/components/portfolio/portfolio-layout";
 import { useMounted } from "@/hooks/use-mounted";
 import { getInViewVariants, staggerContainer, staggerItem } from "@/lib/motion";
 import type { PortfolioStat } from "@/lib/portfolio-utils";
@@ -15,28 +16,27 @@ export function PortfolioStats({ stats }: PortfolioStatsProps) {
   const inView = getInViewVariants(mounted);
 
   return (
-    <section className="border-y border-white/[0.06] bg-white/[0.02] px-4 py-12 sm:px-6 lg:px-8">
+    <section className="border-b border-white/[0.05] bg-white/[0.015]">
       <motion.div
         variants={staggerContainer}
         {...inView}
         viewport={{ once: true, margin: "-40px" }}
-        className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6"
+        className={cn(
+          portfolioContainer,
+          "grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12 lg:py-12"
+        )}
       >
         {stats.map((stat) => (
-          <motion.div
-            key={stat.id}
-            variants={staggerItem}
-            className="text-center sm:text-left"
-          >
+          <motion.div key={stat.id} variants={staggerItem}>
             <p
               className={cn(
-                "text-2xl font-semibold tracking-tight sm:text-3xl",
-                stat.value === "—" ? "text-zinc-700" : "text-white"
+                "text-2xl font-semibold tracking-[-0.02em] lg:text-3xl",
+                stat.value === "—" ? "text-zinc-800" : "text-zinc-200"
               )}
             >
               {stat.value}
             </p>
-            <p className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">
+            <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-600">
               {stat.label}
             </p>
           </motion.div>

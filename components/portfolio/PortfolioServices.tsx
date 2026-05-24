@@ -20,38 +20,38 @@ export function PortfolioServices({ services, hasSkills }: PortfolioServicesProp
     <PortfolioSection
       id="services"
       label="Services"
-      title="How I can help"
-      description="Each service maps directly to a skill in your profile."
+      title="Ways we can work together"
+      alt
     >
       {hasSkills ? (
         <motion.ul
           variants={staggerContainer}
           {...inView}
           viewport={{ once: true, margin: "-60px" }}
-          className="grid gap-4 sm:grid-cols-2"
+          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {services.map((service) => (
             <motion.li
               key={service.id}
               variants={staggerItem}
               className={cn(
-                "rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6",
-                "transition-colors duration-300 hover:border-white/12 hover:bg-white/[0.04]"
+                "rounded-2xl border border-white/[0.06] bg-transparent p-7",
+                "transition-colors duration-300 hover:border-white/10 hover:bg-white/[0.02]"
               )}
             >
-              <h3 className="text-base font-semibold text-white">
+              <h3 className="text-lg font-semibold tracking-tight text-white">
                 {service.title}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-500">
+              <p className="mt-4 text-sm leading-relaxed text-zinc-500">
                 {service.description}
               </p>
             </motion.li>
           ))}
         </motion.ul>
       ) : (
-        <div className="rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.02] px-6 py-14 text-center">
+        <div className="rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.015] px-8 py-16 text-center">
           <p className="text-sm text-zinc-500">
-            Your services will appear once you add skills in the builder.
+            Services appear from the skills you add in the builder.
           </p>
         </div>
       )}
