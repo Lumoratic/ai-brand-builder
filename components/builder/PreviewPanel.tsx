@@ -46,12 +46,12 @@ export function PreviewPanel() {
   return (
     <div className="flex h-full flex-col bg-[oklch(0.06_0.01_280)]">
       <div className="flex shrink-0 items-center justify-between border-b border-white/[0.06] px-5 py-3">
-        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-600">
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
           Live preview
         </p>
-        <div className="flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-emerald-500/80" />
-          <span className="text-[11px] text-zinc-600">Synced</span>
+        <div className="flex items-center gap-2" aria-live="polite" aria-atomic="true">
+          <span className="size-1.5 rounded-full bg-emerald-500/80" aria-hidden />
+          <span className="text-[11px] text-zinc-500">Synced</span>
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export function PreviewPanel() {
               <p
                 className={cn(
                   "mt-4 text-sm leading-relaxed sm:text-base",
-                  isPlaceholder.headline ? "text-zinc-700" : "text-zinc-500"
+                  isPlaceholder.headline ? "text-zinc-600" : "text-zinc-400"
                 )}
               >
                 {headline}
@@ -105,7 +105,7 @@ export function PreviewPanel() {
               className={cn(
                 "relative mx-auto size-24 shrink-0 overflow-hidden rounded-2xl border sm:mx-0 sm:size-28",
                 isPlaceholder.avatar && isPlaceholder.name
-                  ? "border-white/[0.08] bg-white/[0.02]"
+                  ? "border-white/[0.08] bg-[linear-gradient(145deg,oklch(0.32_0.14_280)_0%,oklch(0.22_0.1_300)_100%)]"
                   : "border-white/10 shadow-lg"
               )}
             >
@@ -115,10 +115,11 @@ export function PreviewPanel() {
                   alt=""
                   fill
                   unoptimized
+                  sizes="112px"
                   className="object-cover"
                 />
               ) : (
-                <div className="flex size-full items-center justify-center text-lg font-semibold text-zinc-600">
+                <div className="flex size-full items-center justify-center text-lg font-semibold text-white/90">
                   {initials}
                 </div>
               )}
@@ -151,6 +152,7 @@ export function PreviewPanel() {
                         alt=""
                         fill
                         unoptimized
+                        sizes="(max-width: 640px) 100vw, 400px"
                         className="object-cover brightness-[0.9] saturate-[0.88]"
                       />
                       <div
@@ -198,7 +200,7 @@ export function PreviewPanel() {
               ))}
             </ul>
           ) : (
-            <p className="mt-5 text-sm leading-relaxed text-zinc-600">
+            <p className="mt-5 text-sm leading-relaxed text-zinc-500">
               Your case studies will appear here once you add them.
             </p>
           )}
@@ -252,8 +254,8 @@ export function PreviewPanel() {
           <h3 className="mt-3 text-lg font-semibold tracking-tight text-white">
             Start the conversation
           </h3>
-          <div className="mt-5 flex items-center gap-3 text-sm text-zinc-500">
-            <Mail className="size-4 shrink-0 text-zinc-600" />
+          <div className="mt-5 flex items-center gap-3 text-sm text-zinc-400">
+            <Mail className="size-4 shrink-0 text-zinc-500" aria-hidden />
             {contactEmail(profile.fullName)}
           </div>
           <div className="mt-6 inline-flex rounded-full bg-white px-4 py-2 text-xs font-medium text-zinc-900">

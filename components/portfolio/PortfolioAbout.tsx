@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMounted } from "@/hooks/use-mounted";
-import { getFadeInView } from "@/lib/motion";
+import { useMotion } from "@/hooks/use-motion";
 import { displayValue } from "@/lib/portfolio-utils";
 import type { BuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
@@ -14,7 +13,7 @@ type PortfolioAboutProps = {
 };
 
 export function PortfolioAbout({ profile }: PortfolioAboutProps) {
-  const mounted = useMounted();
+  const { fadeInView } = useMotion();
   const bio = displayValue(
     profile.bio,
     "Share your story in the builder — how you work, what you care about, and the kind of clients you do your best work for."
@@ -28,7 +27,7 @@ export function PortfolioAbout({ profile }: PortfolioAboutProps) {
       title="How I approach the work"
     >
       <motion.div
-        {...getFadeInView(mounted)}
+        {...fadeInView()}
         className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-20"
       >
         <p

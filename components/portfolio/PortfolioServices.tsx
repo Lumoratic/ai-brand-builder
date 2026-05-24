@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMounted } from "@/hooks/use-mounted";
-import { getInViewVariants, staggerContainer, staggerItem } from "@/lib/motion";
+import { useMotion } from "@/hooks/use-motion";
 import type { PortfolioService } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
@@ -55,8 +54,7 @@ function CapabilityBlock({
 }
 
 export function PortfolioServices({ services, hasSkills }: PortfolioServicesProps) {
-  const mounted = useMounted();
-  const inView = getInViewVariants(mounted);
+  const { inView, staggerContainer, staggerItem } = useMotion();
   const [primary, ...rest] = services;
 
   return (

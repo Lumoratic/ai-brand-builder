@@ -127,6 +127,11 @@
   html {
     @apply font-sans scroll-smooth;
   }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
   h1,
   h2,
   h3 {

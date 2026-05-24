@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMounted } from "@/hooks/use-mounted";
-import { getSectionReveal } from "@/lib/motion";
+import { useMotion } from "@/hooks/use-motion";
 import { cn } from "@/lib/utils";
 import {
   portfolioContainer,
@@ -31,7 +30,7 @@ export function PortfolioSection({
   alt = false,
   featured = false,
 }: PortfolioSectionProps) {
-  const mounted = useMounted();
+  const { sectionReveal } = useMotion();
 
   return (
     <section
@@ -59,7 +58,7 @@ export function PortfolioSection({
 
       <div className={portfolioContainer}>
         <motion.div
-          {...getSectionReveal(mounted)}
+          {...sectionReveal()}
           className={cn("max-w-3xl", featured && "max-w-4xl")}
         >
           <p className={portfolioSectionLabel}>{label}</p>

@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useMounted } from "@/hooks/use-mounted";
-import { getInViewVariants, staggerContainer, staggerItem } from "@/lib/motion";
+import { useMotion } from "@/hooks/use-motion";
 import type { PortfolioProject } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
@@ -40,7 +39,7 @@ function CinematicThumbnail({
         fill
         unoptimized
         sizes={featured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 40vw"}
-        className="object-cover object-center brightness-[0.92] saturate-[0.9] transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.018] group-hover:brightness-[0.96]"
+        className="object-cover object-center brightness-[0.92] saturate-[0.9] transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.018] group-hover:brightness-[0.96] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
       />
       <div
         aria-hidden
@@ -181,8 +180,7 @@ export function PortfolioProjects({
   projects,
   hasProjects,
 }: PortfolioProjectsProps) {
-  const mounted = useMounted();
-  const inView = getInViewVariants(mounted);
+  const { inView, staggerContainer, staggerItem } = useMotion();
   const [featured, ...rest] = projects;
 
   return (

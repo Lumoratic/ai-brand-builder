@@ -4,7 +4,11 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { builderLabelClassName } from "@/components/builder/builder-styles";
+import {
+  builderFocusRing,
+  builderHelperClassName,
+  builderLabelClassName,
+} from "@/components/builder/builder-styles";
 import { readImageAsDataUrl } from "@/lib/read-image-file";
 import { useSetField } from "@/lib/stores/builderStore";
 import { getInitials } from "@/lib/portfolio-utils";
@@ -18,6 +22,7 @@ type AvatarUploadProps = {
 export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
   const setField = useSetField();
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = "avatar-upload";
   const initials = getInitials(fullName);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -34,15 +39,18 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
 
   return (
     <div className="space-y-3">
-      <span className={builderLabelClassName}>Profile photo</span>
+      <label htmlFor={inputId} className={builderLabelClassName}>
+        Profile photo
+      </label>
       <div className="flex items-center gap-4">
         <div
           className={cn(
-            "relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border",
+            "relative size-16 shrink-0 overflow-hidden rounded-2xl border",
             avatarUrl
               ? "border-violet-500/30 bg-white/[0.03]"
-              : "border-white/[0.08] bg-white/[0.03] text-sm font-semibold text-zinc-500"
+              : "border-white/[0.08] bg-[linear-gradient(145deg,oklch(0.32_0.14_280)_0%,oklch(0.22_0.1_300)_100%)] text-sm font-semibold text-white/90"
           )}
+          aria-hidden={!avatarUrl}
         >
           {avatarUrl ? (
             <Image
@@ -50,10 +58,13 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
               alt={fullName.trim() ? `${fullName} avatar` : "Profile avatar"}
               fill
               unoptimized
+              sizes="64px"
               className="object-cover"
             />
           ) : (
-            initials
+            <span className="flex size-full items-center justify-center">
+              {initials}
+            </span>
           )}
         </div>
         <div className="flex flex-1 flex-wrap gap-2">
@@ -61,10 +72,13 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
             type="button"
             variant="outline"
             size="sm"
-            className="gap-1.5 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white"
+            className={cn(
+              "gap-1.5 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white",
+              builderFocusRing
+            )}
             onClick={() => inputRef.current?.click()}
           >
-            <Camera className="size-3.5" />
+            <Camera className="size-3.5" aria-hidden />
             Upload photo
           </Button>
           {avatarUrl ? (
@@ -72,23 +86,25 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
               type="button"
               variant="ghost"
               size="sm"
-              className="text-zinc-500 hover:text-zinc-300"
+              className={cn("text-zinc-500 hover:text-zinc-300", builderFocusRing)}
               onClick={clearAvatar}
             >
-              <X className="size-3.5" />
+              <X className="size-3.5" aria-hidden />
               Remove
             </Button>
           ) : null}
         </div>
         <input
           ref={inputRef}
+          id={inputId}
           type="file"
           accept="image/jpeg,image/png,image/webp,image/gif"
-          className="hidden"
+          className="sr-only"
           onChange={handleFileChange}
+          aria-label="Upload profile photo"
         />
       </div>
-      <p className="text-xs text-zinc-600">PNG, JPG or WebP · Max 2MB</p>
+      <p className={builderHelperClassName}>PNG, JPG or WebP · Max 2MB</p>
     </div>
   );
 }

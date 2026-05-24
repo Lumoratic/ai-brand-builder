@@ -4,9 +4,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { portfolioContainerWide, portfolioBtnOutline, portfolioBtnPrimary } from "@/components/portfolio/portfolio-layout";
-import { useMounted } from "@/hooks/use-mounted";
-import { getFadeUp } from "@/lib/motion";
+import { useMotion } from "@/hooks/use-motion";
+import { portfolioContainerWide, portfolioBtnOutline, portfolioBtnPrimary, portfolioFocusRing } from "@/components/portfolio/portfolio-layout";
 import {
   buildSocialLinks,
   contactEmail,
@@ -73,7 +72,7 @@ function HeroAvatar({
 }
 
 export function PortfolioHero({ profile }: PortfolioHeroProps) {
-  const mounted = useMounted();
+  const { fadeUp } = useMotion();
   const name = displayValue(profile.fullName, "Your Name");
   const title = displayValue(profile.jobTitle, "Your Role");
   const headline = profile.headline.trim();
@@ -102,7 +101,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
       >
         <div className="grid items-start gap-10 sm:gap-12 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16">
           <div className="max-w-3xl">
-            <motion.div {...getFadeUp(mounted, 0.05)} className="mb-6 sm:mb-8">
+            <motion.div {...fadeUp(0.05)} className="mb-6 sm:mb-8">
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-emerald-400/90">
                 <span className="size-1.5 rounded-full bg-emerald-400" />
                 Open to new projects
@@ -110,7 +109,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             </motion.div>
 
             <motion.h1
-              {...getFadeUp(mounted, 0.1)}
+              {...fadeUp(0.1)}
               className={cn(
                 "text-[clamp(2.5rem,7.5vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.04em]",
                 hasName ? "text-white" : "text-zinc-700"
@@ -120,7 +119,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             </motion.h1>
 
             <motion.p
-              {...getFadeUp(mounted, 0.15)}
+              {...fadeUp(0.15)}
               className={cn(
                 "mt-4 text-xl font-medium tracking-tight sm:mt-5 sm:text-2xl lg:text-[1.75rem] lg:leading-tight",
                 profile.jobTitle.trim() ? "text-zinc-300" : "text-zinc-700"
@@ -131,7 +130,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
 
             {headline ? (
               <motion.p
-                {...getFadeUp(mounted, 0.2)}
+                {...fadeUp(0.2)}
                 className="mt-5 max-w-2xl text-lg leading-relaxed text-zinc-300 sm:mt-6 sm:text-xl lg:text-2xl lg:leading-snug"
               >
                 {headline}
@@ -140,7 +139,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
 
             {bio ? (
               <motion.p
-                {...getFadeUp(mounted, 0.25)}
+                {...fadeUp(0.25)}
                 className="mt-5 max-w-xl text-base leading-[1.75] text-zinc-300 sm:mt-6 sm:text-lg"
               >
                 {bio.length > 220 ? `${bio.slice(0, 220).trim()}…` : bio}
@@ -148,14 +147,15 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             ) : null}
 
             <motion.div
-              {...getFadeUp(mounted, 0.3)}
+              {...fadeUp(0.3)}
               className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4"
             >
               <Button
                 asChild
                 className={cn(
                   "h-11 rounded-full bg-white px-6 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100 sm:h-12 sm:px-7",
-                  portfolioBtnPrimary
+                  portfolioBtnPrimary,
+                  portfolioFocusRing
                 )}
               >
                 <a href="#contact">
@@ -168,7 +168,8 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
                 variant="outline"
                 className={cn(
                   "h-11 rounded-full border-white/10 bg-transparent px-6 text-[15px] text-zinc-300 hover:border-white/20 hover:bg-white/[0.04] hover:text-white sm:h-12 sm:px-7",
-                  portfolioBtnOutline
+                  portfolioBtnOutline,
+                  portfolioFocusRing
                 )}
               >
                 <a href="#work">See my work</a>
@@ -176,14 +177,18 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             </motion.div>
 
             <motion.div
-              {...getFadeUp(mounted, 0.35)}
+              {...fadeUp(0.35)}
               className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 sm:mt-8 sm:gap-x-6 sm:pt-4"
             >
               {socialLinks.map((link) => (
                 <a
                   key={link.id}
                   href={link.href}
-                  className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-[color,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-zinc-200"
+                  className={cn(
+                    "inline-flex items-center gap-2 text-sm text-zinc-400 transition-[color,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-zinc-200",
+                    portfolioFocusRing,
+                    "rounded-sm"
+                  )}
                 >
                   {link.id === "email" ? (
                     <Mail className="size-3.5 text-zinc-500" />
@@ -197,7 +202,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
           </div>
 
           <motion.div
-            {...getFadeUp(mounted, 0.15)}
+            {...fadeUp(0.15)}
             className="flex justify-center lg:justify-end"
           >
             <HeroAvatar

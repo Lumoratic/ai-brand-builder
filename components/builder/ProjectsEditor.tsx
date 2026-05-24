@@ -5,6 +5,7 @@ import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectThumbnailUpload } from "@/components/builder/ProjectThumbnailUpload";
 import {
+  builderFocusRing,
   builderInputClassName,
   builderLabelClassName,
 } from "@/components/builder/builder-styles";
@@ -70,8 +71,12 @@ export function ProjectsEditor() {
           variant="outline"
           size="sm"
           disabled={projects.length >= MAX_FEATURED_PROJECTS}
-          className="shrink-0 gap-1.5 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white disabled:opacity-40"
+          className={cn(
+            "shrink-0 gap-1.5 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white disabled:opacity-40",
+            builderFocusRing
+          )}
           onClick={handleAdd}
+          aria-label="Add featured project"
         >
           <Plus className="size-3.5" />
           Add
@@ -87,25 +92,33 @@ export function ProjectsEditor() {
           </p>
         </div>
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-2" role="list">
           {projects.map((project, index) => {
             const isExpanded = activeId === project.id;
+            const panelId = `project-panel-${project.id}`;
+            const headerId = `project-header-${project.id}`;
 
             return (
               <li
                 key={project.id}
-                className="overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02]"
+                className="overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02]"
               >
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
+                    id={headerId}
                     onClick={() => toggleProject(project.id)}
                     aria-expanded={isExpanded}
-                    className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-white/[0.02]"
+                    aria-controls={panelId}
+                    className={cn(
+                      "flex min-w-0 flex-1 items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-white/[0.02]",
+                      builderFocusRing
+                    )}
                   >
                     <ChevronDown
+                      aria-hidden
                       className={cn(
-                        "size-3.5 shrink-0 text-zinc-500 transition-transform duration-200",
+                        "size-3.5 shrink-0 text-zinc-500 transition-transform duration-200 motion-reduce:transition-none",
                         isExpanded && "rotate-180"
                       )}
                     />
@@ -119,16 +132,22 @@ export function ProjectsEditor() {
                   <button
                     type="button"
                     onClick={() => removeProject(project.id)}
-                    className="mr-2 flex size-7 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-white/5 hover:text-red-400/90"
-                    aria-label={`Remove project ${index + 1}`}
+                    className={cn(
+                      "mr-2 flex size-7 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-white/5 hover:text-red-400/90",
+                      builderFocusRing
+                    )}
+                    aria-label={`Remove project ${index + 1}: ${projectSummary(project.title)}`}
                   >
                     <Trash2 className="size-3.5" />
                   </button>
                 </div>
 
                 <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={headerId}
                   className={cn(
-                    "grid transition-[grid-template-rows] duration-200 ease-out",
+                    "grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none",
                     isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                   )}
                 >
@@ -204,7 +223,7 @@ export function ProjectsEditor() {
                           placeholder="Increased sign-ups 40% · Shipped in 6 weeks"
                           className={builderInputClassName}
                         />
-                        <p className="text-[11px] text-zinc-600">
+                        <p className="text-[11px] text-zinc-500">
                           Optional — a result, metric, or takeaway
                         </p>
                       </div>
