@@ -52,7 +52,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
               ? `Let’s create something meaningful, ${firstName}.`
               : "Let’s create something meaningful together."}
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-400 lg:mx-0 lg:text-lg">
+          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-300 lg:mx-0 lg:text-lg">
             I partner with teams and founders who value clarity, craft, and
             work that earns trust. Tell me about your project — I reply within
             two business days.

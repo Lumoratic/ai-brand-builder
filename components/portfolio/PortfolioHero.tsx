@@ -80,7 +80,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {headline ? (
               <motion.p
                 {...getFadeUp(mounted, 0.2)}
-                className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-400 sm:text-xl lg:text-2xl lg:leading-snug"
+                className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-300 sm:text-xl lg:text-2xl lg:leading-snug"
               >
                 {headline}
               </motion.p>
@@ -89,7 +89,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {bio ? (
               <motion.p
                 {...getFadeUp(mounted, 0.25)}
-                className="mt-8 max-w-xl text-base leading-[1.75] text-zinc-400 sm:text-lg"
+                className="mt-8 max-w-xl text-base leading-[1.75] text-zinc-300 sm:text-lg"
               >
                 {bio.length > 220 ? `${bio.slice(0, 220).trim()}…` : bio}
               </motion.p>

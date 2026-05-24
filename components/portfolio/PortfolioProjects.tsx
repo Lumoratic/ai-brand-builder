@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { useMounted } from "@/hooks/use-mounted";
 import { getInViewVariants, staggerContainer, staggerItem } from "@/lib/motion";
 import type { PortfolioProject } from "@/lib/portfolio-utils";
@@ -15,44 +14,58 @@ type PortfolioProjectsProps = {
   hasProjects: boolean;
 };
 
-function ProjectThumbnail({
-  project,
-  index,
+function CinematicThumbnail({
+  src,
   featured,
 }: {
-  project: PortfolioProject;
-  index: number;
+  src: string;
   featured?: boolean;
 }) {
-  if (project.thumbnailUrl) {
-    return (
-      <div
-        className={cn(
-          "relative shrink-0 overflow-hidden bg-[oklch(0.06_0.01_280)]",
-          featured
-            ? "aspect-[16/10] w-full lg:aspect-auto lg:min-h-full lg:w-[44%]"
-            : "aspect-[16/10] w-full"
-        )}
-      >
-        <Image
-          src={project.thumbnailUrl}
-          alt=""
-          fill
-          unoptimized
-          className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-[oklch(0.08_0.012_280)/0.4] to-transparent opacity-60"
-        />
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn(
-        "relative shrink-0 overflow-hidden border-white/[0.04] bg-[oklch(0.06_0.01_280)]",
+        "relative w-full shrink-0 overflow-hidden bg-[oklch(0.06_0.01_280)]",
+        featured ? "aspect-[2/1] sm:aspect-[21/9]" : "aspect-[16/10]"
+      )}
+    >
+      <Image
+        src={src}
+        alt=""
+        fill
+        unoptimized
+        className="object-cover brightness-[0.9] saturate-[0.88] transition-[transform,filter] duration-700 group-hover:scale-[1.015] group-hover:brightness-[0.95]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 shadow-[inset_0_0_120px_oklch(0_0_0/0.4)]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,oklch(1_0_0/0.05),transparent_55%)]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-t from-[oklch(0.075_0.012_280)] via-[oklch(0.075_0.012_280)/0.55] to-transparent"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-px bg-white/[0.06]"
+      />
+    </div>
+  );
+}
+
+function PlaceholderThumbnail({
+  index,
+  featured,
+}: {
+  index: number;
+  featured?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative shrink-0 overflow-hidden bg-[oklch(0.06_0.01_280)]",
         featured
           ? "aspect-[16/10] w-full lg:aspect-auto lg:min-h-[280px] lg:w-[44%]"
           : "aspect-[16/10] w-full"
@@ -80,24 +93,35 @@ function ProjectCard({
   index: number;
   featured?: boolean;
 }) {
-  const inner = (
-    <div
+  const hasThumbnail = Boolean(project.thumbnailUrl);
+
+  return (
+    <article
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.05] bg-[oklch(0.075_0.012_280)]",
+        "group relative flex h-full overflow-hidden rounded-2xl border border-white/[0.05] bg-[oklch(0.075_0.012_280)]",
         "transition-[border-color,box-shadow] duration-500",
         "hover:border-white/[0.08] hover:shadow-[0_20px_50px_-30px_oklch(0_0_0/0.9)]",
-        featured ? "lg:flex-row lg:items-stretch" : "flex-col"
+        hasThumbnail
+          ? "flex-col"
+          : featured
+            ? "flex-col lg:flex-row lg:items-stretch"
+            : "flex-col"
       )}
     >
-      <ProjectThumbnail project={project} index={index} featured={featured} />
+      {hasThumbnail ? (
+        <CinematicThumbnail src={project.thumbnailUrl!} featured={featured} />
+      ) : (
+        <PlaceholderThumbnail index={index} featured={featured} />
+      )}
 
       <div
         className={cn(
           "flex flex-1 flex-col",
-          featured ? "p-8 sm:p-10 lg:p-12" : "p-7 sm:p-8"
+          featured ? "p-8 sm:p-10 lg:p-12" : "p-7 sm:p-8",
+          hasThumbnail && featured && "pt-7 sm:pt-8 lg:pt-9"
         )}
       >
-        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-zinc-500">
+        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-zinc-400">
           Case study · {String(index + 1).padStart(2, "0")}
         </p>
 
@@ -115,7 +139,7 @@ function ProjectCard({
         {project.description ? (
           <p
             className={cn(
-              "mt-5 leading-[1.75] text-zinc-400",
+              "mt-5 leading-[1.75] text-zinc-300",
               featured ? "max-w-xl text-base sm:text-[17px]" : "text-sm sm:text-base"
             )}
           >
@@ -124,7 +148,7 @@ function ProjectCard({
         ) : null}
 
         {project.outcome ? (
-          <p className="mt-6 border-l border-white/[0.06] pl-4 text-sm leading-relaxed text-zinc-300">
+          <p className="mt-6 border-l border-white/[0.06] pl-4 text-sm leading-relaxed text-zinc-200">
             {project.outcome}
           </p>
         ) : null}
@@ -134,38 +158,16 @@ function ProjectCard({
             {project.techStack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-md bg-white/[0.03] px-2.5 py-1 text-[11px] tracking-wide text-zinc-400"
+                className="rounded-md bg-white/[0.04] px-2.5 py-1 text-[11px] tracking-wide text-zinc-300"
               >
                 {tech}
               </li>
             ))}
           </ul>
         ) : null}
-
-        <div className="mt-auto flex items-center justify-between pt-6">
-          <span className="text-[13px] text-zinc-500 transition-colors duration-300 group-hover:text-zinc-300">
-            {project.link ? "View project" : "Selected work"}
-          </span>
-          <ArrowUpRight className="size-4 text-zinc-600 transition-all duration-300 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-zinc-300" />
-        </div>
       </div>
-    </div>
+    </article>
   );
-
-  if (project.link) {
-    return (
-      <a
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block h-full"
-      >
-        {inner}
-      </a>
-    );
-  }
-
-  return inner;
 }
 
 export function PortfolioProjects({

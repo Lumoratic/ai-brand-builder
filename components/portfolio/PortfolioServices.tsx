@@ -39,7 +39,7 @@ function CapabilityBlock({
       </h3>
       <p
         className={cn(
-          "mt-5 leading-[1.8] text-zinc-400",
+          "mt-5 leading-[1.8] text-zinc-300",
           featured ? "text-base sm:text-[17px]" : "text-sm sm:text-base"
         )}
       >

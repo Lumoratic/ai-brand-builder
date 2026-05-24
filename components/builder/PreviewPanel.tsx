@@ -145,13 +145,17 @@ export function PreviewPanel() {
                   )}
                 >
                   {project.thumbnailUrl ? (
-                    <div className="relative aspect-[16/10] w-full border-b border-white/[0.05]">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden">
                       <Image
                         src={project.thumbnailUrl}
                         alt=""
                         fill
                         unoptimized
-                        className="object-cover"
+                        className="object-cover brightness-[0.9] saturate-[0.88]"
+                      />
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 bg-gradient-to-t from-[oklch(0.075_0.012_280)] via-[oklch(0.075_0.012_280)/0.4] to-transparent"
                       />
                     </div>
                   ) : null}
@@ -168,12 +172,12 @@ export function PreviewPanel() {
                       {project.title}
                     </p>
                     {project.description ? (
-                      <p className="mt-2 text-sm leading-[1.7] text-zinc-500">
+                      <p className="mt-2 text-sm leading-[1.7] text-zinc-300">
                         {project.description}
                       </p>
                     ) : null}
                     {project.outcome ? (
-                      <p className="mt-3 border-l border-white/10 pl-3 text-xs text-zinc-500">
+                      <p className="mt-3 border-l border-white/[0.06] pl-3 text-xs text-zinc-300">
                         {project.outcome}
                       </p>
                     ) : null}
@@ -227,7 +231,7 @@ export function PreviewPanel() {
                   <p className="text-sm font-semibold tracking-tight text-white">
                     {cap.title}
                   </p>
-                  <p className="mt-1.5 text-xs leading-relaxed text-zinc-400 line-clamp-3">
+                  <p className="mt-1.5 text-xs leading-relaxed text-zinc-300 line-clamp-3">
                     {cap.description}
                   </p>
                 </li>

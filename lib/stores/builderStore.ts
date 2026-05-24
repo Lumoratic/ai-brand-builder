@@ -4,7 +4,6 @@ export type FeaturedProject = {
   id: string;
   title: string;
   description: string;
-  link: string;
   techStack: string;
   thumbnailUrl: string;
   outcome: string;
@@ -53,7 +52,6 @@ function createEmptyProject(): FeaturedProject {
     id: `project-${Date.now()}`,
     title: "",
     description: "",
-    link: "",
     techStack: "",
     thumbnailUrl: "",
     outcome: "",

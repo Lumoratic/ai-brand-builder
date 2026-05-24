@@ -19,7 +19,7 @@ export function PortfolioEmptyState({
       )}
     >
       <p className="text-base text-zinc-300">{title}</p>
-      <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-500">
+      <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-400">
         {description}
       </p>
     </div>

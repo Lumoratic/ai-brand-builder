@@ -31,7 +31,6 @@ export type PortfolioProject = {
   id: string;
   title: string;
   description: string;
-  link?: string;
   techStack: string[];
   thumbnailUrl?: string;
   outcome?: string;
@@ -49,7 +48,6 @@ export function getFeaturedProjects(profile: BuilderProfile): PortfolioProject[]
       id: project.id,
       title: project.title.trim(),
       description: project.description.trim(),
-      link: project.link.trim() || undefined,
       techStack: parseSkills(project.techStack),
       thumbnailUrl: project.thumbnailUrl.trim() || undefined,
       outcome: project.outcome.trim() || undefined,

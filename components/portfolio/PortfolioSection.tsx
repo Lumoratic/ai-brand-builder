@@ -51,7 +51,7 @@ export function PortfolioSection({
             {title}
           </h2>
           {description ? (
-            <p className="mt-5 max-w-2xl text-base leading-[1.75] text-zinc-400 lg:text-[17px]">
+            <p className="mt-5 max-w-2xl text-base leading-[1.75] text-zinc-300 lg:text-[17px]">
               {description}
             </p>
           ) : null}
