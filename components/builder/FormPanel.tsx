@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   useBuilderProfile,
@@ -34,6 +36,7 @@ export function FormPanel() {
   const profile = useBuilderProfile();
   const setField = useSetField();
   const resetProfile = useResetProfile();
+  const router = useRouter();
 
   return (
     <div className="flex h-full flex-col">
@@ -106,7 +109,15 @@ export function FormPanel() {
           <p className="text-xs text-zinc-600">Separate skills with commas</p>
         </div>
 
-        <div className="mt-auto border-t border-white/[0.06] pt-6">
+        <div className="mt-auto space-y-3 border-t border-white/[0.06] pt-6">
+          <Button
+            type="button"
+            className="w-full gap-2 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100"
+            onClick={() => router.push("/portfolio/demo")}
+          >
+            Generate Portfolio
+            <ArrowRight className="size-4" />
+          </Button>
           <Button
             type="button"
             variant="outline"
