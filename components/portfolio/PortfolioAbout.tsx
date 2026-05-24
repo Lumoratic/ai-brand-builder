@@ -7,6 +7,7 @@ import { displayValue } from "@/lib/portfolio-utils";
 import type { BuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
+import { portfolioSectionLabel } from "@/components/portfolio/portfolio-layout";
 
 type PortfolioAboutProps = {
   profile: BuilderProfile;
@@ -38,18 +39,16 @@ export function PortfolioAbout({ profile }: PortfolioAboutProps) {
         >
           {bio}
         </p>
-        <aside className="space-y-8 pt-8 lg:pl-10 lg:pt-2">
+        <aside className="space-y-7 pt-6 sm:space-y-8 sm:pt-8 lg:pl-10 lg:pt-2">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400">
-              Location
+            <p className={portfolioSectionLabel}>Location</p>
+            <p className="mt-2.5 text-sm tracking-tight text-zinc-200 sm:mt-3">
+              Remote · Worldwide
             </p>
-            <p className="mt-3 text-sm text-zinc-200">Remote · Worldwide</p>
           </div>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400">
-              Collaboration
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-300">
+            <p className={portfolioSectionLabel}>Collaboration</p>
+            <p className="mt-2.5 text-sm leading-[1.75] text-zinc-300 sm:mt-3">
               Direct, async-friendly, and focused on outcomes clients can feel.
             </p>
           </div>

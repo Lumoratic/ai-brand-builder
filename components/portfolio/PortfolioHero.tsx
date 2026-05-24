@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { portfolioContainerWide } from "@/components/portfolio/portfolio-layout";
+import { portfolioContainerWide, portfolioBtnOutline, portfolioBtnPrimary } from "@/components/portfolio/portfolio-layout";
 import { useMounted } from "@/hooks/use-mounted";
 import { getFadeUp } from "@/lib/motion";
 import {
@@ -35,7 +35,7 @@ function HeroAvatar({
     <div className="relative mx-auto lg:mx-0">
       <div
         aria-hidden
-        className="absolute -inset-4 rounded-[2.25rem] bg-[radial-gradient(circle,oklch(0.42_0.18_280/0.22),transparent_68%)] sm:-inset-5 sm:rounded-[2.5rem]"
+        className="absolute -inset-4 rounded-[2.25rem] bg-[radial-gradient(circle,oklch(0.42_0.18_280/0.18),transparent_68%)] sm:-inset-5 sm:rounded-[2.5rem]"
       />
       <div
         className={cn(
@@ -84,7 +84,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
   const hasName = Boolean(profile.fullName.trim());
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="noise-fine relative overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-30%,oklch(0.42_0.18_280/0.22),transparent_65%)]"
@@ -153,7 +153,10 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             >
               <Button
                 asChild
-                className="h-11 rounded-full bg-white px-6 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100 sm:h-12 sm:px-7"
+                className={cn(
+                  "h-11 rounded-full bg-white px-6 text-[15px] font-medium text-zinc-900 hover:bg-zinc-100 sm:h-12 sm:px-7",
+                  portfolioBtnPrimary
+                )}
               >
                 <a href="#contact">
                   Discuss a project
@@ -163,7 +166,10 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
               <Button
                 asChild
                 variant="outline"
-                className="h-11 rounded-full border-white/10 bg-transparent px-6 text-[15px] text-zinc-300 hover:border-white/20 hover:bg-white/[0.04] hover:text-white sm:h-12 sm:px-7"
+                className={cn(
+                  "h-11 rounded-full border-white/10 bg-transparent px-6 text-[15px] text-zinc-300 hover:border-white/20 hover:bg-white/[0.04] hover:text-white sm:h-12 sm:px-7",
+                  portfolioBtnOutline
+                )}
               >
                 <a href="#work">See my work</a>
               </Button>
@@ -177,7 +183,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
                 <a
                   key={link.id}
                   href={link.href}
-                  className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-zinc-200"
+                  className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-[color,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-zinc-200"
                 >
                   {link.id === "email" ? (
                     <Mail className="size-3.5 text-zinc-500" />

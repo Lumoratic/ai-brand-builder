@@ -1,6 +1,7 @@
 import type { TargetAndTransition, Variant } from "framer-motion";
 
-export const easeOut = [0.22, 1, 0.36, 1] as const;
+export const easeOut = [0.16, 1, 0.3, 1] as const;
+export const easeReveal = [0.22, 1, 0.36, 1] as const;
 
 /** SSR-safe: `false` initial until mounted, then entrance animation runs. */
 export function motionInitial(
@@ -12,26 +13,40 @@ export function motionInitial(
 
 export function getFadeUp(mounted: boolean, delay = 0) {
   return {
-    initial: motionInitial(mounted, { opacity: 0, y: 24 }),
+    initial: motionInitial(mounted, { opacity: 0, y: 20 }),
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, delay, ease: easeOut },
+      transition: { duration: 0.75, delay, ease: easeOut },
     },
   };
 }
 
 export function getFadeInView(mounted: boolean, delay = 0) {
   return {
-    initial: motionInitial(mounted, { opacity: 0, y: 32 }),
+    initial: motionInitial(mounted, { opacity: 0, y: 28 }),
     whileInView: mounted
       ? {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.65, delay, ease: easeOut },
+          transition: { duration: 0.8, delay, ease: easeOut },
         }
       : undefined,
-    viewport: { once: true, margin: "-80px" as const },
+    viewport: { once: true, margin: "-60px" as const },
+  };
+}
+
+export function getSectionReveal(mounted: boolean) {
+  return {
+    initial: motionInitial(mounted, { opacity: 0, y: 22 }),
+    whileInView: mounted
+      ? {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.85, ease: easeReveal },
+        }
+      : undefined,
+    viewport: { once: true, margin: "-50px" as const },
   };
 }
 
@@ -46,16 +61,16 @@ export const staggerContainer: Record<string, Variant> = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.07, delayChildren: 0.12 },
   },
 };
 
 export const staggerItem: Record<string, Variant> = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: easeOut },
+    transition: { duration: 0.7, ease: easeOut },
   },
 };
 

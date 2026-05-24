@@ -7,7 +7,7 @@ import type { PortfolioService } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
 import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
-import { portfolioPanelSurface } from "@/components/portfolio/portfolio-layout";
+import { portfolioPanelHover, portfolioPanelSurface } from "@/components/portfolio/portfolio-layout";
 
 type PortfolioServicesProps = {
   services: PortfolioService[];
@@ -25,15 +25,17 @@ function CapabilityBlock({
     <article
       className={cn(
         portfolioPanelSurface,
-        "transition-[border-color,box-shadow] duration-500 hover:border-white/[0.08] hover:shadow-[inset_0_1px_0_0_oklch(1_0_0/0.06),0_20px_40px_-22px_oklch(0_0_0/0.85)]",
+        portfolioPanelHover,
+        "relative",
         featured ? "p-7 sm:p-9 lg:p-10" : "p-6 sm:p-8"
       )}
     >
+      <div className="relative z-[2]">
       <h3
         className={cn(
-          "font-semibold tracking-[-0.025em] text-white",
+          "font-semibold tracking-[-0.03em] text-white",
           featured
-            ? "text-xl leading-tight sm:text-2xl lg:text-3xl"
+            ? "text-xl leading-tight sm:text-2xl lg:text-[1.75rem]"
             : "text-lg leading-snug sm:text-xl"
         )}
       >
@@ -47,6 +49,7 @@ function CapabilityBlock({
       >
         {service.description}
       </p>
+      </div>
     </article>
   );
 }

@@ -40,7 +40,7 @@ function CinematicThumbnail({
         fill
         unoptimized
         sizes={featured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 40vw"}
-        className="object-cover object-center brightness-[0.92] saturate-[0.9] transition-[transform,filter] duration-700 group-hover:scale-[1.012] group-hover:brightness-[0.96]"
+        className="object-cover object-center brightness-[0.92] saturate-[0.9] transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.018] group-hover:brightness-[0.96]"
       />
       <div
         aria-hidden
@@ -123,7 +123,7 @@ function ProjectCard({
 
       <div
         className={cn(
-          "relative flex flex-1 flex-col",
+          "relative z-[2] flex flex-1 flex-col",
           featured ? "p-6 sm:p-8 lg:p-11" : "p-5 sm:p-7",
           hasThumbnail && "bg-[linear-gradient(to_bottom,oklch(0.075_0.012_280)_0%,oklch(0.068_0.012_280)_100%)]"
         )}
