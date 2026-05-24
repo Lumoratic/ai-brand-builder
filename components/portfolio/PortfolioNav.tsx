@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "#work", label: "Work" },
   { href: "#about", label: "About" },
-  { href: "#services", label: "Services" },
+  { href: "#services", label: "Capabilities" },
   { href: "#contact", label: "Contact" },
 ] as const;
 
@@ -27,7 +27,7 @@ export function PortfolioNav({ fullName }: PortfolioNavProps) {
   return (
     <motion.header
       {...getFadeUp(mounted, 0)}
-      className="sticky top-0 z-50 border-b border-white/[0.05] bg-[oklch(0.07_0.012_280)]/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 bg-[oklch(0.07_0.012_280)]/80 backdrop-blur-xl"
     >
       <div
         className={cn(
@@ -38,7 +38,7 @@ export function PortfolioNav({ fullName }: PortfolioNavProps) {
         <div className="flex min-w-0 items-center gap-5">
           <Link
             href="/builder"
-            className="flex shrink-0 items-center gap-2 text-xs text-zinc-600 transition-colors hover:text-zinc-400"
+            className="flex shrink-0 items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-zinc-300"
           >
             <ArrowLeft className="size-3.5" />
             <span className="hidden sm:inline">Edit</span>
@@ -53,7 +53,7 @@ export function PortfolioNav({ fullName }: PortfolioNavProps) {
             <a
               key={item.href}
               href={item.href}
-              className="text-[13px] text-zinc-500 transition-colors hover:text-white"
+              className="text-[13px] text-zinc-400 transition-colors hover:text-white"
             >
               {item.label}
             </a>

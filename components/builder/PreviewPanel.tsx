@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { ArrowUpRight, Mail } from "lucide-react";
-import { parseSkills, useBuilderProfile } from "@/lib/stores/builderStore";
-import { getFeaturedProjects, getInitials } from "@/lib/portfolio-utils";
+import { useBuilderProfile } from "@/lib/stores/builderStore";
+import { buildServices, getFeaturedProjects, getInitials } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
 
 const placeholders = {
@@ -11,7 +11,6 @@ const placeholders = {
   jobTitle: "Your Role",
   headline: "Your headline or tagline",
   bio: "Your bio will appear here.",
-  skill: "Add skills",
 };
 
 function displayValue(value: string, fallback: string) {
@@ -29,8 +28,8 @@ function contactEmail(fullName: string): string {
 
 export function PreviewPanel() {
   const profile = useBuilderProfile();
-  const skills = parseSkills(profile.skills);
   const projects = getFeaturedProjects(profile);
+  const capabilities = buildServices(profile);
   const name = displayValue(profile.fullName, placeholders.fullName);
   const title = displayValue(profile.jobTitle, placeholders.jobTitle);
   const headline = displayValue(profile.headline, placeholders.headline);
@@ -41,7 +40,6 @@ export function PreviewPanel() {
     title: !profile.jobTitle.trim(),
     headline: !profile.headline.trim(),
     bio: !profile.bio.trim(),
-    skills: skills.length === 0,
     avatar: !profile.avatarUrl,
   };
 
@@ -217,26 +215,29 @@ export function PreviewPanel() {
           </p>
         </section>
 
-        {/* Skills */}
-        <section className="border-b border-white/[0.05] px-6 py-10 sm:px-8">
-          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
-            Services
+        {/* Capabilities */}
+        <section className="border-b border-white/[0.04] px-6 py-10 sm:px-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+            Capabilities
           </p>
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {(skills.length > 0 ? skills : [placeholders.skill]).map((skill) => (
-              <li
-                key={skill}
-                className={cn(
-                  "rounded-full border px-3 py-1 text-xs",
-                  isPlaceholder.skills
-                    ? "border-white/[0.06] text-zinc-700"
-                    : "border-white/[0.08] text-zinc-400"
-                )}
-              >
-                {skill}
-              </li>
-            ))}
-          </ul>
+          {capabilities.length > 0 ? (
+            <ul className="mt-5 space-y-5">
+              {capabilities.map((cap) => (
+                <li key={cap.id}>
+                  <p className="text-sm font-semibold tracking-tight text-white">
+                    {cap.title}
+                  </p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-zinc-400 line-clamp-3">
+                    {cap.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-4 text-sm text-zinc-500">
+              Add skills to generate capability descriptions.
+            </p>
+          )}
         </section>
 
         {/* Contact CTA */}

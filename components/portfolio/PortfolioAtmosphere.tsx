@@ -12,7 +12,7 @@ export function PortfolioAtmosphere({ children }: PortfolioAtmosphereProps) {
       />
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 opacity-[0.35] grid-bg mask-[radial-gradient(ellipse_at_center,black_15%,transparent_72%)]"
+        className="pointer-events-none fixed inset-0 opacity-[0.12] grid-bg mask-[radial-gradient(ellipse_at_center,black_10%,transparent_78%)]"
       />
       <div
         aria-hidden

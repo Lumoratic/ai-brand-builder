@@ -83,9 +83,9 @@ function ProjectCard({
   const inner = (
     <div
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[oklch(0.075_0.012_280)]",
+        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.05] bg-[oklch(0.075_0.012_280)]",
         "transition-[border-color,box-shadow] duration-500",
-        "hover:border-white/[0.12] hover:shadow-[0_20px_50px_-30px_oklch(0_0_0/0.9)]",
+        "hover:border-white/[0.08] hover:shadow-[0_20px_50px_-30px_oklch(0_0_0/0.9)]",
         featured ? "lg:flex-row lg:items-stretch" : "flex-col"
       )}
     >
@@ -97,7 +97,7 @@ function ProjectCard({
           featured ? "p-8 sm:p-10 lg:p-12" : "p-7 sm:p-8"
         )}
       >
-        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-zinc-600">
+        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-zinc-500">
           Case study · {String(index + 1).padStart(2, "0")}
         </p>
 
@@ -115,7 +115,7 @@ function ProjectCard({
         {project.description ? (
           <p
             className={cn(
-              "mt-5 leading-[1.75] text-zinc-500",
+              "mt-5 leading-[1.75] text-zinc-400",
               featured ? "max-w-xl text-base sm:text-[17px]" : "text-sm sm:text-base"
             )}
           >
@@ -124,7 +124,7 @@ function ProjectCard({
         ) : null}
 
         {project.outcome ? (
-          <p className="mt-6 border-l border-white/10 pl-4 text-sm leading-relaxed text-zinc-400">
+          <p className="mt-6 border-l border-white/[0.06] pl-4 text-sm leading-relaxed text-zinc-300">
             {project.outcome}
           </p>
         ) : null}
@@ -134,7 +134,7 @@ function ProjectCard({
             {project.techStack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-md border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] tracking-wide text-zinc-500"
+                className="rounded-md bg-white/[0.03] px-2.5 py-1 text-[11px] tracking-wide text-zinc-400"
               >
                 {tech}
               </li>
@@ -142,11 +142,11 @@ function ProjectCard({
           </ul>
         ) : null}
 
-        <div className="mt-auto flex items-center justify-between border-t border-white/[0.05] pt-6">
-          <span className="text-[13px] text-zinc-600 transition-colors duration-300 group-hover:text-zinc-400">
+        <div className="mt-auto flex items-center justify-between pt-6">
+          <span className="text-[13px] text-zinc-500 transition-colors duration-300 group-hover:text-zinc-300">
             {project.link ? "View project" : "Selected work"}
           </span>
-          <ArrowUpRight className="size-4 text-zinc-700 transition-all duration-300 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-zinc-400" />
+          <ArrowUpRight className="size-4 text-zinc-600 transition-all duration-300 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-zinc-300" />
         </div>
       </div>
     </div>

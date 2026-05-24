@@ -29,16 +29,15 @@ export function PortfolioSection({
     <section
       id={id}
       className={cn(
-        "border-t border-white/[0.06]",
         portfolioSectionY,
         featured && "bg-[oklch(0.062_0.012_280)]",
-        alt && !featured && "bg-white/[0.012]",
+        alt && !featured && "bg-white/[0.008]",
         className
       )}
     >
       <div className={portfolioContainer}>
         <div className={cn("max-w-3xl", featured && "max-w-4xl")}>
-          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-zinc-500">
+          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-zinc-400">
             {label}
           </p>
           <h2
@@ -52,7 +51,7 @@ export function PortfolioSection({
             {title}
           </h2>
           {description ? (
-            <p className="mt-5 max-w-2xl text-base leading-[1.75] text-zinc-600 lg:text-[17px]">
+            <p className="mt-5 max-w-2xl text-base leading-[1.75] text-zinc-400 lg:text-[17px]">
               {description}
             </p>
           ) : null}

@@ -13,47 +13,83 @@ type PortfolioServicesProps = {
   hasSkills: boolean;
 };
 
+function CapabilityBlock({
+  service,
+  featured,
+}: {
+  service: PortfolioService;
+  featured?: boolean;
+}) {
+  return (
+    <article
+      className={cn(
+        featured ? "max-w-3xl" : "max-w-xl",
+        featured && "lg:max-w-none lg:pr-16"
+      )}
+    >
+      <h3
+        className={cn(
+          "font-semibold tracking-[-0.025em] text-white",
+          featured
+            ? "text-2xl leading-tight sm:text-3xl"
+            : "text-xl leading-snug sm:text-2xl"
+        )}
+      >
+        {service.title}
+      </h3>
+      <p
+        className={cn(
+          "mt-5 leading-[1.8] text-zinc-400",
+          featured ? "text-base sm:text-[17px]" : "text-sm sm:text-base"
+        )}
+      >
+        {service.description}
+      </p>
+    </article>
+  );
+}
+
 export function PortfolioServices({ services, hasSkills }: PortfolioServicesProps) {
   const mounted = useMounted();
   const inView = getInViewVariants(mounted);
+  const [primary, ...rest] = services;
 
   return (
     <PortfolioSection
       id="services"
-      label="Services"
-      title="Ways we can work together"
+      label="Capabilities"
+      title="Where I'm most useful"
+      description="Not a service menu — the kinds of problems I do my best work on."
       alt
     >
-      {hasSkills ? (
-        <motion.ul
+      {hasSkills && primary ? (
+        <motion.div
           variants={staggerContainer}
           {...inView}
           viewport={{ once: true, margin: "-60px" }}
-          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          className="space-y-16 lg:space-y-20"
         >
-          {services.map((service) => (
-            <motion.li
-              key={service.id}
-              variants={staggerItem}
-              className={cn(
-                "rounded-2xl border border-white/[0.06] bg-transparent p-7",
-                "transition-colors duration-300 hover:border-white/10 hover:bg-white/[0.02]"
-              )}
+          <motion.div variants={staggerItem}>
+            <CapabilityBlock service={primary} featured />
+          </motion.div>
+
+          {rest.length > 0 ? (
+            <motion.div
+              variants={staggerContainer}
+              className="grid gap-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-0"
             >
-              <h3 className="text-lg font-semibold tracking-tight text-white">
-                {service.title}
-              </h3>
-              <p className="mt-4 text-sm leading-relaxed text-zinc-500">
-                {service.description}
-              </p>
-            </motion.li>
-          ))}
-        </motion.ul>
+              {rest.map((service) => (
+                <motion.div key={service.id} variants={staggerItem}>
+                  <CapabilityBlock service={service} />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : null}
+        </motion.div>
       ) : (
         <PortfolioEmptyState
-          title="Skills shape your services"
-          description="Add a few core skills in the builder — they'll appear here as ways you can help."
-          className="text-center sm:text-left"
+          title="Your skills shape this section"
+          description="Add a few core skills in the builder — they'll become capability descriptions that read like how you'd actually talk about your work."
         />
       )}
     </PortfolioSection>

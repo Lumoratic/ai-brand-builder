@@ -3,7 +3,6 @@
 import { parseSkills, useBuilderProfile } from "@/lib/stores/builderStore";
 import {
   buildServices,
-  buildStats,
   getFeaturedProjects,
   hasFeaturedProjects,
 } from "@/lib/portfolio-utils";
@@ -14,7 +13,6 @@ import { PortfolioHero } from "@/components/portfolio/PortfolioHero";
 import { PortfolioNav } from "@/components/portfolio/PortfolioNav";
 import { PortfolioProjects } from "@/components/portfolio/PortfolioProjects";
 import { PortfolioServices } from "@/components/portfolio/PortfolioServices";
-import { PortfolioStats } from "@/components/portfolio/PortfolioStats";
 
 export function PortfolioView() {
   const profile = useBuilderProfile();
@@ -25,14 +23,12 @@ export function PortfolioView() {
 
   const projects = getFeaturedProjects(profile);
   const services = buildServices(profile);
-  const stats = buildStats(profile);
 
   return (
     <PortfolioAtmosphere>
       <PortfolioNav fullName={profile.fullName} />
       <main>
         <PortfolioHero profile={profile} />
-        <PortfolioStats stats={stats} />
         <PortfolioProjects projects={projects} hasProjects={hasProjects} />
         <PortfolioAbout profile={profile} />
         <PortfolioServices services={services} hasSkills={hasSkills} />

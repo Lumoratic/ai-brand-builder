@@ -32,7 +32,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
   const hasName = Boolean(profile.fullName.trim());
 
   return (
-    <section className="relative min-h-[88vh] overflow-hidden border-b border-white/[0.05]">
+    <section className="relative min-h-[88vh] overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-30%,oklch(0.42_0.18_280/0.22),transparent_65%)]"
@@ -80,7 +80,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {headline ? (
               <motion.p
                 {...getFadeUp(mounted, 0.2)}
-                className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-500 sm:text-xl lg:text-2xl lg:leading-snug"
+                className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-400 sm:text-xl lg:text-2xl lg:leading-snug"
               >
                 {headline}
               </motion.p>
@@ -89,7 +89,7 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
             {bio ? (
               <motion.p
                 {...getFadeUp(mounted, 0.25)}
-                className="mt-8 max-w-xl text-base leading-[1.75] text-zinc-500 sm:text-lg"
+                className="mt-8 max-w-xl text-base leading-[1.75] text-zinc-400 sm:text-lg"
               >
                 {bio.length > 220 ? `${bio.slice(0, 220).trim()}…` : bio}
               </motion.p>
@@ -119,22 +119,22 @@ export function PortfolioHero({ profile }: PortfolioHeroProps) {
 
             <motion.div
               {...getFadeUp(mounted, 0.35)}
-              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/[0.06] pt-8"
+              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 pt-8"
             >
               {socialLinks.map((link) => (
                 <a
                   key={link.id}
                   href={link.href}
-                  className="inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-300"
+                  className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-zinc-200"
                 >
                   {link.id === "email" ? (
-                    <Mail className="size-3.5 text-zinc-600" />
+                    <Mail className="size-3.5 text-zinc-500" />
                   ) : null}
                   {link.label}
                 </a>
               ))}
-              <span className="hidden text-zinc-700 sm:inline">·</span>
-              <span className="text-sm text-zinc-600">{email}</span>
+              <span className="hidden text-zinc-600 sm:inline">·</span>
+              <span className="text-sm text-zinc-500">{email}</span>
             </motion.div>
           </div>
 

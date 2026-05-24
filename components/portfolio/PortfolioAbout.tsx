@@ -33,23 +33,23 @@ export function PortfolioAbout({ profile }: PortfolioAboutProps) {
         <p
           className={cn(
             "max-w-2xl text-lg leading-[1.85] lg:text-xl lg:leading-[1.8]",
-            hasBio ? "text-zinc-300" : "text-zinc-600"
+            hasBio ? "text-zinc-300" : "text-zinc-500"
           )}
         >
           {bio}
         </p>
-        <aside className="space-y-8 border-t border-white/[0.06] pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+        <aside className="space-y-8 pt-8 lg:pl-10 lg:pt-2">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
               Location
             </p>
-            <p className="mt-3 text-sm text-zinc-400">Remote · Worldwide</p>
+            <p className="mt-3 text-sm text-zinc-300">Remote · Worldwide</p>
           </div>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-500">
               Collaboration
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-500">
+            <p className="mt-3 text-sm leading-relaxed text-zinc-400">
               Direct, async-friendly, and focused on outcomes clients can feel.
             </p>
           </div>

@@ -29,7 +29,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
     <section
       id="contact"
       className={cn(
-        "relative overflow-hidden border-t border-white/[0.06]",
+        "relative overflow-hidden",
         portfolioSectionY
       )}
     >
@@ -44,7 +44,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
         className={portfolioContainer}
       >
         <div className="mx-auto max-w-4xl text-center lg:max-w-none lg:text-left">
-          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-zinc-500">
+          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-zinc-400">
             Start a project
           </p>
           <h2 className="mt-6 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl lg:text-5xl lg:leading-[1.08]">
@@ -52,7 +52,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
               ? `Let’s create something meaningful, ${firstName}.`
               : "Let’s create something meaningful together."}
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-500 lg:mx-0 lg:text-lg">
+          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-400 lg:mx-0 lg:text-lg">
             I partner with teams and founders who value clarity, craft, and
             work that earns trust. Tell me about your project — I reply within
             two business days.
@@ -63,11 +63,11 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
               href={`mailto:${email}?subject=Project%20inquiry`}
               className="inline-flex items-center gap-4 text-left transition-opacity hover:opacity-80"
             >
-              <span className="flex size-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03]">
-                <Mail className="size-5 text-zinc-400" />
+              <span className="flex size-12 items-center justify-center rounded-2xl bg-white/[0.03]">
+                <Mail className="size-5 text-zinc-300" />
               </span>
               <span>
-                <span className="block text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-600">
+                <span className="block text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
                   Email
                 </span>
                 <span className="mt-1 block text-base text-zinc-300">{email}</span>
@@ -87,7 +87,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
               <Button
                 asChild
                 variant="outline"
-                className="h-12 rounded-full border-white/10 bg-transparent px-8 text-[15px] text-zinc-400 hover:border-white/20 hover:text-white"
+                className="h-12 rounded-full border-white/[0.08] bg-transparent px-8 text-[15px] text-zinc-300 hover:border-white/15 hover:text-white"
               >
                 <Link href="/builder">Edit portfolio</Link>
               </Button>
@@ -107,19 +107,19 @@ export function PortfolioFooter({ fullName }: PortfolioFooterProps) {
   const firstName = getFirstName(fullName);
 
   return (
-    <footer className="border-t border-white/[0.05]">
+    <footer>
       <div
         className={cn(
           portfolioContainerWide,
           "flex flex-col items-center justify-between gap-4 py-12 sm:flex-row"
         )}
       >
-        <p className="text-sm text-zinc-600">
+        <p className="text-sm text-zinc-500">
           © {firstName} · Personal portfolio
         </p>
         <Link
           href="/builder"
-          className="text-sm text-zinc-600 transition-colors hover:text-zinc-400"
+          className="text-sm text-zinc-500 transition-colors hover:text-zinc-300"
         >
           Built with BrandSpark
         </Link>

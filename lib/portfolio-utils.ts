@@ -66,12 +66,6 @@ export type PortfolioService = {
   description: string;
 };
 
-export type PortfolioStat = {
-  id: string;
-  label: string;
-  value: string;
-};
-
 export type SocialLink = {
   id: string;
   label: string;
@@ -79,45 +73,38 @@ export type SocialLink = {
   external?: boolean;
 };
 
+/** Three editorial capability blocks — always derived from skills + role. */
 export function buildServices(profile: BuilderProfile): PortfolioService[] {
   const skills = parseSkills(profile.skills);
+  if (skills.length === 0) return [];
+
   const role = profile.jobTitle.trim();
+  const rolePhrase = role ? ` as a ${role.toLowerCase()}` : "";
+  const [primary, secondary, tertiary] = skills;
 
-  return skills.slice(0, 6).map((skill) => ({
-    id: skill,
-    title: skill,
-    description: role
-      ? `${skill} delivered with the perspective of a ${role.toLowerCase()}.`
-      : `Professional ${skill.toLowerCase()} for teams that value clarity and craft.`,
-  }));
-}
-
-export function buildStats(profile: BuilderProfile): PortfolioStat[] {
-  const skills = parseSkills(profile.skills);
-  const hasBio = profile.bio.trim().length > 0;
-  const hasRole = profile.jobTitle.trim().length > 0;
-  const projectCount = getFeaturedProjects(profile).length;
+  const secondarySkills = [secondary, tertiary].filter(Boolean).join(" and ");
 
   return [
     {
-      id: "projects",
-      label: "Featured projects",
-      value: projectCount > 0 ? String(projectCount) : "—",
+      id: "expertise",
+      title: primary,
+      description: role
+        ? `The work I take on most often${rolePhrase} — owning ${primary.toLowerCase()} from early direction through delivery, with enough context to make good calls without constant oversight.`
+        : `Where I spend most of my time — ${primary.toLowerCase()} work that needs someone in the details, making decisions that hold up after handoff.`,
     },
     {
-      id: "skills",
-      label: "Core skills",
-      value: skills.length > 0 ? String(skills.length) : "—",
+      id: "breadth",
+      title: secondarySkills || "Cross-functional continuity",
+      description: secondarySkills
+        ? `${secondarySkills} often come into play when a project crosses disciplines. I stay useful through those shifts — same thread of thinking, fewer gaps between phases.`
+        : "Useful when projects cross disciplines — I keep continuity through handoffs instead of treating each phase like a fresh start.",
     },
     {
-      id: "role",
-      label: "Current focus",
-      value: hasRole ? profile.jobTitle.trim() : "—",
-    },
-    {
-      id: "profile",
-      label: "Profile status",
-      value: hasBio ? "Complete" : "In progress",
+      id: "collaboration",
+      title: "Working together",
+      description: role
+        ? `Direct, async-friendly, and honest about scope upfront. Short feedback loops over big reveals — especially when you need a ${role.toLowerCase()} to move something forward, not add process.`
+        : "Direct communication, async-friendly rhythms, and scope conversations before they become problems. I'd rather flag a constraint early than polish something that misses the point.",
     },
   ];
 }
