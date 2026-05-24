@@ -8,6 +8,7 @@ import {
   hasFeaturedProjects,
 } from "@/lib/portfolio-utils";
 import { PortfolioAbout } from "@/components/portfolio/PortfolioAbout";
+import { PortfolioAtmosphere } from "@/components/portfolio/PortfolioAtmosphere";
 import { PortfolioContact, PortfolioFooter } from "@/components/portfolio/PortfolioContact";
 import { PortfolioHero } from "@/components/portfolio/PortfolioHero";
 import { PortfolioNav } from "@/components/portfolio/PortfolioNav";
@@ -27,7 +28,7 @@ export function PortfolioView() {
   const stats = buildStats(profile);
 
   return (
-    <div className="min-h-screen bg-[oklch(0.07_0.012_280)] text-foreground">
+    <PortfolioAtmosphere>
       <PortfolioNav fullName={profile.fullName} />
       <main>
         <PortfolioHero profile={profile} />
@@ -38,6 +39,6 @@ export function PortfolioView() {
         <PortfolioContact profile={profile} />
       </main>
       <PortfolioFooter fullName={profile.fullName} />
-    </div>
+    </PortfolioAtmosphere>
   );
 }

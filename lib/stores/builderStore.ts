@@ -6,6 +6,8 @@ export type FeaturedProject = {
   description: string;
   link: string;
   techStack: string;
+  thumbnailUrl: string;
+  outcome: string;
 };
 
 export type BuilderProfile = {
@@ -53,6 +55,8 @@ function createEmptyProject(): FeaturedProject {
     description: "",
     link: "",
     techStack: "",
+    thumbnailUrl: "",
+    outcome: "",
   };
 }
 

@@ -5,6 +5,7 @@ import { useMounted } from "@/hooks/use-mounted";
 import { getInViewVariants, staggerContainer, staggerItem } from "@/lib/motion";
 import type { PortfolioService } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
+import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
 import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
 
 type PortfolioServicesProps = {
@@ -49,11 +50,11 @@ export function PortfolioServices({ services, hasSkills }: PortfolioServicesProp
           ))}
         </motion.ul>
       ) : (
-        <div className="rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.015] px-8 py-16 text-center">
-          <p className="text-sm text-zinc-500">
-            Services appear from the skills you add in the builder.
-          </p>
-        </div>
+        <PortfolioEmptyState
+          title="Skills shape your services"
+          description="Add a few core skills in the builder — they'll appear here as ways you can help."
+          className="text-center sm:text-left"
+        />
       )}
     </PortfolioSection>
   );

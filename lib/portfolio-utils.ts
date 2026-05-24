@@ -33,17 +33,26 @@ export type PortfolioProject = {
   description: string;
   link?: string;
   techStack: string[];
+  thumbnailUrl?: string;
+  outcome?: string;
 };
 
 export function getFeaturedProjects(profile: BuilderProfile): PortfolioProject[] {
   return profile.projects
-    .filter((project) => project.title.trim() || project.description.trim())
+    .filter(
+      (project) =>
+        project.title.trim() ||
+        project.description.trim() ||
+        project.outcome.trim()
+    )
     .map((project) => ({
       id: project.id,
       title: project.title.trim(),
       description: project.description.trim(),
       link: project.link.trim() || undefined,
       techStack: parseSkills(project.techStack),
+      thumbnailUrl: project.thumbnailUrl.trim() || undefined,
+      outcome: project.outcome.trim() || undefined,
     }));
 }
 

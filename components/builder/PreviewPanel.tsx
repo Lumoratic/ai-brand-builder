@@ -134,52 +134,70 @@ export function PreviewPanel() {
             Selected work
           </p>
           <h3 className="mt-3 text-xl font-semibold tracking-tight text-white">
-            Featured projects
+            Case studies
           </h3>
           {projects.length > 0 ? (
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-6 space-y-5">
               {projects.map((project, i) => (
                 <li
                   key={project.id}
                   className={cn(
-                    "rounded-xl border border-white/[0.07] bg-[oklch(0.08_0.012_280)] p-5 transition-colors",
-                    i === 0 && "p-6"
+                    "overflow-hidden rounded-xl border border-white/[0.07] bg-[oklch(0.075_0.012_280)]",
+                    i === 0 && "border-white/[0.09]"
                   )}
                 >
-                  <p className="text-[9px] uppercase tracking-wider text-zinc-600">
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <p
-                    className={cn(
-                      "mt-2 font-semibold text-white",
-                      i === 0 ? "text-lg" : "text-base"
-                    )}
-                  >
-                    {project.title}
-                  </p>
-                  {project.description ? (
-                    <p className="mt-2 text-sm leading-relaxed text-zinc-500">
-                      {project.description}
+                  {project.thumbnailUrl ? (
+                    <div className="relative aspect-[16/10] w-full border-b border-white/[0.05]">
+                      <Image
+                        src={project.thumbnailUrl}
+                        alt=""
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : null}
+                  <div className={cn("p-5", i === 0 && "sm:p-6")}>
+                    <p className="text-[9px] uppercase tracking-wider text-zinc-600">
+                      {String(i + 1).padStart(2, "0")}
                     </p>
-                  ) : null}
-                  {project.techStack.length > 0 ? (
-                    <ul className="mt-3 flex flex-wrap gap-1.5">
-                      {project.techStack.map((tech) => (
-                        <li
-                          key={tech}
-                          className="rounded-full border border-white/[0.06] px-2 py-0.5 text-[10px] text-zinc-500"
-                        >
-                          {tech}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
+                    <p
+                      className={cn(
+                        "mt-2 font-semibold tracking-tight text-white",
+                        i === 0 ? "text-lg" : "text-base"
+                      )}
+                    >
+                      {project.title}
+                    </p>
+                    {project.description ? (
+                      <p className="mt-2 text-sm leading-[1.7] text-zinc-500">
+                        {project.description}
+                      </p>
+                    ) : null}
+                    {project.outcome ? (
+                      <p className="mt-3 border-l border-white/10 pl-3 text-xs text-zinc-500">
+                        {project.outcome}
+                      </p>
+                    ) : null}
+                    {project.techStack.length > 0 ? (
+                      <ul className="mt-3 flex flex-wrap gap-1.5">
+                        {project.techStack.map((tech) => (
+                          <li
+                            key={tech}
+                            className="rounded-md border border-white/[0.06] px-2 py-0.5 text-[10px] text-zinc-600"
+                          >
+                            {tech}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-5 text-sm text-zinc-600">
-              Add projects to preview them here.
+            <p className="mt-5 text-sm leading-relaxed text-zinc-600">
+              Your case studies will appear here once you add them.
             </p>
           )}
         </section>

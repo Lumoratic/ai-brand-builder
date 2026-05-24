@@ -4,12 +4,11 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { builderInputClassName, builderLabelClassName } from "@/components/builder/builder-styles";
+import { builderLabelClassName } from "@/components/builder/builder-styles";
+import { readImageAsDataUrl } from "@/lib/read-image-file";
 import { useSetField } from "@/lib/stores/builderStore";
 import { getInitials } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
-
-const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 type AvatarUploadProps = {
   fullName: string;
@@ -24,17 +23,7 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    if (!file.type.startsWith("image/")) return;
-    if (file.size > MAX_FILE_SIZE) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setField("avatarUrl", reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
+    readImageAsDataUrl(file, (dataUrl) => setField("avatarUrl", dataUrl));
     e.target.value = "";
   }
 

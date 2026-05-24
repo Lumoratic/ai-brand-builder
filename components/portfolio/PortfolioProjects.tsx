@@ -1,17 +1,75 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useMounted } from "@/hooks/use-mounted";
 import { getInViewVariants, staggerContainer, staggerItem } from "@/lib/motion";
 import type { PortfolioProject } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
+import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
 import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
 
 type PortfolioProjectsProps = {
   projects: PortfolioProject[];
   hasProjects: boolean;
 };
+
+function ProjectThumbnail({
+  project,
+  index,
+  featured,
+}: {
+  project: PortfolioProject;
+  index: number;
+  featured?: boolean;
+}) {
+  if (project.thumbnailUrl) {
+    return (
+      <div
+        className={cn(
+          "relative shrink-0 overflow-hidden bg-[oklch(0.06_0.01_280)]",
+          featured
+            ? "aspect-[16/10] w-full lg:aspect-auto lg:min-h-full lg:w-[44%]"
+            : "aspect-[16/10] w-full"
+        )}
+      >
+        <Image
+          src={project.thumbnailUrl}
+          alt=""
+          fill
+          unoptimized
+          className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-t from-[oklch(0.08_0.012_280)/0.4] to-transparent opacity-60"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative shrink-0 overflow-hidden border-white/[0.04] bg-[oklch(0.06_0.01_280)]",
+        featured
+          ? "aspect-[16/10] w-full lg:aspect-auto lg:min-h-[280px] lg:w-[44%]"
+          : "aspect-[16/10] w-full"
+      )}
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,oklch(0.35_0.12_280/0.12),transparent_60%)]"
+      />
+      <div className="absolute inset-0 flex items-end p-6 sm:p-8">
+        <span className="text-5xl font-semibold tracking-tighter text-white/[0.04] sm:text-6xl">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function ProjectCard({
   project,
@@ -22,65 +80,76 @@ function ProjectCard({
   index: number;
   featured?: boolean;
 }) {
-  const content = (
-    <>
+  const inner = (
+    <div
+      className={cn(
+        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[oklch(0.075_0.012_280)]",
+        "transition-[border-color,box-shadow] duration-500",
+        "hover:border-white/[0.12] hover:shadow-[0_20px_50px_-30px_oklch(0_0_0/0.9)]",
+        featured ? "lg:flex-row lg:items-stretch" : "flex-col"
+      )}
+    >
+      <ProjectThumbnail project={project} index={index} featured={featured} />
+
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-      />
-      <div className="relative flex flex-1 flex-col">
+        className={cn(
+          "flex flex-1 flex-col",
+          featured ? "p-8 sm:p-10 lg:p-12" : "p-7 sm:p-8"
+        )}
+      >
         <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-zinc-600">
-          {String(index + 1).padStart(2, "0")}
+          Case study · {String(index + 1).padStart(2, "0")}
         </p>
+
         <h3
           className={cn(
-            "mt-4 font-semibold tracking-[-0.02em] text-white",
+            "mt-4 font-semibold tracking-[-0.025em] text-white",
             featured
-              ? "text-2xl sm:text-3xl lg:text-4xl lg:leading-tight"
-              : "text-xl sm:text-2xl"
+              ? "text-2xl leading-tight sm:text-3xl lg:text-[2rem]"
+              : "text-xl leading-snug sm:text-2xl"
           )}
         >
           {project.title}
         </h3>
+
         {project.description ? (
           <p
             className={cn(
-              "mt-5 leading-relaxed text-zinc-500",
-              featured ? "max-w-2xl text-base sm:text-lg" : "text-sm sm:text-base"
+              "mt-5 leading-[1.75] text-zinc-500",
+              featured ? "max-w-xl text-base sm:text-[17px]" : "text-sm sm:text-base"
             )}
           >
             {project.description}
           </p>
         ) : null}
+
+        {project.outcome ? (
+          <p className="mt-6 border-l border-white/10 pl-4 text-sm leading-relaxed text-zinc-400">
+            {project.outcome}
+          </p>
+        ) : null}
+
         {project.techStack.length > 0 ? (
           <ul className="mt-8 flex flex-wrap gap-2">
             {project.techStack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-zinc-400"
+                className="rounded-md border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] tracking-wide text-zinc-500"
               >
                 {tech}
               </li>
             ))}
           </ul>
         ) : null}
-      </div>
-      <div className="relative mt-10 flex items-center justify-between border-t border-white/[0.06] pt-6">
-        <span className="text-sm text-zinc-600 transition-colors group-hover:text-zinc-400">
-          {project.link ? "View live project" : "Selected work"}
-        </span>
-        {project.link ? (
-          <ExternalLink className="size-4 text-zinc-600 transition-all duration-300 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-white" />
-        ) : null}
-      </div>
-    </>
-  );
 
-  const className = cn(
-    "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[oklch(0.08_0.012_280)]",
-    "transition-all duration-500 hover:border-white/[0.14] hover:bg-[oklch(0.09_0.014_280)] hover:shadow-[0_24px_48px_-24px_oklch(0_0_0/0.8)]",
-    featured ? "p-8 sm:p-10 lg:p-12" : "p-7 sm:p-8",
-    project.link && "cursor-pointer"
+        <div className="mt-auto flex items-center justify-between border-t border-white/[0.05] pt-6">
+          <span className="text-[13px] text-zinc-600 transition-colors duration-300 group-hover:text-zinc-400">
+            {project.link ? "View project" : "Selected work"}
+          </span>
+          <ArrowUpRight className="size-4 text-zinc-700 transition-all duration-300 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-zinc-400" />
+        </div>
+      </div>
+    </div>
   );
 
   if (project.link) {
@@ -89,14 +158,14 @@ function ProjectCard({
         href={project.link}
         target="_blank"
         rel="noopener noreferrer"
-        className={className}
+        className="block h-full"
       >
-        {content}
+        {inner}
       </a>
     );
   }
 
-  return <article className={className}>{content}</article>;
+  return inner;
 }
 
 export function PortfolioProjects({
@@ -111,8 +180,8 @@ export function PortfolioProjects({
     <PortfolioSection
       id="work"
       label="Selected work"
-      title="Projects that define my craft"
-      description="A curated look at the work I’m most proud of — built from your real project entries."
+      title="Case studies & client work"
+      description="A curated selection — the kind of work I'd share when someone asks what I've actually built."
       featured
     >
       {hasProjects && featured ? (
@@ -120,7 +189,7 @@ export function PortfolioProjects({
           variants={staggerContainer}
           {...inView}
           viewport={{ once: true, margin: "-80px" }}
-          className="space-y-6"
+          className="space-y-8"
         >
           <motion.div variants={staggerItem}>
             <ProjectCard project={featured} index={0} featured />
@@ -128,7 +197,7 @@ export function PortfolioProjects({
           {rest.length > 0 ? (
             <motion.div
               variants={staggerContainer}
-              className="grid gap-6 sm:grid-cols-2"
+              className="grid gap-8 lg:grid-cols-2"
             >
               {rest.map((project, index) => (
                 <motion.div key={project.id} variants={staggerItem}>
@@ -139,12 +208,10 @@ export function PortfolioProjects({
           ) : null}
         </motion.div>
       ) : (
-        <div className="rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.015] px-8 py-20 text-center">
-          <p className="text-base text-zinc-500">Your featured projects will live here</p>
-          <p className="mt-2 text-sm text-zinc-600">
-            Add projects in the builder to showcase selected work.
-          </p>
-        </div>
+        <PortfolioEmptyState
+          title="Your best work belongs here"
+          description="Add a project in the builder — include what you did, what changed, and optionally a screenshot. This section reads best with real context, not filler."
+        />
       )}
     </PortfolioSection>
   );
