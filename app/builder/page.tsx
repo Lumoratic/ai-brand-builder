@@ -1,4 +1,5 @@
-import { BuilderLayout } from "@/components/builder/BuilderLayout";
+import { BuilderHeader } from "@/components/builder/BuilderHeader";
+import { BuilderWorkspace } from "@/components/builder/BuilderWorkspace";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function BuilderPage() {
-  return <BuilderLayout />;
+  return (
+    <div className="flex min-h-screen flex-col bg-[oklch(0.07_0.012_280)] text-foreground">
+      <BuilderHeader />
+      <BuilderWorkspace />
+    </div>
+  );
 }

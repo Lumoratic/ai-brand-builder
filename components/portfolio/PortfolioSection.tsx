@@ -1,8 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { useMotion } from "@/hooks/use-motion";
 import { cn } from "@/lib/utils";
+import { MotionReveal } from "@/components/portfolio/motion/MotionReveal";
 import {
   portfolioContainer,
   portfolioSectionLabel,
@@ -30,8 +27,6 @@ export function PortfolioSection({
   alt = false,
   featured = false,
 }: PortfolioSectionProps) {
-  const { sectionReveal } = useMotion();
-
   return (
     <section
       id={id}
@@ -57,10 +52,7 @@ export function PortfolioSection({
       ) : null}
 
       <div className={portfolioContainer}>
-        <motion.div
-          {...sectionReveal()}
-          className={cn("max-w-3xl", featured && "max-w-4xl")}
-        >
+        <MotionReveal className={cn("max-w-3xl", featured && "max-w-4xl")}>
           <p className={portfolioSectionLabel}>{label}</p>
           <h2
             className={cn(
@@ -77,7 +69,7 @@ export function PortfolioSection({
               {description}
             </p>
           ) : null}
-        </motion.div>
+        </MotionReveal>
         <div
           className={cn(
             "mt-10 sm:mt-11 lg:mt-12",

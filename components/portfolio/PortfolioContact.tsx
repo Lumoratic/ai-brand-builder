@@ -1,29 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useMotion } from "@/hooks/use-motion";
+import { MotionReveal } from "@/components/portfolio/motion/MotionReveal";
 import {
   portfolioBtnOutline,
   portfolioBtnPrimary,
   portfolioContainer,
-  portfolioContainerWide,
   portfolioFocusRing,
   portfolioSectionLabel,
   portfolioSectionY,
 } from "@/components/portfolio/portfolio-layout";
 import { contactEmail, getFirstName } from "@/lib/portfolio-utils";
-import type { BuilderProfile } from "@/lib/stores/builderStore";
+import { useBuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 
-type PortfolioContactProps = {
-  profile: BuilderProfile;
-};
-
-export function PortfolioContact({ profile }: PortfolioContactProps) {
-  const { sectionReveal } = useMotion();
+export function PortfolioContact() {
+  const profile = useBuilderProfile();
   const firstName = getFirstName(profile.fullName);
   const email = contactEmail(profile.fullName);
   const hasName = Boolean(profile.fullName.trim());
@@ -47,7 +41,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[oklch(0.07_0.012_280)] sm:h-40"
       />
 
-      <motion.div {...sectionReveal()} className={portfolioContainer}>
+      <MotionReveal className={portfolioContainer}>
         <div className="mx-auto max-w-4xl text-center lg:max-w-none lg:text-left">
           <p className={portfolioSectionLabel}>Start a project</p>
           <h2
@@ -114,49 +108,7 @@ export function PortfolioContact({ profile }: PortfolioContactProps) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </MotionReveal>
     </section>
-  );
-}
-
-type PortfolioFooterProps = {
-  fullName: string;
-};
-
-export function PortfolioFooter({ fullName }: PortfolioFooterProps) {
-  const firstName = getFirstName(fullName);
-
-  return (
-    <footer className="relative" role="contentinfo">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-16 h-16 bg-gradient-to-b from-transparent to-[oklch(0.07_0.012_280)] sm:-top-20 sm:h-20"
-      />
-      <div
-        className={cn(
-          portfolioContainerWide,
-          "relative flex flex-col items-center justify-between gap-5 pb-16 pt-8 sm:flex-row sm:pb-20 sm:pt-10"
-        )}
-      >
-        <p className="text-sm tracking-wide text-zinc-400">
-          <span className="text-zinc-300">© {firstName}</span>
-          <span className="text-zinc-600" aria-hidden>
-            {" "}
-            ·{" "}
-          </span>
-          <span>Personal portfolio</span>
-        </p>
-        <Link
-          href="/builder"
-          className={cn(
-            "text-sm tracking-wide text-zinc-400 transition-[color,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-zinc-200",
-            portfolioFocusRing,
-            "rounded-sm"
-          )}
-        >
-          Built with BrandSpark
-        </Link>
-      </div>
-    </footer>
   );
 }

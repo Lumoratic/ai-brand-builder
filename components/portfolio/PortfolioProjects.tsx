@@ -3,19 +3,22 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useMotion } from "@/hooks/use-motion";
-import type { PortfolioProject } from "@/lib/portfolio-utils";
+import {
+  getFeaturedProjects,
+  hasFeaturedProjects,
+  type PortfolioProject,
+} from "@/lib/portfolio-utils";
+import { useBuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 import { PortfolioEmptyState } from "@/components/portfolio/PortfolioEmptyState";
-import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
+import {
+  MotionStagger,
+  MotionStaggerItem,
+} from "@/components/portfolio/motion/MotionStagger";
 import {
   portfolioCardHover,
   portfolioCardSurface,
 } from "@/components/portfolio/portfolio-layout";
-
-type PortfolioProjectsProps = {
-  projects: PortfolioProject[];
-  hasProjects: boolean;
-};
 
 function CinematicThumbnail({
   src,
@@ -176,50 +179,39 @@ function ProjectCard({
   );
 }
 
-export function PortfolioProjects({
-  projects,
-  hasProjects,
-}: PortfolioProjectsProps) {
-  const { inView, staggerContainer, staggerItem } = useMotion();
+export function PortfolioProjects() {
+  const profile = useBuilderProfile();
+  const projects = getFeaturedProjects(profile);
+  const hasProjects = hasFeaturedProjects(profile);
+  const { staggerContainer, staggerItem } = useMotion();
   const [featured, ...rest] = projects;
 
+  if (!hasProjects || !featured) {
+    return (
+      <PortfolioEmptyState
+        title="Your best work belongs here"
+        description="Add a project in the builder — include what you did, what changed, and optionally a screenshot. This section reads best with real context, not filler."
+      />
+    );
+  }
+
   return (
-    <PortfolioSection
-      id="work"
-      label="Selected work"
-      title="Case studies & client work"
-      description="A curated selection — the kind of work I'd share when someone asks what I've actually built."
-      featured
-    >
-      {hasProjects && featured ? (
+    <MotionStagger viewportMargin="-80px" className="space-y-6 sm:space-y-8">
+      <MotionStaggerItem>
+        <ProjectCard project={featured} index={0} featured />
+      </MotionStaggerItem>
+      {rest.length > 0 ? (
         <motion.div
           variants={staggerContainer}
-          {...inView}
-          viewport={{ once: true, margin: "-80px" }}
-          className="space-y-6 sm:space-y-8"
+          className="grid gap-6 sm:gap-8 lg:grid-cols-2"
         >
-          <motion.div variants={staggerItem}>
-            <ProjectCard project={featured} index={0} featured />
-          </motion.div>
-          {rest.length > 0 ? (
-            <motion.div
-              variants={staggerContainer}
-              className="grid gap-6 sm:gap-8 lg:grid-cols-2"
-            >
-              {rest.map((project, index) => (
-                <motion.div key={project.id} variants={staggerItem}>
-                  <ProjectCard project={project} index={index + 1} />
-                </motion.div>
-              ))}
+          {rest.map((project, index) => (
+            <motion.div key={project.id} variants={staggerItem}>
+              <ProjectCard project={project} index={index + 1} />
             </motion.div>
-          ) : null}
+          ))}
         </motion.div>
-      ) : (
-        <PortfolioEmptyState
-          title="Your best work belongs here"
-          description="Add a project in the builder — include what you did, what changed, and optionally a screenshot. This section reads best with real context, not filler."
-        />
-      )}
-    </PortfolioSection>
+      ) : null}
+    </MotionStagger>
   );
 }

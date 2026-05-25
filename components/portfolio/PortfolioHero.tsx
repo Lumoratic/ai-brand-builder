@@ -12,12 +12,8 @@ import {
   displayValue,
   getInitials,
 } from "@/lib/portfolio-utils";
-import type { BuilderProfile } from "@/lib/stores/builderStore";
+import { useBuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
-
-type PortfolioHeroProps = {
-  profile: BuilderProfile;
-};
 
 function HeroAvatar({
   avatarUrl,
@@ -71,7 +67,8 @@ function HeroAvatar({
   );
 }
 
-export function PortfolioHero({ profile }: PortfolioHeroProps) {
+export function PortfolioHero() {
+  const profile = useBuilderProfile();
   const { fadeUp } = useMotion();
   const name = displayValue(profile.fullName, "Your Name");
   const title = displayValue(profile.jobTitle, "Your Role");

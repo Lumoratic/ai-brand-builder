@@ -4,8 +4,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useMotion } from "@/hooks/use-motion";
-import { portfolioContainerWide, portfolioFocusRing } from "@/components/portfolio/portfolio-layout";
+import {
+  portfolioContainerWide,
+  portfolioFocusRing,
+} from "@/components/portfolio/portfolio-layout";
 import { getFirstName } from "@/lib/portfolio-utils";
+import { useBuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -15,13 +19,10 @@ const navItems = [
   { href: "#contact", label: "Contact" },
 ] as const;
 
-type PortfolioNavProps = {
-  fullName: string;
-};
-
-export function PortfolioNav({ fullName }: PortfolioNavProps) {
+export function PortfolioNav() {
+  const profile = useBuilderProfile();
   const { fadeUp } = useMotion();
-  const displayName = getFirstName(fullName);
+  const displayName = getFirstName(profile.fullName);
 
   return (
     <motion.header
