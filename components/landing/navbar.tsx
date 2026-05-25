@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Sparkles, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { UserMenu } from "@/components/auth/UserMenu";
 import { navLinks } from "@/lib/landing-data";
 import { cn } from "@/lib/utils";
 
@@ -37,14 +37,7 @@ export function Navbar() {
             ))}
           </ul>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <Button variant="ghost" className="text-zinc-300 hover:text-white">
-              Log in
-            </Button>
-            <Button asChild className="bg-white text-zinc-900 hover:bg-zinc-100">
-              <Link href="/builder">Start free</Link>
-            </Button>
-          </div>
+          <UserMenu className="hidden md:flex" redirectTo="/builder" />
 
           <button
             type="button"
@@ -82,15 +75,14 @@ export function Navbar() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4">
-                <Button variant="ghost" className="w-full justify-center">
-                  Log in
-                </Button>
-                <Button asChild className="w-full justify-center bg-white text-zinc-900">
-                  <Link href="/builder" onClick={() => setMobileOpen(false)}>
-                    Start free
-                  </Link>
-                </Button>
+              <div
+                className="mt-4 border-t border-white/10 pt-4"
+                onClick={() => setMobileOpen(false)}
+              >
+                <UserMenu
+                  className="flex w-full flex-col gap-2 [&_a]:w-full [&_button]:w-full"
+                  redirectTo="/builder"
+                />
               </div>
             </motion.div>
           )}

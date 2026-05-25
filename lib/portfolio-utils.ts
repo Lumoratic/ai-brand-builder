@@ -108,6 +108,10 @@ export function buildServices(profile: BuilderProfile): PortfolioService[] {
 }
 
 export function buildSocialLinks(profile: BuilderProfile): SocialLink[] {
+  if (profile.links.length > 0) {
+    return profile.links.filter((link) => link.label.trim() && link.href.trim());
+  }
+
   const email = contactEmail(profile.fullName);
 
   return [

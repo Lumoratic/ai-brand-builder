@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { ProfileLink } from "@/lib/profile/types";
 
 export type FeaturedProject = {
   id: string;
@@ -16,12 +17,23 @@ export type BuilderProfile = {
   bio: string;
   skills: string;
   avatarUrl: string;
+  links: ProfileLink[];
   projects: FeaturedProject[];
 };
 
+export type ProfileSyncStatus =
+  | "idle"
+  | "loading"
+  | "saving"
+  | "saved"
+  | "error";
+
 type BuilderState = {
   profile: BuilderProfile;
-  setField: <K extends keyof Omit<BuilderProfile, "projects">>(
+  syncStatus: ProfileSyncStatus;
+  syncError: string | null;
+  isHydrated: boolean;
+  setField: <K extends keyof Omit<BuilderProfile, "projects" | "links">>(
     field: K,
     value: BuilderProfile[K]
   ) => void;
@@ -33,6 +45,9 @@ type BuilderState = {
   ) => void;
   removeProject: (id: string) => void;
   resetProfile: () => void;
+  hydrateProfile: (profile: BuilderProfile) => void;
+  setSyncStatus: (status: ProfileSyncStatus, error?: string | null) => void;
+  setHydrated: (hydrated: boolean) => void;
 };
 
 export const MAX_FEATURED_PROJECTS = 3;
@@ -44,6 +59,7 @@ const defaultProfile: BuilderProfile = {
   bio: "",
   skills: "",
   avatarUrl: "",
+  links: [],
   projects: [],
 };
 
@@ -67,6 +83,9 @@ export function parseSkills(skills: string): string[] {
 
 export const useBuilderStore = create<BuilderState>((set) => ({
   profile: defaultProfile,
+  syncStatus: "idle",
+  syncError: null,
+  isHydrated: false,
   setField: (field, value) =>
     set((state) => ({
       profile: { ...state.profile, [field]: value },
@@ -99,7 +118,22 @@ export const useBuilderStore = create<BuilderState>((set) => ({
         projects: state.profile.projects.filter((project) => project.id !== id),
       },
     })),
-  resetProfile: () => set({ profile: { ...defaultProfile, projects: [] } }),
+  resetProfile: () =>
+    set({
+      profile: { ...defaultProfile, projects: [], links: [] },
+    }),
+  hydrateProfile: (profile) =>
+    set({
+      profile: {
+        ...defaultProfile,
+        ...profile,
+        links: profile.links ?? [],
+        projects: profile.projects ?? [],
+      },
+    }),
+  setSyncStatus: (status, error = null) =>
+    set({ syncStatus: status, syncError: error }),
+  setHydrated: (hydrated) => set({ isHydrated: hydrated }),
 }));
 
 /** Primitive/stable selectors — never return a new object from a selector. */
@@ -121,3 +155,12 @@ export const useResetProfile = () =>
 
 export const useBuilderProjects = () =>
   useBuilderStore((state) => state.profile.projects);
+
+export const useProfileSyncStatus = () =>
+  useBuilderStore((state) => state.syncStatus);
+
+export const useProfileSyncError = () =>
+  useBuilderStore((state) => state.syncError);
+
+export const useProfileIsHydrated = () =>
+  useBuilderStore((state) => state.isHydrated);

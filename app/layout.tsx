@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { AuthShell } from "@/components/auth/AuthShell";
 import "./globals.css";
 
 const inter = Inter({
@@ -37,7 +38,7 @@ export default function RootLayout({
       className={`dark ${inter.variable} ${jakarta.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[oklch(0.07_0.012_280)] text-foreground font-sans">
-        {children}
+        <AuthShell>{children}</AuthShell>
       </body>
     </html>
   );
