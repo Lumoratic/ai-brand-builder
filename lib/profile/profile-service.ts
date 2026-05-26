@@ -57,3 +57,21 @@ export async function deleteProfile(userId: string): Promise<void> {
     throw new Error(error.message);
   }
 }
+
+export async function isUsernameAvailable(
+  username: string,
+  currentUserId: string
+): Promise<boolean> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.rpc("is_username_available", {
+    p_username: username,
+    p_user_id: currentUserId,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return Boolean(data);
+}

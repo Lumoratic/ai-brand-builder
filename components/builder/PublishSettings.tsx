@@ -1,6 +1,10 @@
 "use client";
 
-import { Globe, Loader2 } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import { Check, Copy, ExternalLink, Globe, Loader2 } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { Button } from "@/components/ui/button";
 import {
   builderFocusRing,
   builderHelperClassName,
@@ -8,8 +12,11 @@ import {
   builderLabelClassName,
   builderSectionClassName,
 } from "@/components/builder/builder-styles";
+import { useUsernameAvailability } from "@/hooks/useUsernameAvailability";
 import {
-  getPublicPortfolioPath,
+  canPublishWithUsernameStatus,
+  getPublicPortfolioUrl,
+  getUsernameAvailabilityLabel,
   getUsernameError,
   sanitizeUsername,
 } from "@/lib/profile/username";
@@ -20,22 +27,111 @@ import {
 } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 
+function UsernameStatus({
+  status,
+  validationError,
+}: {
+  status: ReturnType<typeof useUsernameAvailability>;
+  validationError: string | null;
+}) {
+  const label = getUsernameAvailabilityLabel(status);
+
+  if (!label && !validationError) return null;
+
+  const isError = status === "taken" || status === "invalid";
+  const isSuccess = status === "available";
+  const isPending = status === "checking";
+
+  return (
+    <p
+      className={cn(
+        "flex items-center gap-1.5 text-xs",
+        isError && "text-red-400/90",
+        isSuccess && "text-emerald-400/80",
+        isPending && "text-zinc-500",
+        status === "required" && "text-zinc-500"
+      )}
+      aria-live="polite"
+    >
+      {isPending ? <Loader2 className="size-3 animate-spin" aria-hidden /> : null}
+      {isSuccess ? <Check className="size-3" aria-hidden /> : null}
+      <span>
+        {status === "invalid" && validationError
+          ? validationError
+          : label}
+      </span>
+    </p>
+  );
+}
+
 export function PublishSettings() {
+  const { user } = useAuth();
   const profile = useBuilderProfile();
   const setField = useSetField();
   const syncStatus = useProfileSyncStatus();
-  const usernameError = profile.username ? getUsernameError(profile.username) : null;
-  const publicPath = getPublicPortfolioPath(profile.username);
-  const canPublish = !usernameError && Boolean(sanitizeUsername(profile.username));
+  const availabilityStatus = useUsernameAvailability(profile.username, user?.id);
+  const [copied, setCopied] = useState(false);
+
+  const normalizedUsername = sanitizeUsername(profile.username);
+  const validationError = profile.username ? getUsernameError(profile.username) : null;
+  const publicUrl = getPublicPortfolioUrl(profile.username);
+  const canPublish = canPublishWithUsernameStatus(
+    availabilityStatus,
+    profile.username
+  );
+  const canOpenPublicUrl =
+    profile.isPublished &&
+    Boolean(normalizedUsername) &&
+    !validationError &&
+    availabilityStatus !== "taken" &&
+    availabilityStatus !== "checking";
+  const canCopyUrl = Boolean(normalizedUsername) && !validationError;
 
   function handleUsernameChange(value: string) {
     setField("username", sanitizeUsername(value));
+    setCopied(false);
   }
 
   function handlePublishToggle() {
     const next = !profile.isPublished;
     if (next && !canPublish) return;
     setField("isPublished", next);
+  }
+
+  async function handleCopyUrl() {
+    if (!canCopyUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(publicUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  function handleOpenUrl() {
+    if (!canOpenPublicUrl) return;
+    window.open(publicUrl, "_blank", "noopener,noreferrer");
+  }
+
+  function getPublishHint(): string | null {
+    if (profile.isPublished) {
+      return "Your portfolio is live at the public URL.";
+    }
+    if (!normalizedUsername) {
+      return "Choose a username to publish.";
+    }
+    if (validationError || availabilityStatus === "invalid") {
+      return validationError ?? "Fix the username before publishing.";
+    }
+    if (availabilityStatus === "checking") {
+      return "Checking username availability…";
+    }
+    if (availabilityStatus === "taken") {
+      return "This username is already taken. Try another one.";
+    }
+    return "Only you can preview until you publish.";
   }
 
   return (
@@ -71,17 +167,18 @@ export function PublishSettings() {
             className={builderInputClassName}
             autoComplete="off"
             spellCheck={false}
-            aria-invalid={Boolean(usernameError)}
-            aria-describedby="username-help username-preview"
+            aria-invalid={Boolean(validationError) || availabilityStatus === "taken"}
+            aria-describedby="username-help username-status username-preview"
           />
           <p id="username-help" className={builderHelperClassName}>
             Lowercase letters, numbers, and hyphens · 3–30 characters
           </p>
-          {usernameError ? (
-            <p role="alert" className="text-xs text-red-400/90">
-              {usernameError}
-            </p>
-          ) : null}
+          <div id="username-status">
+            <UsernameStatus
+              status={availabilityStatus}
+              validationError={validationError}
+            />
+          </div>
         </div>
 
         <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
@@ -89,49 +186,86 @@ export function PublishSettings() {
             <Globe className="size-3.5" aria-hidden />
             Public URL
           </div>
-          <p
-            id="username-preview"
-            className="mt-2 break-all font-mono text-sm text-zinc-300"
-          >
-            {publicPath}
-          </p>
+          {canCopyUrl ? (
+            <Link
+              id="username-preview"
+              href={publicUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "mt-2 block break-all font-mono text-sm text-zinc-300 transition-colors hover:text-white",
+                !canOpenPublicUrl && "pointer-events-none text-zinc-500"
+              )}
+            >
+              {publicUrl}
+            </Link>
+          ) : (
+            <p
+              id="username-preview"
+              className="mt-2 break-all font-mono text-sm text-zinc-500"
+            >
+              {publicUrl}
+            </p>
+          )}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={!canCopyUrl}
+              onClick={handleCopyUrl}
+              className={cn(
+                "h-8 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white",
+                builderFocusRing
+              )}
+            >
+              {copied ? (
+                <Check className="size-3.5" aria-hidden />
+              ) : (
+                <Copy className="size-3.5" aria-hidden />
+              )}
+              {copied ? "Copied" : "Copy"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={!canOpenPublicUrl}
+              onClick={handleOpenUrl}
+              className={cn(
+                "h-8 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white",
+                builderFocusRing
+              )}
+            >
+              <ExternalLink className="size-3.5" aria-hidden />
+              Open
+            </Button>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+        <div className="space-y-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
           <div>
             <p className="text-sm font-medium text-white">
               {profile.isPublished ? "Published" : "Unpublished"}
             </p>
-            <p className={cn("mt-1", builderHelperClassName)}>
-              {profile.isPublished
-                ? "Your portfolio is live at the public URL."
-                : "Only you can preview until you publish."}
-            </p>
+            <p className={cn("mt-1", builderHelperClassName)}>{getPublishHint()}</p>
           </div>
-          <button
+          <Button
             type="button"
-            role="switch"
-            aria-checked={profile.isPublished}
-            aria-label={profile.isPublished ? "Unpublish portfolio" : "Publish portfolio"}
+            variant={profile.isPublished ? "outline" : "default"}
             disabled={!profile.isPublished && !canPublish}
             onClick={handlePublishToggle}
             className={cn(
-              "relative h-7 w-12 shrink-0 rounded-full border transition-colors duration-200",
+              "h-10 w-full rounded-xl",
+              builderFocusRing,
               profile.isPublished
-                ? "border-violet-500/40 bg-violet-500/80"
-                : "border-white/10 bg-white/[0.06]",
-              "disabled:cursor-not-allowed disabled:opacity-40",
-              builderFocusRing
+                ? "border-red-500/20 bg-red-500/5 text-red-300 hover:bg-red-500/10 hover:text-red-200"
+                : "bg-white text-zinc-900 hover:bg-zinc-100",
+              "disabled:cursor-not-allowed disabled:opacity-40"
             )}
           >
-            <span
-              aria-hidden
-              className={cn(
-                "absolute top-0.5 size-6 rounded-full bg-white shadow-sm transition-transform duration-200",
-                profile.isPublished ? "translate-x-5" : "translate-x-0.5"
-              )}
-            />
-          </button>
+            {profile.isPublished ? "Unpublish" : "Publish portfolio"}
+          </Button>
         </div>
       </div>
     </section>
