@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { ArrowUpRight, Mail } from "lucide-react";
+import { shouldUnoptimizeAvatar } from "@/lib/storage/avatar";
 import { useBuilderProfile } from "@/lib/stores/builderStore";
 import { buildServices, getFeaturedProjects, getInitials } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
@@ -114,7 +115,7 @@ export function PreviewPanel() {
                   src={profile.avatarUrl}
                   alt=""
                   fill
-                  unoptimized
+                  unoptimized={shouldUnoptimizeAvatar(profile.avatarUrl)}
                   sizes="112px"
                   className="object-cover"
                 />

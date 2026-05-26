@@ -1,15 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { Camera, X } from "lucide-react";
+import { Camera, Loader2, X } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import {
   builderFocusRing,
   builderHelperClassName,
   builderLabelClassName,
 } from "@/components/builder/builder-styles";
-import { readImageAsDataUrl } from "@/lib/read-image-file";
+import { uploadAvatar, shouldUnoptimizeAvatar } from "@/lib/storage/avatar";
 import { useSetField } from "@/lib/stores/builderStore";
 import { getInitials } from "@/lib/portfolio-utils";
 import { cn } from "@/lib/utils";
@@ -20,20 +21,43 @@ type AvatarUploadProps = {
 };
 
 export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
+  const { user } = useAuth();
   const setField = useSetField();
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = "avatar-upload";
   const initials = getInitials(fullName);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
     if (!file) return;
-    readImageAsDataUrl(file, (dataUrl) => setField("avatarUrl", dataUrl));
-    e.target.value = "";
+
+    if (!user) {
+      setUploadError("Sign in to upload a profile photo.");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      const publicUrl = await uploadAvatar(user.id, file);
+      setField("avatarUrl", publicUrl);
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : "Failed to upload photo."
+      );
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   function clearAvatar() {
     setField("avatarUrl", "");
+    setUploadError(null);
     if (inputRef.current) inputRef.current.value = "";
   }
 
@@ -57,7 +81,7 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
               src={avatarUrl}
               alt={fullName.trim() ? `${fullName} avatar` : "Profile avatar"}
               fill
-              unoptimized
+              unoptimized={shouldUnoptimizeAvatar(avatarUrl)}
               sizes="64px"
               className="object-cover"
             />
@@ -72,20 +96,26 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
             type="button"
             variant="outline"
             size="sm"
+            disabled={isUploading}
             className={cn(
               "gap-1.5 border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white",
               builderFocusRing
             )}
             onClick={() => inputRef.current?.click()}
           >
-            <Camera className="size-3.5" aria-hidden />
-            Upload photo
+            {isUploading ? (
+              <Loader2 className="size-3.5 animate-spin" aria-hidden />
+            ) : (
+              <Camera className="size-3.5" aria-hidden />
+            )}
+            {isUploading ? "Uploading…" : "Upload photo"}
           </Button>
           {avatarUrl ? (
             <Button
               type="button"
               variant="ghost"
               size="sm"
+              disabled={isUploading}
               className={cn("text-zinc-500 hover:text-zinc-300", builderFocusRing)}
               onClick={clearAvatar}
             >
@@ -98,13 +128,20 @@ export function AvatarUpload({ fullName, avatarUrl }: AvatarUploadProps) {
           ref={inputRef}
           id={inputId}
           type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
+          accept="image/jpeg,image/png,image/webp"
           className="sr-only"
           onChange={handleFileChange}
+          disabled={isUploading}
           aria-label="Upload profile photo"
         />
       </div>
-      <p className={builderHelperClassName}>PNG, JPG or WebP · Max 2MB</p>
+      {uploadError ? (
+        <p role="alert" className="text-xs text-red-400/90">
+          {uploadError}
+        </p>
+      ) : (
+        <p className={builderHelperClassName}>PNG, JPG or WebP · Max 2MB</p>
+      )}
     </div>
   );
 }

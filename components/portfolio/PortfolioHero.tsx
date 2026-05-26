@@ -12,6 +12,7 @@ import {
   displayValue,
   getInitials,
 } from "@/lib/portfolio-utils";
+import { shouldUnoptimizeAvatar } from "@/lib/storage/avatar";
 import { useBuilderProfile } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +45,7 @@ function HeroAvatar({
             src={avatarUrl}
             alt={hasName ? `${name} profile photo` : "Profile photo"}
             fill
-            unoptimized
+            unoptimized={shouldUnoptimizeAvatar(avatarUrl)}
             className="object-cover"
             priority
           />
