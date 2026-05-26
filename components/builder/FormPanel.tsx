@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { AvatarUpload } from "@/components/builder/AvatarUpload";
 import { ProjectsEditor } from "@/components/builder/ProjectsEditor";
+import { PublishSettings } from "@/components/builder/PublishSettings";
 import {
   builderFocusRing,
   builderHelperClassName,
@@ -136,6 +137,8 @@ export function FormPanel() {
             <p className={builderHelperClassName}>Separate skills with commas</p>
           </div>
         </section>
+
+        <PublishSettings />
 
         <div className="mt-auto space-y-3 border-t border-white/[0.06] pt-6">
           <Button

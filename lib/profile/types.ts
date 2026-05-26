@@ -15,6 +15,8 @@ export type ProfileRow = {
   bio: string;
   skills: string;
   avatar: string;
+  username: string | null;
+  is_published: boolean;
   links: ProfileLink[];
   projects: FeaturedProject[];
   created_at: string;

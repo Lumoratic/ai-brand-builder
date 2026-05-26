@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { fetchProfile, saveProfile } from "@/lib/profile/profile-service";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
@@ -10,7 +11,9 @@ const SAVE_DEBOUNCE_MS = 900;
 
 export function useProfileSync() {
   const { user } = useAuth();
+  const pathname = usePathname();
   const userId = user?.id ?? null;
+  const isPublicPortfolioRoute = pathname.startsWith("/u/");
 
   const profile = useBuilderStore((state) => state.profile);
   const isHydrated = useBuilderStore((state) => state.isHydrated);
@@ -23,7 +26,7 @@ export function useProfileSync() {
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!hasSupabaseEnv()) return;
+    if (!hasSupabaseEnv() || isPublicPortfolioRoute) return;
 
     if (!userId) {
       resetProfile();
@@ -67,6 +70,7 @@ export function useProfileSync() {
     };
   }, [
     userId,
+    isPublicPortfolioRoute,
     hydrateProfile,
     resetProfile,
     setHydrated,
@@ -74,7 +78,13 @@ export function useProfileSync() {
   ]);
 
   useEffect(() => {
-    if (!hasSupabaseEnv() || !userId || !isHydrated || skipSaveRef.current) {
+    if (
+      !hasSupabaseEnv() ||
+      isPublicPortfolioRoute ||
+      !userId ||
+      !isHydrated ||
+      skipSaveRef.current
+    ) {
       return;
     }
 
@@ -102,5 +112,5 @@ export function useProfileSync() {
         clearTimeout(saveTimerRef.current);
       }
     };
-  }, [profile, userId, isHydrated, setSyncStatus]);
+  }, [profile, userId, isHydrated, isPublicPortfolioRoute, setSyncStatus]);
 }

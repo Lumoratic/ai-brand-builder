@@ -17,6 +17,8 @@ export type BuilderProfile = {
   bio: string;
   skills: string;
   avatarUrl: string;
+  username: string;
+  isPublished: boolean;
   links: ProfileLink[];
   projects: FeaturedProject[];
 };
@@ -59,6 +61,8 @@ const defaultProfile: BuilderProfile = {
   bio: "",
   skills: "",
   avatarUrl: "",
+  username: "",
+  isPublished: false,
   links: [],
   projects: [],
 };

@@ -21,6 +21,8 @@ export type Database = {
           bio: string;
           skills: string;
           avatar: string;
+          username: string | null;
+          is_published: boolean;
           links: Json;
           projects: Json;
           created_at: string;
@@ -34,6 +36,8 @@ export type Database = {
           bio?: string;
           skills?: string;
           avatar?: string;
+          username?: string | null;
+          is_published?: boolean;
           links?: Json;
           projects?: Json;
           created_at?: string;
@@ -47,6 +51,8 @@ export type Database = {
           bio?: string;
           skills?: string;
           avatar?: string;
+          username?: string | null;
+          is_published?: boolean;
           links?: Json;
           projects?: Json;
           created_at?: string;

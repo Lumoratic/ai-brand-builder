@@ -1,16 +1,21 @@
 import { createClient } from "@/lib/supabase/client";
 import { profileToRow, rowToProfile } from "@/lib/profile/mappers";
 import type { ProfileRow } from "@/lib/profile/types";
+import {
+  formatUsernameConflictError,
+  isUsernameConflictError,
+} from "@/lib/profile/username";
 import type { BuilderProfile } from "@/lib/stores/builderStore";
+
+const PROFILE_SELECT =
+  "id, full_name, role, tagline, bio, skills, avatar, username, is_published, links, projects, created_at, updated_at";
 
 export async function fetchProfile(userId: string): Promise<BuilderProfile | null> {
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from("profiles")
-    .select(
-      "id, full_name, role, tagline, bio, skills, avatar, links, projects, created_at, updated_at"
-    )
+    .select(PROFILE_SELECT)
     .eq("id", userId)
     .maybeSingle();
 
@@ -35,7 +40,11 @@ export async function saveProfile(
   });
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(
+      isUsernameConflictError(error.message)
+        ? formatUsernameConflictError()
+        : error.message
+    );
   }
 }
 

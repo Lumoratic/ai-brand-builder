@@ -1,5 +1,6 @@
 import type { BuilderProfile, FeaturedProject } from "@/lib/stores/builderStore";
 import type { ProfileInsert, ProfileLink, ProfileRow } from "@/lib/profile/types";
+import { sanitizeUsername, isValidUsername } from "@/lib/profile/username";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -43,6 +44,9 @@ export function parseLinks(value: unknown): ProfileLink[] {
 }
 
 export function profileToRow(userId: string, profile: BuilderProfile): ProfileInsert {
+  const username = sanitizeUsername(profile.username);
+  const hasValidUsername = Boolean(username) && isValidUsername(username);
+
   return {
     id: userId,
     full_name: profile.fullName,
@@ -51,6 +55,8 @@ export function profileToRow(userId: string, profile: BuilderProfile): ProfileIn
     bio: profile.bio,
     skills: profile.skills,
     avatar: profile.avatarUrl,
+    username: hasValidUsername ? username : null,
+    is_published: profile.isPublished && hasValidUsername,
     links: profile.links,
     projects: profile.projects,
   };
@@ -64,6 +70,8 @@ export function rowToProfile(row: ProfileRow): BuilderProfile {
     bio: row.bio ?? "",
     skills: row.skills ?? "",
     avatarUrl: row.avatar ?? "",
+    username: row.username ?? "",
+    isPublished: row.is_published ?? false,
     links: parseLinks(row.links),
     projects: parseProjects(row.projects),
   };
