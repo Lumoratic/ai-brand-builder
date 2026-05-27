@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useMotion } from "@/hooks/use-motion";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import {
   portfolioContainerWide,
   portfolioFocusRing,
@@ -36,6 +37,7 @@ export function PortfolioNav() {
         )}
       >
         <div className="flex min-w-0 items-center gap-5">
+          <BrandLogo size="sm" className="text-zinc-200" />
           <Link
             href="/builder"
             className={cn(

@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { UserMenu } from "@/components/auth/UserMenu";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { navLinks } from "@/lib/landing-data";
 import { cn } from "@/lib/utils";
 
@@ -15,14 +16,7 @@ export function Navbar() {
     <header className="fixed top-0 z-50 w-full">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <nav className="mt-4 flex items-center justify-between rounded-2xl border border-white/[0.08] bg-[oklch(0.1_0.015_280)]/80 px-4 py-3 backdrop-blur-xl sm:px-6">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500">
-              <Sparkles className="size-4 text-white" />
-            </div>
-            <span className="text-base font-semibold tracking-tight text-white">
-              BrandSpark
-            </span>
-          </Link>
+          <BrandLogo />
 
           <ul className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => (

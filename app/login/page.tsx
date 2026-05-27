@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Sparkles } from "lucide-react";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -40,14 +39,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       />
 
       <header className="relative z-10 px-4 py-6 sm:px-6">
-        <Link href="/" className="inline-flex items-center gap-2.5">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500">
-            <Sparkles className="size-4 text-white" />
-          </div>
-          <span className="text-base font-semibold tracking-tight text-white">
-            BrandSpark
-          </span>
-        </Link>
+        <BrandLogo />
       </header>
 
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 pb-16 sm:px-6">

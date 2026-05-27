@@ -1,5 +1,6 @@
 import { BuilderAuthActions } from "@/components/builder/BuilderAuthActions";
 import { BuilderSaveStatus } from "@/components/builder/BuilderSaveStatus";
+import { BrandLogo } from "@/components/shared/brand-logo";
 
 export function BuilderHeader() {
   return (
@@ -10,9 +11,7 @@ export function BuilderHeader() {
             className="size-2 rounded-full bg-violet-500 shadow-[0_0_12px_oklch(0.55_0.25_280)]"
             aria-hidden
           />
-          <span className="text-sm font-medium tracking-tight text-white">
-            BrandSpark
-          </span>
+          <BrandLogo size="sm" />
           <span className="hidden text-zinc-600 sm:inline" aria-hidden>
             /
           </span>
