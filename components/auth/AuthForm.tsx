@@ -139,13 +139,16 @@ function AuthFormInner({
     setIsGoogleLoading(true);
 
     try {
-      const callbackUrl = new URL("/auth/callback", window.location.origin);
-      callbackUrl.searchParams.set("redirect", redirectTo);
+      if (redirectTo !== "/builder") {
+        const secure =
+          window.location.protocol === "https:" ? "; Secure" : "";
+        document.cookie = `auth_redirect=${encodeURIComponent(redirectTo)}; path=/; max-age=600; SameSite=Lax${secure}`;
+      }
 
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: callbackUrl.toString(),
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
