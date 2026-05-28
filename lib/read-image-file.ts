@@ -1,5 +1,9 @@
 export const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 
+export function shouldUnoptimizeImageSrc(src: string): boolean {
+  return src.startsWith("data:") || src.startsWith("blob:");
+}
+
 export function readImageAsDataUrl(
   file: File,
   onLoad: (dataUrl: string) => void
