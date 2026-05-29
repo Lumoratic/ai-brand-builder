@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectThumbnailUpload } from "@/components/builder/ProjectThumbnailUpload";
+import { ImproveDescriptionButton } from "@/components/builder/ImproveDescriptionButton";
 import {
   builderFocusRing,
   builderInputClassName,
@@ -181,12 +182,20 @@ export function ProjectsEditor() {
                       </div>
 
                       <div className="space-y-2">
-                        <label
-                          className={fieldLabel}
-                          htmlFor={`desc-${project.id}`}
-                        >
-                          Description
-                        </label>
+                        <div className="flex items-center justify-between gap-3">
+                          <label
+                            className={fieldLabel}
+                            htmlFor={`desc-${project.id}`}
+                          >
+                            Description
+                          </label>
+                          <ImproveDescriptionButton
+                            description={project.description}
+                            onImprove={(value) =>
+                              updateProject(project.id, "description", value)
+                            }
+                          />
+                        </div>
                         <textarea
                           id={`desc-${project.id}`}
                           value={project.description}
