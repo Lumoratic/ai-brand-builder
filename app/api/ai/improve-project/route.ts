@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import Groq from "groq-sdk";
 import {
   buildImproveProjectUserPrompt,
   IMPROVE_PROJECT_MAX_INPUT,
@@ -9,12 +9,12 @@ import {
 import { checkRateLimit } from "@/lib/ai/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
-function getOpenAIClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
+function getGroqClient() {
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not configured.");
+    throw new Error("GROQ_API_KEY is not configured.");
   }
-  return new OpenAI({ apiKey });
+  return new Groq({ apiKey });
 }
 
 export async function POST(request: Request) {
@@ -53,8 +53,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const openai = getOpenAIClient();
-    const completion = await openai.chat.completions.create({
+    const groq = getGroqClient();
+    const completion = await groq.chat.completions.create({
       model: IMPROVE_PROJECT_MODEL,
       temperature: 0.4,
       max_tokens: 220,
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     const message =
       error instanceof Error ? error.message : "Failed to improve description.";
 
-    if (message.includes("OPENAI_API_KEY")) {
+    if (message.includes("GROQ_API_KEY")) {
       return NextResponse.json({ error: message }, { status: 503 });
     }
 

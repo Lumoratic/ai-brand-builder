@@ -1,4 +1,4 @@
-export const IMPROVE_PROJECT_MODEL = "gpt-4o-mini";
+export const IMPROVE_PROJECT_MODEL = "llama-3.3-70b-versatile";
 
 export const IMPROVE_PROJECT_MAX_INPUT = 2000;
 
