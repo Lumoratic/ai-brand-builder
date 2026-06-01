@@ -13,6 +13,14 @@ import {
   builderSectionClassName,
 } from "@/components/builder/builder-styles";
 import { useUsernameAvailability } from "@/hooks/useUsernameAvailability";
+import { useAssetSlugAvailability } from "@/hooks/use-asset-slug-availability";
+import {
+  canPublishWithSlugStatus,
+  getPublicPortfolioAssetUrl,
+  getSlugAvailabilityLabel,
+  getSlugError,
+  sanitizeSlug,
+} from "@/lib/assets/slug";
 import {
   canPublishWithUsernameStatus,
   getPublicPortfolioUrl,
@@ -21,9 +29,12 @@ import {
   sanitizeUsername,
 } from "@/lib/profile/username";
 import {
+  useActiveAssetId,
   useBuilderProfile,
+  usePortfolioSlug,
   useProfileSyncStatus,
   useSetField,
+  useSetPortfolioSlug,
 } from "@/lib/stores/builderStore";
 import { cn } from "@/lib/utils";
 
@@ -64,31 +75,103 @@ function UsernameStatus({
   );
 }
 
-export function PublishSettings() {
+function SlugStatus({
+  status,
+  validationError,
+}: {
+  status: ReturnType<typeof useAssetSlugAvailability>;
+  validationError: string | null;
+}) {
+  const label = getSlugAvailabilityLabel(status);
+
+  if (!label && !validationError) return null;
+
+  const isError = status === "taken" || status === "invalid";
+  const isSuccess = status === "available";
+  const isPending = status === "checking";
+
+  return (
+    <p
+      className={cn(
+        "flex items-center gap-1.5 text-xs",
+        isError && "text-red-400/90",
+        isSuccess && "text-emerald-400/80",
+        isPending && "text-zinc-500",
+        status === "required" && "text-zinc-500"
+      )}
+      aria-live="polite"
+    >
+      {isPending ? <Loader2 className="size-3 animate-spin" aria-hidden /> : null}
+      {isSuccess ? <Check className="size-3" aria-hidden /> : null}
+      <span>
+        {status === "invalid" && validationError ? validationError : label}
+      </span>
+    </p>
+  );
+}
+
+type PublishSettingsProps = {
+  mode?: "profile" | "asset";
+};
+
+export function PublishSettings({ mode = "profile" }: PublishSettingsProps) {
+  const isAssetMode = mode === "asset";
   const { user } = useAuth();
   const profile = useBuilderProfile();
   const setField = useSetField();
+  const portfolioSlug = usePortfolioSlug();
+  const setPortfolioSlug = useSetPortfolioSlug();
+  const activeAssetId = useActiveAssetId();
   const syncStatus = useProfileSyncStatus();
   const availabilityStatus = useUsernameAvailability(profile.username, user?.id);
+  const slugAvailabilityStatus = useAssetSlugAvailability(
+    portfolioSlug,
+    user?.id,
+    activeAssetId ?? undefined
+  );
   const [copied, setCopied] = useState(false);
 
   const normalizedUsername = sanitizeUsername(profile.username);
+  const normalizedSlug = sanitizeSlug(portfolioSlug);
   const validationError = profile.username ? getUsernameError(profile.username) : null;
-  const publicUrl = getPublicPortfolioUrl(profile.username);
-  const canPublish = canPublishWithUsernameStatus(
+  const slugValidationError = portfolioSlug ? getSlugError(portfolioSlug) : null;
+  const publicUrl = isAssetMode
+    ? getPublicPortfolioAssetUrl(profile.username, portfolioSlug)
+    : getPublicPortfolioUrl(profile.username);
+  const canPublishUsername = canPublishWithUsernameStatus(
     availabilityStatus,
     profile.username
   );
+  const canPublishSlug = canPublishWithSlugStatus(
+    slugAvailabilityStatus,
+    portfolioSlug
+  );
+  const canPublish = isAssetMode
+    ? canPublishUsername && canPublishSlug
+    : canPublishUsername;
   const canOpenPublicUrl =
     profile.isPublished &&
     Boolean(normalizedUsername) &&
     !validationError &&
     availabilityStatus !== "taken" &&
-    availabilityStatus !== "checking";
-  const canCopyUrl = Boolean(normalizedUsername) && !validationError;
+    availabilityStatus !== "checking" &&
+    (!isAssetMode ||
+      (Boolean(normalizedSlug) &&
+        !slugValidationError &&
+        slugAvailabilityStatus !== "taken" &&
+        slugAvailabilityStatus !== "checking"));
+  const canCopyUrl =
+    Boolean(normalizedUsername) &&
+    !validationError &&
+    (!isAssetMode || (Boolean(normalizedSlug) && !slugValidationError));
 
   function handleUsernameChange(value: string) {
     setField("username", sanitizeUsername(value));
+    setCopied(false);
+  }
+
+  function handleSlugChange(value: string) {
+    setPortfolioSlug(sanitizeSlug(value));
     setCopied(false);
   }
 
@@ -117,19 +200,30 @@ export function PublishSettings() {
 
   function getPublishHint(): string | null {
     if (profile.isPublished) {
-      return "Your portfolio is live at the public URL.";
+      return isAssetMode
+        ? "This portfolio asset is live at the public URL."
+        : "Your portfolio is live at the public URL.";
     }
     if (!normalizedUsername) {
       return "Choose a username to publish.";
     }
+    if (isAssetMode && !normalizedSlug) {
+      return "Choose a portfolio slug to publish.";
+    }
     if (validationError || availabilityStatus === "invalid") {
       return validationError ?? "Fix the username before publishing.";
     }
-    if (availabilityStatus === "checking") {
-      return "Checking username availability…";
+    if (isAssetMode && (slugValidationError || slugAvailabilityStatus === "invalid")) {
+      return slugValidationError ?? "Fix the portfolio slug before publishing.";
+    }
+    if (availabilityStatus === "checking" || slugAvailabilityStatus === "checking") {
+      return "Checking availability…";
     }
     if (availabilityStatus === "taken") {
       return "This username is already taken. Try another one.";
+    }
+    if (isAssetMode && slugAvailabilityStatus === "taken") {
+      return "This portfolio slug is already taken. Try another one.";
     }
     return "Only you can preview until you publish.";
   }
@@ -145,7 +239,9 @@ export function PublishSettings() {
             Publish
           </h2>
           <p className={cn("mt-2", builderHelperClassName)}>
-            Choose a username and publish your portfolio to a public URL.
+            {isAssetMode
+              ? "Choose a username and portfolio slug to publish this asset."
+              : "Choose a username and publish your portfolio to a public URL."}
           </p>
         </div>
         {syncStatus === "saving" ? (
@@ -180,6 +276,37 @@ export function PublishSettings() {
             />
           </div>
         </div>
+
+        {isAssetMode ? (
+          <div className="space-y-2">
+            <label htmlFor="portfolio-slug" className={builderLabelClassName}>
+              Portfolio slug
+            </label>
+            <input
+              id="portfolio-slug"
+              type="text"
+              value={portfolioSlug}
+              onChange={(event) => handleSlugChange(event.target.value)}
+              placeholder="product-design"
+              className={builderInputClassName}
+              autoComplete="off"
+              spellCheck={false}
+              aria-invalid={
+                Boolean(slugValidationError) || slugAvailabilityStatus === "taken"
+              }
+              aria-describedby="portfolio-slug-help portfolio-slug-status"
+            />
+            <p id="portfolio-slug-help" className={builderHelperClassName}>
+              Identifies this portfolio at /portfolio/your-slug
+            </p>
+            <div id="portfolio-slug-status">
+              <SlugStatus
+                status={slugAvailabilityStatus}
+                validationError={slugValidationError}
+              />
+            </div>
+          </div>
+        ) : null}
 
         <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
           <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-500">

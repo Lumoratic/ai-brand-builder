@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AssetCard } from "@/components/workspace/AssetCard";
@@ -9,6 +10,7 @@ import { createAsset, getUserAssets } from "@/lib/assets/asset-service";
 import type { AssetRow, AssetType } from "@/lib/assets/types";
 
 export function WorkspaceView() {
+  const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,6 +52,10 @@ export function WorkspaceView() {
     try {
       const asset = await createAsset(user.id, type);
       setAssets((current) => [asset, ...current]);
+
+      if (type === "portfolio") {
+        router.push(`/builder/portfolio/${asset.id}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create asset");
     } finally {

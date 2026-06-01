@@ -3,34 +3,49 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { fetchProfile, saveProfile } from "@/lib/profile/profile-service";
+import {
+  assetRowToPortfolioEditorState,
+  portfolioEditorStateToAssetPayload,
+} from "@/lib/assets/mappers";
+import { getAssetById, updateAsset } from "@/lib/assets/asset-service";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { useBuilderStore } from "@/lib/stores/builderStore";
 
 const SAVE_DEBOUNCE_MS = 900;
 
-export function useProfileSync() {
+function getPortfolioAssetIdFromPath(pathname: string): string | null {
+  const match = pathname.match(/^\/builder\/portfolio\/([^/]+)/);
+  return match?.[1] ?? null;
+}
+
+export function useAssetSync() {
   const { user } = useAuth();
   const pathname = usePathname();
+  const assetId = getPortfolioAssetIdFromPath(pathname);
   const userId = user?.id ?? null;
-  const isPublicPortfolioRoute = pathname.startsWith("/u/");
-  const isAssetEditorRoute = pathname.startsWith("/builder/portfolio/");
+  const isAssetEditorRoute = Boolean(assetId);
 
   const profile = useBuilderStore((state) => state.profile);
+  const portfolioSlug = useBuilderStore((state) => state.portfolioSlug);
   const isHydrated = useBuilderStore((state) => state.isHydrated);
   const hydrateProfile = useBuilderStore((state) => state.hydrateProfile);
   const resetProfile = useBuilderStore((state) => state.resetProfile);
   const setSyncStatus = useBuilderStore((state) => state.setSyncStatus);
   const setHydrated = useBuilderStore((state) => state.setHydrated);
+  const setEditorMode = useBuilderStore((state) => state.setEditorMode);
+  const setActiveAssetId = useBuilderStore((state) => state.setActiveAssetId);
+  const setPortfolioSlug = useBuilderStore((state) => state.setPortfolioSlug);
+  const resetAssetEditor = useBuilderStore((state) => state.resetAssetEditor);
 
   const skipSaveRef = useRef(true);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!hasSupabaseEnv() || isPublicPortfolioRoute || isAssetEditorRoute) return;
+    if (!hasSupabaseEnv() || !isAssetEditorRoute || !assetId) return;
 
     if (!userId) {
       resetProfile();
+      resetAssetEditor();
       setHydrated(false);
       skipSaveRef.current = true;
       setSyncStatus("idle");
@@ -41,17 +56,23 @@ export function useProfileSync() {
     skipSaveRef.current = true;
     setHydrated(false);
     setSyncStatus("loading");
+    setEditorMode("asset");
+    setActiveAssetId(assetId);
 
-    fetchProfile(userId)
-      .then((savedProfile) => {
+    getAssetById(assetId)
+      .then((asset) => {
         if (cancelled) return;
 
-        if (savedProfile) {
-          hydrateProfile(savedProfile);
-        } else {
-          resetProfile();
+        if (!asset || asset.type !== "portfolio") {
+          setHydrated(true);
+          skipSaveRef.current = false;
+          setSyncStatus("error", "Portfolio asset not found.");
+          return;
         }
 
+        const editorState = assetRowToPortfolioEditorState(asset);
+        hydrateProfile(editorState.profile);
+        setPortfolioSlug(editorState.portfolioSlug);
         setHydrated(true);
         setSyncStatus("idle");
         skipSaveRef.current = false;
@@ -62,7 +83,7 @@ export function useProfileSync() {
         skipSaveRef.current = false;
         setSyncStatus(
           "error",
-          error instanceof Error ? error.message : "Failed to load profile"
+          error instanceof Error ? error.message : "Failed to load asset"
         );
       });
 
@@ -70,20 +91,30 @@ export function useProfileSync() {
       cancelled = true;
     };
   }, [
+    assetId,
     userId,
-    isPublicPortfolioRoute,
     isAssetEditorRoute,
     hydrateProfile,
     resetProfile,
+    resetAssetEditor,
+    setActiveAssetId,
+    setEditorMode,
     setHydrated,
+    setPortfolioSlug,
     setSyncStatus,
   ]);
 
   useEffect(() => {
+    if (isAssetEditorRoute) return;
+
+    resetAssetEditor();
+  }, [isAssetEditorRoute, resetAssetEditor]);
+
+  useEffect(() => {
     if (
       !hasSupabaseEnv() ||
-      isPublicPortfolioRoute ||
-      isAssetEditorRoute ||
+      !isAssetEditorRoute ||
+      !assetId ||
       !userId ||
       !isHydrated ||
       skipSaveRef.current
@@ -98,14 +129,19 @@ export function useProfileSync() {
     setSyncStatus("saving");
 
     saveTimerRef.current = setTimeout(() => {
-      saveProfile(userId, profile)
+      const payload = portfolioEditorStateToAssetPayload({
+        profile,
+        portfolioSlug,
+      });
+
+      updateAsset(assetId, payload)
         .then(() => {
           setSyncStatus("saved");
         })
         .catch((error: unknown) => {
           setSyncStatus(
             "error",
-            error instanceof Error ? error.message : "Failed to save profile"
+            error instanceof Error ? error.message : "Failed to save asset"
           );
         });
     }, SAVE_DEBOUNCE_MS);
@@ -115,5 +151,13 @@ export function useProfileSync() {
         clearTimeout(saveTimerRef.current);
       }
     };
-  }, [profile, userId, isHydrated, isPublicPortfolioRoute, isAssetEditorRoute, setSyncStatus]);
+  }, [
+    profile,
+    portfolioSlug,
+    assetId,
+    userId,
+    isHydrated,
+    isAssetEditorRoute,
+    setSyncStatus,
+  ]);
 }

@@ -41,7 +41,12 @@ const fields = [
   },
 ] as const;
 
-export function FormPanel() {
+type FormPanelProps = {
+  variant?: "legacy" | "asset";
+};
+
+export function FormPanel({ variant = "legacy" }: FormPanelProps) {
+  const isAssetMode = variant === "asset";
   const profile = useBuilderProfile();
   const setField = useSetField();
   const resetProfile = useResetProfile();
@@ -51,10 +56,12 @@ export function FormPanel() {
     <div className="flex h-full flex-col">
       <div className="border-b border-white/[0.06] px-6 py-7 sm:px-8 sm:py-8">
         <h1 className="text-xl font-semibold tracking-tight text-white">
-          Build your portfolio
+          {isAssetMode ? "Edit portfolio asset" : "Build your portfolio"}
         </h1>
         <p className={cn("mt-2", builderHelperClassName)}>
-          Fill in your details. The preview updates instantly as you type.
+          {isAssetMode
+            ? "Changes save to this workspace asset. The preview updates as you type."
+            : "Fill in your details. The preview updates instantly as you type."}
         </p>
       </div>
 
@@ -138,7 +145,7 @@ export function FormPanel() {
           </div>
         </section>
 
-        <PublishSettings />
+        <PublishSettings mode={isAssetMode ? "asset" : "profile"} />
 
         <div className="mt-auto space-y-3 border-t border-white/[0.06] pt-6">
           <Button
@@ -152,17 +159,19 @@ export function FormPanel() {
             Generate Portfolio
             <ArrowRight className="size-4" aria-hidden />
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className={cn(
-              "w-full border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white",
-              builderFocusRing
-            )}
-            onClick={resetProfile}
-          >
-            Clear form
-          </Button>
+          {!isAssetMode ? (
+            <Button
+              type="button"
+              variant="outline"
+              className={cn(
+                "w-full border-white/10 bg-transparent text-zinc-300 hover:bg-white/5 hover:text-white",
+                builderFocusRing
+              )}
+              onClick={resetProfile}
+            >
+              Clear form
+            </Button>
+          ) : null}
         </div>
       </form>
     </div>

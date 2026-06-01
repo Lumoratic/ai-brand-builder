@@ -30,15 +30,24 @@ export type ProfileSyncStatus =
   | "saved"
   | "error";
 
+export type BuilderEditorMode = "profile" | "asset";
+
 type BuilderState = {
   profile: BuilderProfile;
   syncStatus: ProfileSyncStatus;
   syncError: string | null;
   isHydrated: boolean;
+  editorMode: BuilderEditorMode;
+  activeAssetId: string | null;
+  portfolioSlug: string;
   setField: <K extends keyof Omit<BuilderProfile, "projects" | "links">>(
     field: K,
     value: BuilderProfile[K]
   ) => void;
+  setPortfolioSlug: (slug: string) => void;
+  setEditorMode: (mode: BuilderEditorMode) => void;
+  setActiveAssetId: (assetId: string | null) => void;
+  resetAssetEditor: () => void;
   addProject: () => void;
   updateProject: (
     id: string,
@@ -90,6 +99,18 @@ export const useBuilderStore = create<BuilderState>((set) => ({
   syncStatus: "idle",
   syncError: null,
   isHydrated: false,
+  editorMode: "profile",
+  activeAssetId: null,
+  portfolioSlug: "",
+  setPortfolioSlug: (slug) => set({ portfolioSlug: slug }),
+  setEditorMode: (mode) => set({ editorMode: mode }),
+  setActiveAssetId: (assetId) => set({ activeAssetId: assetId }),
+  resetAssetEditor: () =>
+    set({
+      editorMode: "profile",
+      activeAssetId: null,
+      portfolioSlug: "",
+    }),
   setField: (field, value) =>
     set((state) => ({
       profile: { ...state.profile, [field]: value },
@@ -168,3 +189,15 @@ export const useProfileSyncError = () =>
 
 export const useProfileIsHydrated = () =>
   useBuilderStore((state) => state.isHydrated);
+
+export const useBuilderEditorMode = () =>
+  useBuilderStore((state) => state.editorMode);
+
+export const useActiveAssetId = () =>
+  useBuilderStore((state) => state.activeAssetId);
+
+export const usePortfolioSlug = () =>
+  useBuilderStore((state) => state.portfolioSlug);
+
+export const useSetPortfolioSlug = () =>
+  useBuilderStore((state) => state.setPortfolioSlug);

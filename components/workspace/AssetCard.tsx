@@ -1,3 +1,6 @@
+"use client";
+
+import Link from "next/link";
 import type { AssetRow } from "@/lib/assets/types";
 import { ASSET_TYPE_LABELS } from "@/lib/assets/types";
 import { cn } from "@/lib/utils";
@@ -15,14 +18,17 @@ function formatUpdatedAt(value: string) {
   });
 }
 
+function getAssetHref(asset: AssetRow): string | null {
+  if (asset.type === "portfolio") {
+    return `/builder/portfolio/${asset.id}`;
+  }
+  return null;
+}
+
 export function AssetCard({ asset, className }: AssetCardProps) {
-  return (
-    <article
-      className={cn(
-        "rounded-xl border border-white/[0.08] bg-white/[0.03] p-4",
-        className
-      )}
-    >
+  const href = getAssetHref(asset);
+  const content = (
+    <>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-sm font-medium text-zinc-100">
@@ -43,6 +49,31 @@ export function AssetCard({ asset, className }: AssetCardProps) {
           <span>Draft</span>
         )}
       </p>
-    </article>
+    </>
+  );
+
+  if (!href) {
+    return (
+      <article
+        className={cn(
+          "rounded-xl border border-white/[0.08] bg-white/[0.03] p-4",
+          className
+        )}
+      >
+        {content}
+      </article>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "block rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 transition-colors hover:border-white/[0.14] hover:bg-white/[0.05]",
+        className
+      )}
+    >
+      {content}
+    </Link>
   );
 }

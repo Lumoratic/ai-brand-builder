@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/client";
+import { createEmptyPortfolioAssetData } from "@/lib/assets/mappers";
 import type { AssetInsert, AssetRow, AssetType, AssetUpdate } from "@/lib/assets/types";
 import { DEFAULT_ASSET_TITLES } from "@/lib/assets/types";
+import { isValidSlug, sanitizeSlug } from "@/lib/assets/slug";
 
 const ASSET_SELECT =
   "id, user_id, type, title, slug, data, is_published, created_at, updated_at";
@@ -32,7 +34,7 @@ export async function createAsset(
     user_id: userId,
     type,
     title: title?.trim() || DEFAULT_ASSET_TITLES[type],
-    data: {},
+    data: type === "portfolio" ? createEmptyPortfolioAssetData() : {},
   };
 
   const { data, error } = await supabase
@@ -92,4 +94,33 @@ export async function deleteAsset(id: string): Promise<void> {
   if (error) {
     throw new Error(error.message);
   }
+}
+
+export async function isAssetSlugAvailable(
+  userId: string,
+  slug: string,
+  excludeAssetId?: string
+): Promise<boolean> {
+  const normalized = sanitizeSlug(slug);
+  if (!normalized || !isValidSlug(normalized)) return false;
+
+  const supabase = createClient();
+
+  let query = supabase
+    .from("assets")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("slug", normalized);
+
+  if (excludeAssetId) {
+    query = query.neq("id", excludeAssetId);
+  }
+
+  const { data, error } = await query.maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return !data;
 }
