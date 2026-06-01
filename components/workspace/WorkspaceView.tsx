@@ -44,20 +44,35 @@ export function WorkspaceView() {
   }, [authLoading, user, loadAssets]);
 
   async function handleCreate(type: AssetType) {
-    if (!user || creatingType) return;
+    if (creatingType) return;
+
+    if (!user) {
+      const message = "Sign in to create assets.";
+      setError(message);
+      console.error("[workspace] createAsset blocked:", message);
+      return;
+    }
 
     setCreatingType(type);
     setError(null);
 
     try {
       const asset = await createAsset(user.id, type);
-      setAssets((current) => [asset, ...current]);
 
       if (type === "portfolio") {
+        if (!asset.id) {
+          throw new Error("Created portfolio asset is missing an id.");
+        }
         router.push(`/builder/portfolio/${asset.id}`);
+        return;
       }
+
+      setAssets((current) => [asset, ...current]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create asset");
+      const message =
+        err instanceof Error ? err.message : "Failed to create asset";
+      console.error("[workspace] createAsset failed:", err);
+      setError(message);
     } finally {
       setCreatingType(null);
     }
@@ -78,6 +93,7 @@ export function WorkspaceView() {
 
       <CreateAssetButtons
         creatingType={creatingType}
+        disabled={authLoading || !user}
         onCreate={handleCreate}
         className="mb-8"
       />

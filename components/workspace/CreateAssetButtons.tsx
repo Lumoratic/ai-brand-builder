@@ -30,12 +30,14 @@ const CREATE_OPTIONS: {
 
 type CreateAssetButtonsProps = {
   creatingType: AssetType | null;
+  disabled?: boolean;
   onCreate: (type: AssetType) => void;
   className?: string;
 };
 
 export function CreateAssetButtons({
   creatingType,
+  disabled = false,
   onCreate,
   className,
 }: CreateAssetButtonsProps) {
@@ -49,7 +51,7 @@ export function CreateAssetButtons({
             key={type}
             type="button"
             variant="outline"
-            disabled={creatingType !== null}
+            disabled={disabled || creatingType !== null}
             onClick={() => onCreate(type)}
             className="h-auto min-w-[140px] flex-col items-start gap-1 border-white/[0.08] bg-white/[0.03] px-4 py-3 text-left hover:bg-white/[0.06]"
           >

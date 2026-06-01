@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { AssetRow } from "@/lib/assets/types";
 import { ASSET_TYPE_LABELS } from "@/lib/assets/types";
 import { cn } from "@/lib/utils";
@@ -18,15 +18,21 @@ function formatUpdatedAt(value: string) {
   });
 }
 
-function getAssetHref(asset: AssetRow): string | null {
-  if (asset.type === "portfolio") {
-    return `/builder/portfolio/${asset.id}`;
+function getPortfolioEditorPath(asset: AssetRow): string | null {
+  if (asset.type?.toLowerCase() !== "portfolio" || !asset.id) {
+    return null;
   }
-  return null;
+  return `/builder/portfolio/${asset.id}`;
 }
 
 export function AssetCard({ asset, className }: AssetCardProps) {
-  const href = getAssetHref(asset);
+  const router = useRouter();
+  const href = getPortfolioEditorPath(asset);
+
+  function openPortfolioEditor() {
+    if (!href) return;
+    router.push(href);
+  }
   const content = (
     <>
       <div className="flex items-start justify-between gap-3">
@@ -66,14 +72,22 @@ export function AssetCard({ asset, className }: AssetCardProps) {
   }
 
   return (
-    <Link
-      href={href}
+    <article
+      role="link"
+      tabIndex={0}
+      onClick={openPortfolioEditor}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openPortfolioEditor();
+        }
+      }}
       className={cn(
-        "block rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 transition-colors hover:border-white/[0.14] hover:bg-white/[0.05]",
+        "block cursor-pointer rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 transition-colors hover:border-white/[0.14] hover:bg-white/[0.05]",
         className
       )}
     >
       {content}
-    </Link>
+    </article>
   );
 }
