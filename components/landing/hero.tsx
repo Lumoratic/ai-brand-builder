@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GradientText } from "@/components/shared/gradient-text";
 import { GridBackground } from "@/components/shared/grid-background";
@@ -32,7 +32,7 @@ export function Hero() {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-violet-400 opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-violet-500" />
           </span>
-          Now in public beta — 10,000+ professionals
+          One profile · Resume · Portfolio · Website
         </motion.div>
 
         <motion.h1
@@ -41,17 +41,17 @@ export function Hero() {
         >
           Build your{" "}
           <GradientText as="span" className="inline">
-            personal brand
+            professional presence
           </GradientText>{" "}
-          with AI
+          in one place
         </motion.h1>
 
         <motion.p
           {...getFadeUp(mounted, 0.2)}
           className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg md:text-xl"
         >
-          Create a recruiter-ready resume and a stunning portfolio website in
-          minutes. AI-powered copy, premium templates, and one-click publish.
+          Create a resume, portfolio website, and professional profile from a
+          single source of truth. Update once and publish everywhere.
         </motion.p>
 
         <motion.div
@@ -74,9 +74,9 @@ export function Hero() {
             size="lg"
             className="h-12 gap-2 rounded-full border-white/15 bg-white/[0.03] px-8 text-base text-white hover:bg-white/10"
           >
-            <Link href="#how-it-works">
-              <Play className="size-4 fill-current" />
-              Watch demo
+            <Link href="/portfolio/demo">
+              <ExternalLink className="size-4" />
+              View example portfolio
             </Link>
           </Button>
         </motion.div>
@@ -85,7 +85,7 @@ export function Hero() {
           {...getFadeUp(mounted, 0.4)}
           className="mt-6 text-sm text-zinc-500"
         >
-          No credit card required · Free forever plan
+          Free to start · No credit card required
         </motion.p>
 
         <motion.div {...getFadeUp(mounted, 0.5)} className="mt-16 w-full sm:mt-20">

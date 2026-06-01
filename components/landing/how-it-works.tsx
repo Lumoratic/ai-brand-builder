@@ -25,11 +25,12 @@ export function HowItWorks() {
           How it works
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
-          Four steps to{" "}
-          <GradientText as="span">go live</GradientText>
+          From profile to{" "}
+          <GradientText as="span">published presence</GradientText>
         </h2>
         <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-          From raw experience to published brand in under ten minutes.
+          Build once, refine your copy, and share a portfolio when you&apos;re
+          ready.
         </p>
       </div>
 

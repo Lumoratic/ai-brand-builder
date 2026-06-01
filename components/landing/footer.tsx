@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { SectionContainer } from "@/components/shared/section-container";
 import { COPYRIGHT_YEAR, footerLinks } from "@/lib/landing-data";
 
@@ -9,17 +9,10 @@ export function Footer() {
       <SectionContainer className="py-16">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500">
-                <Sparkles className="size-4 text-white" />
-              </div>
-              <span className="text-base font-semibold text-white">
-                BrandSpark
-              </span>
-            </Link>
+            <BrandLogo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500">
-              AI-powered resume and personal brand website builder. Stand out,
-              get hired, grow your career.
+              One profile for your resume, portfolio, and professional website.
+              Build once, update everywhere.
             </p>
           </div>
 
@@ -80,7 +73,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 sm:flex-row">
           <p className="text-sm text-zinc-600">
-            © {COPYRIGHT_YEAR} BrandSpark. All rights reserved.
+            © {COPYRIGHT_YEAR} Pflio. All rights reserved.
           </p>
           <div className="flex gap-6">
             {["Twitter", "LinkedIn", "GitHub"].map((social) => (

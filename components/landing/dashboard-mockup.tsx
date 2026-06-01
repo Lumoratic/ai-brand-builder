@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import {
-  BarChart3,
   CheckCircle2,
   FileText,
   Globe,
+  Layers,
   Sparkles,
 } from "lucide-react";
 import { GlassCard } from "@/components/shared/glass-card";
@@ -18,7 +18,6 @@ export function DashboardMockup() {
 
   return (
     <div className="relative mx-auto w-full max-w-4xl">
-      {/* Floating glass cards */}
       <motion.div
         animate={mounted ? floatAnimation(0, 8) : false}
         className="absolute -left-2 top-8 z-20 hidden sm:block md:-left-8 lg:-left-12"
@@ -29,8 +28,8 @@ export function DashboardMockup() {
               <CheckCircle2 className="size-4 text-emerald-400" />
             </div>
             <div>
-              <p className="text-xs font-medium text-white">ATS Score</p>
-              <p className="text-lg font-semibold text-emerald-400">98%</p>
+              <p className="text-xs font-medium text-white">Profile synced</p>
+              <p className="text-sm text-zinc-400">Resume · Portfolio</p>
             </div>
           </div>
         </GlassCard>
@@ -46,8 +45,8 @@ export function DashboardMockup() {
               <Sparkles className="size-4 text-violet-400" />
             </div>
             <div>
-              <p className="text-xs font-medium text-white">AI Enhanced</p>
-              <p className="text-sm text-zinc-400">12 sections</p>
+              <p className="text-xs font-medium text-white">AI assistant</p>
+              <p className="text-sm text-zinc-400">Project copy</p>
             </div>
           </div>
         </GlassCard>
@@ -60,13 +59,12 @@ export function DashboardMockup() {
         <GlassCard className="px-4 py-3 shadow-2xl">
           <div className="flex items-center gap-2">
             <Globe className="size-4 text-sky-400" />
-            <span className="text-xs font-medium text-sky-400">Live</span>
-            <span className="text-xs text-zinc-500">brandspark.io/you</span>
+            <span className="text-xs font-medium text-sky-400">Published</span>
+            <span className="text-xs text-zinc-500">pflio.com/u/you</span>
           </div>
         </GlassCard>
       </motion.div>
 
-      {/* Main dashboard */}
       <motion.div
         initial={motionInitial(mounted, { opacity: 0, y: 40 })}
         animate={{ opacity: 1, y: 0 }}
@@ -80,20 +78,19 @@ export function DashboardMockup() {
             <span className="size-3 rounded-full bg-emerald-500/80" />
           </div>
           <div className="mx-auto flex h-7 w-48 items-center justify-center rounded-md bg-white/[0.04] text-[10px] text-zinc-500">
-            app.brandspark.io/editor
+            pflio.com/builder
           </div>
         </div>
 
         <div className="flex min-h-[280px] sm:min-h-[320px]">
-          {/* Sidebar */}
           <aside className="hidden w-44 shrink-0 border-r border-white/[0.06] p-3 sm:block">
             <p className="mb-3 px-2 text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-              Workspace
+              Your profile
             </p>
             {[
               { icon: FileText, label: "Resume", active: true },
-              { icon: Globe, label: "Website", active: false },
-              { icon: BarChart3, label: "Analytics", active: false },
+              { icon: Globe, label: "Portfolio", active: false },
+              { icon: Layers, label: "Profile", active: false },
             ].map((item) => (
               <div
                 key={item.label}
@@ -110,7 +107,6 @@ export function DashboardMockup() {
             ))}
           </aside>
 
-          {/* Editor preview */}
           <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <div>

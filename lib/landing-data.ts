@@ -1,8 +1,8 @@
 import {
-  Brain,
+  FileText,
   Globe,
-  Layout,
-  Palette,
+  Layers,
+  Link2,
   Sparkles,
   Zap,
   type LucideIcon,
@@ -14,8 +14,8 @@ export const COPYRIGHT_YEAR = 2026;
 export const navLinks = [
   { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "Pricing", href: "#cta" },
+  { label: "Early access", href: "#testimonials" },
+  { label: "Get started", href: "#cta" },
 ] as const;
 
 export type Feature = {
@@ -26,108 +26,80 @@ export type Feature = {
 
 export const features: Feature[] = [
   {
-    icon: Brain,
-    title: "AI Resume Writer",
+    icon: FileText,
+    title: "Resume Builder",
     description:
-      "Turn bullet points into compelling narratives. Our AI tailors tone, keywords, and structure for every role you target.",
+      "Create a professional resume from your profile data—structured, consistent, and ready to share.",
   },
   {
     icon: Globe,
-    title: "Personal Brand Site",
+    title: "Portfolio Website",
     description:
-      "Launch a stunning portfolio site in minutes—custom domain ready, SEO optimized, and designed to convert visitors into opportunities.",
-  },
-  {
-    icon: Palette,
-    title: "Premium Templates",
-    description:
-      "Choose from curated, designer-crafted layouts inspired by top tech portfolios and executive resumes.",
-  },
-  {
-    icon: Zap,
-    title: "One-Click Publish",
-    description:
-      "Go live instantly. Update your resume and site from a single dashboard—changes sync everywhere automatically.",
-  },
-  {
-    icon: Layout,
-    title: "ATS-Optimized",
-    description:
-      "Every export passes applicant tracking systems. Smart formatting ensures your experience never gets lost in parsing.",
+      "Launch a public portfolio without managing a separate website. Your work, presented cleanly.",
   },
   {
     icon: Sparkles,
-    title: "Brand Consistency",
+    title: "AI Writing Assistant",
     description:
-      "Unified colors, typography, and voice across resume, cover letter, and website—your brand, perfectly aligned.",
+      "Improve bios, project descriptions, and professional copy without starting from a blank page.",
+  },
+  {
+    icon: Layers,
+    title: "One Source of Truth",
+    description:
+      "Update your information once and keep your resume, portfolio, and profile in sync.",
+  },
+  {
+    icon: Link2,
+    title: "Public Profile",
+    description:
+      "Share a clean public URL with employers and clients—your professional presence, always current.",
+  },
+  {
+    icon: Zap,
+    title: "Easy Publishing",
+    description:
+      "Publish your professional presence in minutes. Choose a username and go live when you're ready.",
   },
 ];
 
 export const steps = [
   {
     step: "01",
-    title: "Upload or paste",
+    title: "Create your profile",
     description:
-      "Import your LinkedIn, existing resume, or start from scratch. We parse everything intelligently.",
+      "Add your name, role, bio, and the basics that define your professional story.",
   },
   {
     step: "02",
-    title: "AI crafts your story",
+    title: "Add experience, projects, and skills",
     description:
-      "Our engine refines experience, skills, and achievements into recruiter-ready copy and layouts.",
+      "Build out featured work, capabilities, and the details that belong on a resume and portfolio.",
   },
   {
     step: "03",
-    title: "Customize & preview",
+    title: "Generate and improve professional content",
     description:
-      "Pick a template, tweak colors and sections, and preview your resume and live site side by side.",
+      "Polish project descriptions and copy with AI—clear, professional, and true to what you actually did.",
   },
   {
     step: "04",
-    title: "Publish & share",
+    title: "Publish your portfolio and resume",
     description:
-      "Download PDF, share a link, or deploy your personal brand site with one click.",
-  },
-] as const;
-
-export const testimonials = [
-  {
-    quote:
-      "I landed three interviews in two weeks after switching to BrandSpark. The AI resume copy alone was worth it.",
-    author: "Sarah Chen",
-    role: "Product Designer",
-    company: "Stripe",
-    avatar: "SC",
-  },
-  {
-    quote:
-      "Finally a tool that treats your personal brand as seriously as your work. My portfolio site looks like I hired an agency.",
-    author: "Marcus Rivera",
-    role: "Engineering Lead",
-    company: "Vercel",
-    avatar: "MR",
-  },
-  {
-    quote:
-      "The ATS optimization actually works. I went from zero callbacks to multiple offers in one hiring cycle.",
-    author: "Priya Patel",
-    role: "Data Scientist",
-    company: "Notion",
-    avatar: "PP",
+      "Share a public portfolio URL and keep everything aligned from one profile.",
   },
 ] as const;
 
 export const footerLinks = {
   product: [
     { label: "Features", href: "#features" },
-    { label: "Templates", href: "#" },
-    { label: "Pricing", href: "#cta" },
-    { label: "Changelog", href: "#" },
+    { label: "How it works", href: "#how-it-works" },
+    { label: "Example portfolio", href: "/portfolio/demo" },
+    { label: "Get started", href: "/builder" },
   ],
   company: [
     { label: "About", href: "#" },
     { label: "Blog", href: "#" },
-    { label: "Careers", href: "#" },
     { label: "Contact", href: "#" },
   ],
   legal: [

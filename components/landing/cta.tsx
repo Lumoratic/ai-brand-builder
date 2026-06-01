@@ -34,11 +34,11 @@ export function CTA() {
         <div className="relative z-10 mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
             Ready to build your{" "}
-            <GradientText as="span">brand</GradientText>?
+            <GradientText as="span">professional presence</GradientText>?
           </h2>
           <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-            Start free today. No credit card, no commitment—just your best
-            professional story, powered by AI.
+            One profile for your resume, portfolio, and public URL. Update once
+            and keep everything aligned.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
@@ -46,8 +46,8 @@ export function CTA() {
               size="lg"
               className="h-12 gap-2 rounded-full bg-white px-8 text-base font-medium text-zinc-900 hover:bg-zinc-100"
             >
-              <Link href="#">
-                Get started free
+              <Link href="/builder">
+                Start building free
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -57,11 +57,11 @@ export function CTA() {
               size="lg"
               className="h-12 rounded-full border-white/20 bg-transparent px-8 text-base text-white hover:bg-white/10"
             >
-              <Link href="#features">Explore features</Link>
+              <Link href="/portfolio/demo">View example portfolio</Link>
             </Button>
           </div>
           <p className="mt-6 text-sm text-zinc-500">
-            Join 10,000+ professionals already using BrandSpark
+            Free to start · Publish when you&apos;re ready
           </p>
         </div>
       </motion.div>

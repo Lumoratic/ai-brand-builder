@@ -22,9 +22,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BrandSpark — AI Resume & Personal Brand Website Builder",
+  title: "Pflio — Resume, Portfolio & Personal Website from One Profile",
   description:
-    "Build a stunning resume and personal brand website with AI. Premium templates, ATS optimization, and one-click publish.",
+    "Build your professional presence in one place. Create a resume, portfolio website, and public profile from a single source of truth.",
 };
 
 export default function RootLayout({

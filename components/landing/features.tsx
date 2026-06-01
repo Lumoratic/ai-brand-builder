@@ -24,12 +24,12 @@ export function Features() {
           Features
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
-          Everything to{" "}
-          <GradientText as="span">stand out</GradientText>
+          Everything from{" "}
+          <GradientText as="span">one profile</GradientText>
         </h2>
         <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-          From AI writing to live publishing—one platform for your entire
-          professional presence.
+          Resume, portfolio, and public profile—kept in sync from a single
+          source of truth.
         </p>
       </div>
 
@@ -39,7 +39,7 @@ export function Features() {
         viewport={{ once: true, margin: "-80px" }}
         className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {features.map((feature, i) => (
+        {features.map((feature) => (
           <motion.div key={feature.title} variants={staggerItem}>
             <GlassCard
               className={cn(
@@ -63,11 +63,6 @@ export function Features() {
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
                 {feature.description}
               </p>
-              {i === 0 && (
-                <span className="mt-4 inline-block rounded-full bg-violet-500/20 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-violet-300">
-                  Most popular
-                </span>
-              )}
             </GlassCard>
           </motion.div>
         ))}
