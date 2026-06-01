@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BuilderAuthActions } from "@/components/builder/BuilderAuthActions";
 import { BuilderSaveStatus } from "@/components/builder/BuilderSaveStatus";
 import { BrandLogo } from "@/components/shared/brand-logo";
@@ -20,6 +21,12 @@ export function BuilderHeader() {
           </span>
         </div>
         <div className="flex shrink-0 items-center gap-4">
+          <Link
+            href="/workspace"
+            className="hidden text-sm text-zinc-500 transition-colors hover:text-zinc-300 sm:inline"
+          >
+            Workspace
+          </Link>
           <BuilderSaveStatus />
           <BuilderAuthActions />
         </div>

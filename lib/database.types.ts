@@ -1,4 +1,4 @@
-// Supabase database types (profiles table).
+// Supabase database types (profiles, assets tables).
 // Regenerate with: npx supabase gen types typescript --project-id <id>
 
 export type Json =
@@ -55,6 +55,42 @@ export type Database = {
           is_published?: boolean;
           links?: Json;
           projects?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      assets: {
+        Row: {
+          id: string;
+          user_id: string;
+          type: string;
+          title: string;
+          slug: string | null;
+          data: Json;
+          is_published: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          type: string;
+          title: string;
+          slug?: string | null;
+          data?: Json;
+          is_published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          type?: string;
+          title?: string;
+          slug?: string | null;
+          data?: Json;
+          is_published?: boolean;
           created_at?: string;
           updated_at?: string;
         };

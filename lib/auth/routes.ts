@@ -3,7 +3,7 @@ export const AUTH_ROUTES = {
   callback: "/auth/callback",
 } as const;
 
-export const PROTECTED_ROUTE_PREFIXES = ["/builder"] as const;
+export const PROTECTED_ROUTE_PREFIXES = ["/builder", "/workspace"] as const;
 
 export function isProtectedRoute(pathname: string) {
   return PROTECTED_ROUTE_PREFIXES.some(
