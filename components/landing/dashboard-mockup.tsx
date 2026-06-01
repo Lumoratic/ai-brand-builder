@@ -28,8 +28,8 @@ export function DashboardMockup() {
               <CheckCircle2 className="size-4 text-emerald-400" />
             </div>
             <div>
-              <p className="text-xs font-medium text-white">Profile synced</p>
-              <p className="text-sm text-zinc-400">Resume · Portfolio</p>
+              <p className="text-xs font-medium text-white">Assets saved</p>
+              <p className="text-sm text-zinc-400">Resume · Portfolio · Website</p>
             </div>
           </div>
         </GlassCard>
@@ -85,12 +85,12 @@ export function DashboardMockup() {
         <div className="flex min-h-[280px] sm:min-h-[320px]">
           <aside className="hidden w-44 shrink-0 border-r border-white/[0.06] p-3 sm:block">
             <p className="mb-3 px-2 text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-              Your profile
+              Your workspace
             </p>
             {[
-              { icon: FileText, label: "Resume", active: true },
-              { icon: Globe, label: "Portfolio", active: false },
-              { icon: Layers, label: "Profile", active: false },
+              { icon: FileText, label: "Resume", active: false },
+              { icon: Globe, label: "Portfolio", active: true },
+              { icon: Layers, label: "Website", active: false },
             ].map((item) => (
               <div
                 key={item.label}

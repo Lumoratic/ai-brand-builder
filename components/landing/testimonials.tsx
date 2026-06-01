@@ -13,18 +13,18 @@ export function Testimonials() {
   const mounted = useMounted();
 
   return (
-    <SectionContainer id="testimonials" className="py-24 sm:py-32">
+    <SectionContainer id="product-status" className="py-24 sm:py-32">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-sm font-medium uppercase tracking-widest text-violet-400">
-          Early access
+          What&apos;s live
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
-          Stories from{" "}
-          <GradientText as="span">real users</GradientText>
+          Available{" "}
+          <GradientText as="span">today</GradientText>
         </h2>
         <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-          Pflio is in early access. Testimonials and case studies from people
-          using the product will appear here soon.
+          Pflio is being built in stages. Here is what you can use now—and what
+          is still on the way.
         </p>
       </div>
 
@@ -35,19 +35,27 @@ export function Testimonials() {
         transition={{ duration: 0.6, ease: easeOut }}
         className="mx-auto mt-16 max-w-xl"
       >
-        <GlassCard className="p-8 text-center sm:p-10">
+        <GlassCard className="p-8 text-left sm:p-10">
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-            Coming soon
+            Live now
           </p>
-          <p className="mt-4 text-base leading-relaxed text-zinc-300 sm:text-lg">
-            We&apos;re focused on building a product worth recommending—honest
-            feedback from early users will live here once it&apos;s ready.
+          <ul className="mt-4 space-y-2 text-base leading-relaxed text-zinc-300 sm:text-lg">
+            <li>Workspace for resume, portfolio, and website assets</li>
+            <li>Portfolio builder with public publishing</li>
+            <li>AI help for project descriptions</li>
+          </ul>
+          <p className="mt-8 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
+            Coming next
           </p>
+          <ul className="mt-4 space-y-2 text-base leading-relaxed text-zinc-400 sm:text-lg">
+            <li>Resume builder</li>
+            <li>Personal website builder</li>
+          </ul>
           <Link
-            href="/builder"
+            href="/workspace"
             className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-violet-300 transition-colors hover:text-violet-200"
           >
-            Be among the first to build
+            Open your workspace
             <ArrowRight className="size-4" />
           </Link>
         </GlassCard>

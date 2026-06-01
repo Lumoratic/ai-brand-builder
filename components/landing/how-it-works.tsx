@@ -25,12 +25,11 @@ export function HowItWorks() {
           How it works
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
-          From profile to{" "}
-          <GradientText as="span">published presence</GradientText>
+          Create, build,{" "}
+          <GradientText as="span">publish</GradientText>
         </h2>
         <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-          Build once, refine your copy, and share a portfolio when you&apos;re
-          ready.
+          A straightforward path from workspace to a portfolio you can share.
         </p>
       </div>
 

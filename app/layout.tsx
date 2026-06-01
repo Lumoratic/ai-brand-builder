@@ -22,9 +22,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pflio — Resume, Portfolio & Personal Website from One Profile",
+  title: "Pflio — Resume, Portfolio & Website in One Workspace",
   description:
-    "Build your professional presence in one place. Create a resume, portfolio website, and public profile from a single source of truth.",
+    "Build resumes, portfolios, and websites in one workspace. Manage your professional presence with flexible, owned assets.",
 };
 
 export default function RootLayout({

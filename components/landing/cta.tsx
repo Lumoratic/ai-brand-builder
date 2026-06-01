@@ -37,8 +37,8 @@ export function CTA() {
             <GradientText as="span">professional presence</GradientText>?
           </h2>
           <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-            One profile for your resume, portfolio, and public URL. Update once
-            and keep everything aligned.
+            Create assets in your workspace, build your portfolio, and publish a
+            public URL when you are ready.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button

@@ -32,26 +32,26 @@ export function Hero() {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-violet-400 opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-violet-500" />
           </span>
-          One profile · Resume · Portfolio · Website
+          Workspace · Resume · Portfolio · Website
         </motion.div>
 
         <motion.h1
           {...getFadeUp(mounted, 0.1)}
           className="max-w-4xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Build your{" "}
+          Build resumes, portfolios, and websites in one{" "}
           <GradientText as="span" className="inline">
-            professional presence
-          </GradientText>{" "}
-          in one place
+            workspace
+          </GradientText>
         </motion.h1>
 
         <motion.p
           {...getFadeUp(mounted, 0.2)}
           className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg md:text-xl"
         >
-          Create a resume, portfolio website, and professional profile from a
-          single source of truth. Update once and publish everywhere.
+          Manage multiple professional assets from one account. Own your
+          presence, work on each piece independently, and publish when you are
+          ready.
         </motion.p>
 
         <motion.div

@@ -11,8 +11,8 @@ export function Footer() {
           <div className="lg:col-span-2">
             <BrandLogo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500">
-              One profile for your resume, portfolio, and professional website.
-              Build once, update everywhere.
+              Resumes, portfolios, and websites in one workspace. Build what you
+              need, publish when it is ready.
             </p>
           </div>
 

@@ -14,7 +14,7 @@ export const COPYRIGHT_YEAR = 2026;
 export const navLinks = [
   { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Early access", href: "#testimonials" },
+  { label: "What's live", href: "#product-status" },
   { label: "Get started", href: "#cta" },
 ] as const;
 
@@ -27,66 +27,66 @@ export type Feature = {
 export const features: Feature[] = [
   {
     icon: FileText,
-    title: "Resume Builder",
+    title: "Resume assets",
     description:
-      "Create a professional resume from your profile data—structured, consistent, and ready to share.",
+      "Create resume drafts in your workspace. A dedicated resume builder is coming next.",
   },
   {
     icon: Globe,
-    title: "Portfolio Website",
+    title: "Portfolio builder",
     description:
-      "Launch a public portfolio without managing a separate website. Your work, presented cleanly.",
+      "Build and publish a public portfolio with projects, bio, skills, and links.",
   },
   {
     icon: Sparkles,
-    title: "AI Writing Assistant",
+    title: "AI writing help",
     description:
-      "Improve bios, project descriptions, and professional copy without starting from a blank page.",
+      "Improve project descriptions and professional copy in the portfolio editor.",
   },
   {
     icon: Layers,
-    title: "One Source of Truth",
+    title: "Unified workspace",
     description:
-      "Update your information once and keep your resume, portfolio, and profile in sync.",
+      "Manage resume, portfolio, and website assets under one account—each on its own terms.",
   },
   {
     icon: Link2,
-    title: "Public Profile",
+    title: "Public portfolio URL",
     description:
-      "Share a clean public URL with employers and clients—your professional presence, always current.",
+      "Share a clean public page with employers and clients when your portfolio is ready.",
   },
   {
     icon: Zap,
-    title: "Easy Publishing",
+    title: "Simple publishing",
     description:
-      "Publish your professional presence in minutes. Choose a username and go live when you're ready.",
+      "Choose a username and publish your portfolio when you are ready. Unpublish anytime.",
   },
 ];
 
 export const steps = [
   {
     step: "01",
-    title: "Create your profile",
+    title: "Create assets in your workspace",
     description:
-      "Add your name, role, bio, and the basics that define your professional story.",
+      "Start resume, portfolio, or website drafts from one place. Each asset stays separate and under your control.",
   },
   {
     step: "02",
-    title: "Add experience, projects, and skills",
+    title: "Build your content",
     description:
-      "Build out featured work, capabilities, and the details that belong on a resume and portfolio.",
+      "Use the portfolio builder to add projects, experience, and the details that represent your work.",
   },
   {
     step: "03",
-    title: "Generate and improve professional content",
+    title: "Improve with AI",
     description:
-      "Polish project descriptions and copy with AI—clear, professional, and true to what you actually did.",
+      "Polish project descriptions with AI—clear, professional, and grounded in what you actually did.",
   },
   {
     step: "04",
-    title: "Publish your portfolio and resume",
+    title: "Publish and share",
     description:
-      "Share a public portfolio URL and keep everything aligned from one profile.",
+      "Publish your portfolio to a public URL and share it when you are ready. More asset types will follow.",
   },
 ] as const;
 

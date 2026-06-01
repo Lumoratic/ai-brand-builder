@@ -24,12 +24,12 @@ export function Features() {
           Features
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
-          Everything from{" "}
-          <GradientText as="span">one profile</GradientText>
+          Everything in one{" "}
+          <GradientText as="span">workspace</GradientText>
         </h2>
         <p className="mt-4 text-base text-zinc-400 sm:text-lg">
-          Resume, portfolio, and public profile—kept in sync from a single
-          source of truth.
+          Resume, portfolio, and website assets—managed separately, owned by
+          you, under one account.
         </p>
       </div>
 
