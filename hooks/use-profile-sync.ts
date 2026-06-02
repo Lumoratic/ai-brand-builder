@@ -15,6 +15,7 @@ export function useProfileSync() {
   const userId = user?.id ?? null;
   const isPublicPortfolioRoute = pathname.startsWith("/u/");
   const isAssetEditorRoute = pathname.startsWith("/builder/portfolio/");
+  const isWorkspaceRoute = pathname.startsWith("/workspace");
 
   const profile = useBuilderStore((state) => state.profile);
   const isHydrated = useBuilderStore((state) => state.isHydrated);
@@ -27,7 +28,14 @@ export function useProfileSync() {
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!hasSupabaseEnv() || isPublicPortfolioRoute || isAssetEditorRoute) return;
+    if (
+      !hasSupabaseEnv() ||
+      isPublicPortfolioRoute ||
+      isAssetEditorRoute ||
+      isWorkspaceRoute
+    ) {
+      return;
+    }
 
     if (!userId) {
       resetProfile();
@@ -73,6 +81,7 @@ export function useProfileSync() {
     userId,
     isPublicPortfolioRoute,
     isAssetEditorRoute,
+    isWorkspaceRoute,
     hydrateProfile,
     resetProfile,
     setHydrated,
@@ -84,6 +93,7 @@ export function useProfileSync() {
       !hasSupabaseEnv() ||
       isPublicPortfolioRoute ||
       isAssetEditorRoute ||
+      isWorkspaceRoute ||
       !userId ||
       !isHydrated ||
       skipSaveRef.current
@@ -115,5 +125,5 @@ export function useProfileSync() {
         clearTimeout(saveTimerRef.current);
       }
     };
-  }, [profile, userId, isHydrated, isPublicPortfolioRoute, isAssetEditorRoute, setSyncStatus]);
+  }, [profile, userId, isHydrated, isPublicPortfolioRoute, isAssetEditorRoute, isWorkspaceRoute, setSyncStatus]);
 }

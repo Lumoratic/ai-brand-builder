@@ -65,7 +65,7 @@ export function useAssetSync() {
 
         if (!asset || asset.type !== "portfolio") {
           setHydrated(true);
-          skipSaveRef.current = false;
+          skipSaveRef.current = true;
           setSyncStatus("error", "Portfolio asset not found.");
           return;
         }
@@ -80,7 +80,7 @@ export function useAssetSync() {
       .catch((error: unknown) => {
         if (cancelled) return;
         setHydrated(true);
-        skipSaveRef.current = false;
+        skipSaveRef.current = true;
         setSyncStatus(
           "error",
           error instanceof Error ? error.message : "Failed to load asset"
@@ -107,6 +107,11 @@ export function useAssetSync() {
   useEffect(() => {
     if (isAssetEditorRoute) return;
 
+    skipSaveRef.current = true;
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
     resetAssetEditor();
   }, [isAssetEditorRoute, resetAssetEditor]);
 

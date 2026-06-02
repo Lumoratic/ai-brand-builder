@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -12,52 +12,64 @@ import type { AssetRow, AssetType } from "@/lib/assets/types";
 export function WorkspaceView() {
   const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
+  const userId = user?.id ?? null;
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [creatingType, setCreatingType] = useState<AssetType | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const createInFlightRef = useRef(false);
 
-  const loadAssets = useCallback(async (userId: string) => {
+  const loadAssets = useCallback(async (ownerId: string, signal?: AbortSignal) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const rows = await getUserAssets(userId);
+      const rows = await getUserAssets(ownerId);
+      if (signal?.aborted) return;
       setAssets(rows);
     } catch (err) {
+      if (signal?.aborted) return;
       setError(err instanceof Error ? err.message : "Failed to load assets");
     } finally {
-      setIsLoading(false);
+      if (!signal?.aborted) {
+        setIsLoading(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     if (authLoading) return;
 
-    if (!user) {
+    if (!userId) {
       setAssets([]);
       setIsLoading(false);
       return;
     }
 
-    void loadAssets(user.id);
-  }, [authLoading, user, loadAssets]);
+    const controller = new AbortController();
+    void loadAssets(userId, controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, [authLoading, userId, loadAssets]);
 
   async function handleCreate(type: AssetType) {
-    if (creatingType) return;
+    if (createInFlightRef.current || creatingType) return;
 
-    if (!user) {
+    if (!userId) {
       const message = "Sign in to create assets.";
       setError(message);
       console.error("[workspace] createAsset blocked:", message);
       return;
     }
 
+    createInFlightRef.current = true;
     setCreatingType(type);
     setError(null);
 
     try {
-      const asset = await createAsset(user.id, type);
+      const asset = await createAsset(userId, type);
 
       if (type === "portfolio") {
         if (!asset.id) {
@@ -74,6 +86,7 @@ export function WorkspaceView() {
       console.error("[workspace] createAsset failed:", err);
       setError(message);
     } finally {
+      createInFlightRef.current = false;
       setCreatingType(null);
     }
   }
@@ -93,7 +106,7 @@ export function WorkspaceView() {
 
       <CreateAssetButtons
         creatingType={creatingType}
-        disabled={authLoading || !user}
+        disabled={authLoading || !userId}
         onCreate={handleCreate}
         className="mb-8"
       />
