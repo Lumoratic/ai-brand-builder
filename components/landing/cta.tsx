@@ -46,7 +46,7 @@ export function CTA() {
               size="lg"
               className="h-12 gap-2 rounded-full bg-white px-8 text-base font-medium text-zinc-900 hover:bg-zinc-100"
             >
-              <Link href="/builder">
+              <Link href="/workspace">
                 Start building free
                 <ArrowRight className="size-4" />
               </Link>

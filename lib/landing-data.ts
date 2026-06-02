@@ -95,7 +95,7 @@ export const footerLinks = {
     { label: "Features", href: "#features" },
     { label: "How it works", href: "#how-it-works" },
     { label: "Example portfolio", href: "/portfolio/demo" },
-    { label: "Get started", href: "/builder" },
+    { label: "Get started", href: "/workspace" },
   ],
   company: [
     { label: "About", href: "#" },

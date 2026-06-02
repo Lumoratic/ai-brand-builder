@@ -31,7 +31,7 @@ export function Navbar() {
             ))}
           </ul>
 
-          <UserMenu className="hidden md:flex" redirectTo="/builder" />
+          <UserMenu className="hidden md:flex" redirectTo="/workspace" />
 
           <button
             type="button"
@@ -75,7 +75,7 @@ export function Navbar() {
               >
                 <UserMenu
                   className="flex w-full flex-col gap-2 [&_a]:w-full [&_button]:w-full"
-                  redirectTo="/builder"
+                  redirectTo="/workspace"
                 />
               </div>
             </motion.div>

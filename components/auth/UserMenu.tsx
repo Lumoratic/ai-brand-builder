@@ -80,7 +80,7 @@ export function UserMenu({
           variant="outline"
           className="border-white/[0.08] bg-white/[0.03] text-zinc-200 hover:bg-white/[0.06] hover:text-white"
         >
-          <Link href="/builder">Builder</Link>
+          <Link href={redirectTo}>Builder</Link>
         </Button>
       ) : null}
       <Button
