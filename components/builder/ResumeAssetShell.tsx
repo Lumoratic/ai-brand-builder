@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import { ResumeEditor } from "@/components/builder/ResumeEditor";
+import { ResumeBuilderWorkspace } from "@/components/builder/ResumeBuilderWorkspace";
 import { ResumeHeader } from "@/components/builder/ResumeHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,8 +51,8 @@ export function ResumeAssetShell() {
   return (
     <div className="flex min-h-screen flex-col bg-[oklch(0.07_0.012_280)] text-foreground">
       <ResumeHeader />
-      <main className="flex-1 overflow-y-auto pb-12">
-        <ResumeEditor />
+      <main className="flex flex-1 flex-col overflow-hidden">
+        <ResumeBuilderWorkspace />
       </main>
     </div>
   );

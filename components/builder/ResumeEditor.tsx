@@ -56,7 +56,7 @@ export function ResumeEditor() {
   const removeSkill = useRemoveResumeSkill();
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col">
+    <div className="flex w-full flex-col">
       <div className="border-b border-white/[0.06] px-6 py-7 sm:px-8 sm:py-8">
         <h1 className="text-xl font-semibold tracking-tight text-white">
           {assetTitle.trim() || "Edit resume"}
