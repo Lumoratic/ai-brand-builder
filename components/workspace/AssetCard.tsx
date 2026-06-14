@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { AssetRow } from "@/lib/assets/types";
+import type { AssetRow, AssetType } from "@/lib/assets/types";
 import { ASSET_TYPE_LABELS } from "@/lib/assets/types";
 import { cn } from "@/lib/utils";
 
@@ -21,18 +21,22 @@ function formatUpdatedAt(value: string) {
   });
 }
 
-function getPortfolioEditorPath(asset: AssetRow): string | null {
-  if (asset.type?.toLowerCase() !== "portfolio" || !asset.id) {
-    return null;
-  }
-  return `/builder/portfolio/${asset.id}`;
+function getAssetEditorPath(asset: AssetRow): string | null {
+  if (!asset.id) return null;
+
+  const editorPaths: Partial<Record<AssetType, string>> = {
+    portfolio: `/builder/portfolio/${asset.id}`,
+    resume: `/builder/resume/${asset.id}`,
+  };
+
+  return editorPaths[asset.type] ?? null;
 }
 
 export function AssetCard({ asset, onDelete, className }: AssetCardProps) {
   const router = useRouter();
-  const href = getPortfolioEditorPath(asset);
+  const href = getAssetEditorPath(asset);
 
-  function openPortfolioEditor() {
+  function openEditor() {
     if (!href) return;
     router.push(href);
   }
@@ -97,11 +101,11 @@ export function AssetCard({ asset, onDelete, className }: AssetCardProps) {
     <article
       role="link"
       tabIndex={0}
-      onClick={openPortfolioEditor}
+      onClick={openEditor}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          openPortfolioEditor();
+          openEditor();
         }
       }}
       className={cn(
