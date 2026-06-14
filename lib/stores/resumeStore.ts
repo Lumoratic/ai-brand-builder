@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   createEmptyResumeAssetData,
   type ResumeAssetData,
+  type ResumeEducation,
   type ResumeExperience,
   type ResumePersonal,
   type ResumeSkill,
@@ -33,6 +34,13 @@ type ResumeState = {
     value: ResumeExperience[keyof Omit<ResumeExperience, "id">]
   ) => void;
   removeExperience: (id: string) => void;
+  addEducation: () => void;
+  updateEducation: (
+    id: string,
+    field: keyof Omit<ResumeEducation, "id">,
+    value: ResumeEducation[keyof Omit<ResumeEducation, "id">]
+  ) => void;
+  removeEducation: (id: string) => void;
   addSkill: () => void;
   updateSkill: (id: string, name: string) => void;
   removeSkill: (id: string) => void;
@@ -59,6 +67,18 @@ function createEmptyExperience(): ResumeExperience {
     startDate: "",
     endDate: "",
     isCurrent: false,
+    description: "",
+  };
+}
+
+function createEmptyEducation(): ResumeEducation {
+  return {
+    id: `education-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    degree: "",
+    institution: "",
+    location: "",
+    startDate: "",
+    endDate: "",
     description: "",
   };
 }
@@ -109,6 +129,29 @@ export const useResumeStore = create<ResumeState>((set) => ({
       data: {
         ...state.data,
         experience: state.data.experience.filter((entry) => entry.id !== id),
+      },
+    })),
+  addEducation: () =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        education: [...state.data.education, createEmptyEducation()],
+      },
+    })),
+  updateEducation: (id, field, value) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        education: state.data.education.map((entry) =>
+          entry.id === id ? { ...entry, [field]: value } : entry
+        ),
+      },
+    })),
+  removeEducation: (id) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        education: state.data.education.filter((entry) => entry.id !== id),
       },
     })),
   addSkill: () =>
@@ -183,6 +226,15 @@ export const useUpdateResumeExperience = () =>
 
 export const useRemoveResumeExperience = () =>
   useResumeStore((state) => state.removeExperience);
+
+export const useAddResumeEducation = () =>
+  useResumeStore((state) => state.addEducation);
+
+export const useUpdateResumeEducation = () =>
+  useResumeStore((state) => state.updateEducation);
+
+export const useRemoveResumeEducation = () =>
+  useResumeStore((state) => state.removeEducation);
 
 export const useAddResumeSkill = () => useResumeStore((state) => state.addSkill);
 

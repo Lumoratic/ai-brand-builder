@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { ResumeEducationEditor } from "@/components/builder/ResumeEducationEditor";
 import { ResumeExperienceEditor } from "@/components/builder/ResumeExperienceEditor";
 import {
   builderHelperClassName,
@@ -116,6 +117,8 @@ export function ResumeEditor() {
         </section>
 
         <ResumeExperienceEditor />
+
+        <ResumeEducationEditor />
 
         <section
           className={builderSectionClassName}

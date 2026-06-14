@@ -4,6 +4,7 @@ import {
   createEmptyResumeAssetData,
   isResumeAssetData,
   type ResumeAssetData,
+  type ResumeEducation,
   type ResumeExperience,
   type ResumePersonal,
 } from "@/lib/assets/resume-data";
@@ -66,6 +67,34 @@ function parseExperience(value: unknown): ResumeExperience[] {
   });
 }
 
+function parseEducation(value: unknown): ResumeEducation[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item, index) => {
+    if (!isRecord(item)) {
+      return {
+        id: `education-${index}`,
+        degree: "",
+        institution: "",
+        location: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+      };
+    }
+
+    return {
+      id: typeof item.id === "string" ? item.id : `education-${index}`,
+      degree: typeof item.degree === "string" ? item.degree : "",
+      institution: typeof item.institution === "string" ? item.institution : "",
+      location: typeof item.location === "string" ? item.location : "",
+      startDate: typeof item.startDate === "string" ? item.startDate : "",
+      endDate: typeof item.endDate === "string" ? item.endDate : "",
+      description: typeof item.description === "string" ? item.description : "",
+    };
+  });
+}
+
 export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
   const empty = createEmptyResumeAssetData();
   if (!isResumeAssetData(value)) return empty;
@@ -76,7 +105,7 @@ export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
     personal: parsePersonal(value.personal),
     summary: typeof value.summary === "string" ? value.summary : "",
     experience: parseExperience(value.experience),
-    education: Array.isArray(value.education) ? value.education : [],
+    education: parseEducation(value.education),
     skills: Array.isArray(value.skills) ? value.skills : [],
     languages: Array.isArray(value.languages) ? value.languages : [],
     certifications: Array.isArray(value.certifications) ? value.certifications : [],
