@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   createEmptyResumeAssetData,
   type ResumeAssetData,
+  type ResumeExperience,
   type ResumePersonal,
   type ResumeSkill,
 } from "@/lib/assets/resume-data";
@@ -25,6 +26,13 @@ type ResumeState = {
     value: ResumePersonal[K]
   ) => void;
   setSummary: (summary: string) => void;
+  addExperience: () => void;
+  updateExperience: (
+    id: string,
+    field: keyof Omit<ResumeExperience, "id">,
+    value: ResumeExperience[keyof Omit<ResumeExperience, "id">]
+  ) => void;
+  removeExperience: (id: string) => void;
   addSkill: () => void;
   updateSkill: (id: string, name: string) => void;
   removeSkill: (id: string) => void;
@@ -39,6 +47,19 @@ function createEmptySkill(): ResumeSkill {
   return {
     id: `skill-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     name: "",
+  };
+}
+
+function createEmptyExperience(): ResumeExperience {
+  return {
+    id: `experience-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    jobTitle: "",
+    company: "",
+    location: "",
+    startDate: "",
+    endDate: "",
+    isCurrent: false,
+    description: "",
   };
 }
 
@@ -59,6 +80,36 @@ export const useResumeStore = create<ResumeState>((set) => ({
   setSummary: (summary) =>
     set((state) => ({
       data: { ...state.data, summary },
+    })),
+  addExperience: () =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        experience: [...state.data.experience, createEmptyExperience()],
+      },
+    })),
+  updateExperience: (id, field, value) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        experience: state.data.experience.map((entry) => {
+          if (entry.id !== id) return entry;
+
+          const updated: ResumeExperience = { ...entry, [field]: value };
+          if (field === "isCurrent" && value === true) {
+            updated.endDate = "";
+          }
+
+          return updated;
+        }),
+      },
+    })),
+  removeExperience: (id) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        experience: state.data.experience.filter((entry) => entry.id !== id),
+      },
     })),
   addSkill: () =>
     set((state) => ({
@@ -123,6 +174,15 @@ export const useSetResumePersonalField = () =>
 
 export const useSetResumeSummary = () =>
   useResumeStore((state) => state.setSummary);
+
+export const useAddResumeExperience = () =>
+  useResumeStore((state) => state.addExperience);
+
+export const useUpdateResumeExperience = () =>
+  useResumeStore((state) => state.updateExperience);
+
+export const useRemoveResumeExperience = () =>
+  useResumeStore((state) => state.removeExperience);
 
 export const useAddResumeSkill = () => useResumeStore((state) => state.addSkill);
 

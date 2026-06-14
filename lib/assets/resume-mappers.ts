@@ -4,6 +4,7 @@ import {
   createEmptyResumeAssetData,
   isResumeAssetData,
   type ResumeAssetData,
+  type ResumeExperience,
   type ResumePersonal,
 } from "@/lib/assets/resume-data";
 
@@ -29,6 +30,42 @@ function parsePersonal(value: unknown): ResumePersonal {
   };
 }
 
+function parseExperience(value: unknown): ResumeExperience[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item, index) => {
+    if (!isRecord(item)) {
+      return {
+        id: `experience-${index}`,
+        jobTitle: "",
+        company: "",
+        location: "",
+        startDate: "",
+        endDate: "",
+        isCurrent: false,
+        description: "",
+      };
+    }
+
+    const isCurrent = item.isCurrent === true;
+
+    return {
+      id: typeof item.id === "string" ? item.id : `experience-${index}`,
+      jobTitle: typeof item.jobTitle === "string" ? item.jobTitle : "",
+      company: typeof item.company === "string" ? item.company : "",
+      location: typeof item.location === "string" ? item.location : "",
+      startDate: typeof item.startDate === "string" ? item.startDate : "",
+      endDate: isCurrent
+        ? ""
+        : typeof item.endDate === "string"
+          ? item.endDate
+          : "",
+      isCurrent,
+      description: typeof item.description === "string" ? item.description : "",
+    };
+  });
+}
+
 export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
   const empty = createEmptyResumeAssetData();
   if (!isResumeAssetData(value)) return empty;
@@ -38,7 +75,7 @@ export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
     version: value.version,
     personal: parsePersonal(value.personal),
     summary: typeof value.summary === "string" ? value.summary : "",
-    experience: Array.isArray(value.experience) ? value.experience : [],
+    experience: parseExperience(value.experience),
     education: Array.isArray(value.education) ? value.education : [],
     skills: Array.isArray(value.skills) ? value.skills : [],
     languages: Array.isArray(value.languages) ? value.languages : [],
