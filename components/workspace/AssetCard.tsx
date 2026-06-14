@@ -1,12 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { AssetRow } from "@/lib/assets/types";
 import { ASSET_TYPE_LABELS } from "@/lib/assets/types";
 import { cn } from "@/lib/utils";
 
 type AssetCardProps = {
   asset: AssetRow;
+  onDelete: (asset: AssetRow) => void;
   className?: string;
 };
 
@@ -25,7 +28,7 @@ function getPortfolioEditorPath(asset: AssetRow): string | null {
   return `/builder/portfolio/${asset.id}`;
 }
 
-export function AssetCard({ asset, className }: AssetCardProps) {
+export function AssetCard({ asset, onDelete, className }: AssetCardProps) {
   const router = useRouter();
   const href = getPortfolioEditorPath(asset);
 
@@ -33,10 +36,17 @@ export function AssetCard({ asset, className }: AssetCardProps) {
     if (!href) return;
     router.push(href);
   }
+
+  function handleDeleteClick(event: React.MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    onDelete(asset);
+  }
+
   const content = (
     <>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3 className="truncate text-sm font-medium text-zinc-100">
             {asset.title}
           </h3>
@@ -44,9 +54,21 @@ export function AssetCard({ asset, className }: AssetCardProps) {
             Updated {formatUpdatedAt(asset.updated_at)}
           </p>
         </div>
-        <span className="shrink-0 rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-zinc-400">
-          {ASSET_TYPE_LABELS[asset.type]}
-        </span>
+        <div className="flex shrink-0 items-start gap-2">
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-zinc-400">
+            {ASSET_TYPE_LABELS[asset.type]}
+          </span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            aria-label={`Delete ${asset.title}`}
+            onClick={handleDeleteClick}
+            className="text-zinc-500 hover:bg-red-500/10 hover:text-red-300"
+          >
+            <Trash2 className="size-3.5" />
+          </Button>
+        </div>
       </div>
       <p className="mt-3 text-xs text-zinc-500">
         {asset.is_published ? (

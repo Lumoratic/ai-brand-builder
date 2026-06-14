@@ -1,23 +1,39 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AssetCard } from "@/components/workspace/AssetCard";
 import { CreateAssetButtons } from "@/components/workspace/CreateAssetButtons";
-import { createAsset, getUserAssets } from "@/lib/assets/asset-service";
+import { CreateAssetModal } from "@/components/workspace/CreateAssetModal";
+import { DeleteAssetModal } from "@/components/workspace/DeleteAssetModal";
+import {
+  createAsset,
+  deleteAsset,
+  getUserAssets,
+} from "@/lib/assets/asset-service";
 import type { AssetRow, AssetType } from "@/lib/assets/types";
 
 export function WorkspaceView() {
-  const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
   const userId = user?.id ?? null;
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [creatingType, setCreatingType] = useState<AssetType | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [pendingCreateType, setPendingCreateType] = useState<AssetType | null>(
+    null
+  );
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const createInFlightRef = useRef(false);
+
+  const [pendingDeleteAsset, setPendingDeleteAsset] = useState<AssetRow | null>(
+    null
+  );
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteInFlightRef = useRef(false);
 
   const loadAssets = useCallback(async (ownerId: string, signal?: AbortSignal) => {
     setIsLoading(true);
@@ -54,44 +70,78 @@ export function WorkspaceView() {
     };
   }, [authLoading, userId, loadAssets]);
 
-  async function handleCreate(type: AssetType) {
-    if (createInFlightRef.current || creatingType) return;
+  function handleOpenCreate(type: AssetType) {
+    if (!userId || isCreating || pendingCreateType) return;
+    setCreateError(null);
+    setPendingCreateType(type);
+  }
 
-    if (!userId) {
-      const message = "Sign in to create assets.";
-      setError(message);
-      console.error("[workspace] createAsset blocked:", message);
-      return;
-    }
+  function handleCloseCreate() {
+    if (isCreating) return;
+    setPendingCreateType(null);
+    setCreateError(null);
+  }
+
+  async function handleConfirmCreate(title: string) {
+    if (!pendingCreateType || createInFlightRef.current || !userId) return;
 
     createInFlightRef.current = true;
-    setCreatingType(type);
-    setError(null);
+    setIsCreating(true);
+    setCreateError(null);
 
     try {
-      const asset = await createAsset(userId, type);
-
-      if (type === "portfolio") {
-        if (!asset.id) {
-          throw new Error("Created portfolio asset is missing an id.");
-        }
-        router.push(`/builder/portfolio/${asset.id}`);
-        return;
-      }
-
+      const asset = await createAsset(userId, pendingCreateType, title);
       setAssets((current) => [asset, ...current]);
+      setPendingCreateType(null);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to create asset";
       console.error("[workspace] createAsset failed:", err);
-      setError(message);
+      setCreateError(message);
     } finally {
       createInFlightRef.current = false;
-      setCreatingType(null);
+      setIsCreating(false);
+    }
+  }
+
+  function handleRequestDelete(asset: AssetRow) {
+    if (isDeleting || pendingDeleteAsset) return;
+    setDeleteError(null);
+    setPendingDeleteAsset(asset);
+  }
+
+  function handleCloseDelete() {
+    if (isDeleting) return;
+    setPendingDeleteAsset(null);
+    setDeleteError(null);
+  }
+
+  async function handleConfirmDelete() {
+    if (!pendingDeleteAsset || deleteInFlightRef.current) return;
+
+    deleteInFlightRef.current = true;
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await deleteAsset(pendingDeleteAsset.id);
+      setAssets((current) =>
+        current.filter((asset) => asset.id !== pendingDeleteAsset.id)
+      );
+      setPendingDeleteAsset(null);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to delete asset";
+      console.error("[workspace] deleteAsset failed:", err);
+      setDeleteError(message);
+    } finally {
+      deleteInFlightRef.current = false;
+      setIsDeleting(false);
     }
   }
 
   const showEmptyState = !isLoading && assets.length === 0;
+  const createModalOpen = pendingCreateType !== null;
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-8 sm:px-6 lg:px-8">
@@ -105,9 +155,8 @@ export function WorkspaceView() {
       </div>
 
       <CreateAssetButtons
-        creatingType={creatingType}
-        disabled={authLoading || !userId}
-        onCreate={handleCreate}
+        disabled={authLoading || !userId || createModalOpen || isCreating}
+        onSelectType={handleOpenCreate}
         className="mb-8"
       />
 
@@ -133,11 +182,27 @@ export function WorkspaceView() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {assets.map((asset) => (
             <li key={asset.id}>
-              <AssetCard asset={asset} />
+              <AssetCard asset={asset} onDelete={handleRequestDelete} />
             </li>
           ))}
         </ul>
       )}
+
+      <CreateAssetModal
+        type={pendingCreateType}
+        isSubmitting={isCreating}
+        error={createError}
+        onClose={handleCloseCreate}
+        onConfirm={handleConfirmCreate}
+      />
+
+      <DeleteAssetModal
+        asset={pendingDeleteAsset}
+        isDeleting={isDeleting}
+        error={deleteError}
+        onClose={handleCloseDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }
