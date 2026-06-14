@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 import { createEmptyPortfolioAssetData } from "@/lib/assets/mappers";
+import { createEmptyResumeAssetData } from "@/lib/assets/resume-data";
 import type { AssetInsert, AssetRow, AssetType, AssetUpdate } from "@/lib/assets/types";
 import { DEFAULT_ASSET_TITLES } from "@/lib/assets/types";
 import { isValidSlug, sanitizeSlug } from "@/lib/assets/slug";
@@ -34,7 +35,12 @@ export async function createAsset(
     user_id: userId,
     type,
     title: title?.trim() || DEFAULT_ASSET_TITLES[type],
-    data: type === "portfolio" ? createEmptyPortfolioAssetData() : {},
+    data:
+      type === "portfolio"
+        ? createEmptyPortfolioAssetData()
+        : type === "resume"
+          ? createEmptyResumeAssetData()
+          : {},
   };
 
   const { data, error } = await supabase
