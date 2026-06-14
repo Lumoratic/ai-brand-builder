@@ -1,8 +1,11 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { ResumeCertificationsEditor } from "@/components/builder/ResumeCertificationsEditor";
 import { ResumeEducationEditor } from "@/components/builder/ResumeEducationEditor";
 import { ResumeExperienceEditor } from "@/components/builder/ResumeExperienceEditor";
+import { ResumeLanguagesEditor } from "@/components/builder/ResumeLanguagesEditor";
+import { ResumeLinksEditor } from "@/components/builder/ResumeLinksEditor";
 import {
   builderHelperClassName,
   builderInputClassName,
@@ -171,6 +174,12 @@ export function ResumeEditor() {
             </ul>
           )}
         </section>
+
+        <ResumeLanguagesEditor />
+
+        <ResumeCertificationsEditor />
+
+        <ResumeLinksEditor />
       </form>
     </div>
   );

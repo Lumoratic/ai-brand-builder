@@ -4,9 +4,13 @@ import {
   createEmptyResumeAssetData,
   isResumeAssetData,
   type ResumeAssetData,
+  type ResumeCertification,
   type ResumeEducation,
   type ResumeExperience,
+  type ResumeLanguage,
+  type ResumeLink,
   type ResumePersonal,
+  type ResumeSkill,
 } from "@/lib/assets/resume-data";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -95,6 +99,70 @@ function parseEducation(value: unknown): ResumeEducation[] {
   });
 }
 
+function parseSkills(value: unknown): ResumeSkill[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item, index) => {
+    if (!isRecord(item)) {
+      return { id: `skill-${index}`, name: "" };
+    }
+
+    return {
+      id: typeof item.id === "string" ? item.id : `skill-${index}`,
+      name: typeof item.name === "string" ? item.name : "",
+    };
+  });
+}
+
+function parseLanguages(value: unknown): ResumeLanguage[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item, index) => {
+    if (!isRecord(item)) {
+      return { id: `language-${index}`, name: "", level: "" };
+    }
+
+    return {
+      id: typeof item.id === "string" ? item.id : `language-${index}`,
+      name: typeof item.name === "string" ? item.name : "",
+      level: typeof item.level === "string" ? item.level : "",
+    };
+  });
+}
+
+function parseCertifications(value: unknown): ResumeCertification[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item, index) => {
+    if (!isRecord(item)) {
+      return { id: `certification-${index}`, name: "", issuer: "", date: "" };
+    }
+
+    return {
+      id: typeof item.id === "string" ? item.id : `certification-${index}`,
+      name: typeof item.name === "string" ? item.name : "",
+      issuer: typeof item.issuer === "string" ? item.issuer : "",
+      date: typeof item.date === "string" ? item.date : "",
+    };
+  });
+}
+
+function parseLinks(value: unknown): ResumeLink[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item, index) => {
+    if (!isRecord(item)) {
+      return { id: `link-${index}`, label: "", url: "" };
+    }
+
+    return {
+      id: typeof item.id === "string" ? item.id : `link-${index}`,
+      label: typeof item.label === "string" ? item.label : "",
+      url: typeof item.url === "string" ? item.url : "",
+    };
+  });
+}
+
 export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
   const empty = createEmptyResumeAssetData();
   if (!isResumeAssetData(value)) return empty;
@@ -106,11 +174,11 @@ export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
     summary: typeof value.summary === "string" ? value.summary : "",
     experience: parseExperience(value.experience),
     education: parseEducation(value.education),
-    skills: Array.isArray(value.skills) ? value.skills : [],
-    languages: Array.isArray(value.languages) ? value.languages : [],
-    certifications: Array.isArray(value.certifications) ? value.certifications : [],
+    skills: parseSkills(value.skills),
+    languages: parseLanguages(value.languages),
+    certifications: parseCertifications(value.certifications),
     projects: Array.isArray(value.projects) ? value.projects : [],
-    links: Array.isArray(value.links) ? value.links : [],
+    links: parseLinks(value.links),
   };
 }
 

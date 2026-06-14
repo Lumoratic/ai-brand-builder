@@ -2,8 +2,11 @@ import { create } from "zustand";
 import {
   createEmptyResumeAssetData,
   type ResumeAssetData,
+  type ResumeCertification,
   type ResumeEducation,
   type ResumeExperience,
+  type ResumeLanguage,
+  type ResumeLink,
   type ResumePersonal,
   type ResumeSkill,
 } from "@/lib/assets/resume-data";
@@ -44,6 +47,27 @@ type ResumeState = {
   addSkill: () => void;
   updateSkill: (id: string, name: string) => void;
   removeSkill: (id: string) => void;
+  addLanguage: () => void;
+  updateLanguage: (
+    id: string,
+    field: keyof Omit<ResumeLanguage, "id">,
+    value: ResumeLanguage[keyof Omit<ResumeLanguage, "id">]
+  ) => void;
+  removeLanguage: (id: string) => void;
+  addCertification: () => void;
+  updateCertification: (
+    id: string,
+    field: keyof Omit<ResumeCertification, "id">,
+    value: ResumeCertification[keyof Omit<ResumeCertification, "id">]
+  ) => void;
+  removeCertification: (id: string) => void;
+  addLink: () => void;
+  updateLink: (
+    id: string,
+    field: keyof Omit<ResumeLink, "id">,
+    value: ResumeLink[keyof Omit<ResumeLink, "id">]
+  ) => void;
+  removeLink: (id: string) => void;
   hydrateResume: (data: ResumeAssetData, assetTitle: string) => void;
   resetResume: () => void;
   setActiveAssetId: (assetId: string | null) => void;
@@ -80,6 +104,31 @@ function createEmptyEducation(): ResumeEducation {
     startDate: "",
     endDate: "",
     description: "",
+  };
+}
+
+function createEmptyLanguage(): ResumeLanguage {
+  return {
+    id: `language-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    name: "",
+    level: "",
+  };
+}
+
+function createEmptyCertification(): ResumeCertification {
+  return {
+    id: `certification-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    name: "",
+    issuer: "",
+    date: "",
+  };
+}
+
+function createEmptyLink(): ResumeLink {
+  return {
+    id: `link-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    label: "",
+    url: "",
   };
 }
 
@@ -177,6 +226,75 @@ export const useResumeStore = create<ResumeState>((set) => ({
         skills: state.data.skills.filter((skill) => skill.id !== id),
       },
     })),
+  addLanguage: () =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        languages: [...state.data.languages, createEmptyLanguage()],
+      },
+    })),
+  updateLanguage: (id, field, value) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        languages: state.data.languages.map((entry) =>
+          entry.id === id ? { ...entry, [field]: value } : entry
+        ),
+      },
+    })),
+  removeLanguage: (id) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        languages: state.data.languages.filter((entry) => entry.id !== id),
+      },
+    })),
+  addCertification: () =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        certifications: [...state.data.certifications, createEmptyCertification()],
+      },
+    })),
+  updateCertification: (id, field, value) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        certifications: state.data.certifications.map((entry) =>
+          entry.id === id ? { ...entry, [field]: value } : entry
+        ),
+      },
+    })),
+  removeCertification: (id) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        certifications: state.data.certifications.filter((entry) => entry.id !== id),
+      },
+    })),
+  addLink: () =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        links: [...state.data.links, createEmptyLink()],
+      },
+    })),
+  updateLink: (id, field, value) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        links: state.data.links.map((entry) =>
+          entry.id === id ? { ...entry, [field]: value } : entry
+        ),
+      },
+    })),
+  removeLink: (id) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        links: state.data.links.filter((entry) => entry.id !== id),
+      },
+    })),
   hydrateResume: (data, assetTitle) =>
     set({
       data,
@@ -243,3 +361,29 @@ export const useUpdateResumeSkill = () =>
 
 export const useRemoveResumeSkill = () =>
   useResumeStore((state) => state.removeSkill);
+
+export const useAddResumeLanguage = () =>
+  useResumeStore((state) => state.addLanguage);
+
+export const useUpdateResumeLanguage = () =>
+  useResumeStore((state) => state.updateLanguage);
+
+export const useRemoveResumeLanguage = () =>
+  useResumeStore((state) => state.removeLanguage);
+
+export const useAddResumeCertification = () =>
+  useResumeStore((state) => state.addCertification);
+
+export const useUpdateResumeCertification = () =>
+  useResumeStore((state) => state.updateCertification);
+
+export const useRemoveResumeCertification = () =>
+  useResumeStore((state) => state.removeCertification);
+
+export const useAddResumeLink = () => useResumeStore((state) => state.addLink);
+
+export const useUpdateResumeLink = () =>
+  useResumeStore((state) => state.updateLink);
+
+export const useRemoveResumeLink = () =>
+  useResumeStore((state) => state.removeLink);
