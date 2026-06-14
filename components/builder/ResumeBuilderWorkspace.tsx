@@ -7,7 +7,7 @@ export function ResumeBuilderWorkspace() {
   return (
     <div className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col lg:flex-row">
       <aside
-        className="w-full shrink-0 overflow-y-auto border-b border-white/[0.06] lg:max-h-[calc(100vh-3.5rem)] lg:w-[min(480px,42%)] lg:border-b-0 lg:border-r"
+        className="w-full shrink-0 overflow-y-auto border-b border-white/[0.06] lg:max-h-[calc(100vh-3.5rem)] lg:w-[min(400px,36%)] lg:border-b-0 lg:border-r"
         aria-label="Resume editor"
       >
         <ResumeEditor />

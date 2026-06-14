@@ -18,8 +18,10 @@ export function ResumePreview() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-        <ResumePreviewContent data={data} />
+      <div className="flex flex-1 justify-center overflow-y-auto px-3 py-4 sm:px-5 sm:py-6 lg:px-6 lg:py-8">
+        <div className="w-full max-w-[210mm] min-w-0">
+          <ResumePreviewContent data={data} />
+        </div>
       </div>
     </div>
   );

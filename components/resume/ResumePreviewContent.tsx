@@ -84,12 +84,23 @@ function PreviewSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-6 first:mt-0">
-      <h2 className="border-b border-zinc-300 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
+    <section className="mt-7 first:mt-0">
+      <h2 className="border-b border-zinc-300 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
         {title}
       </h2>
-      <div className="mt-3 space-y-4">{children}</div>
+      <div className="mt-3.5 space-y-5">{children}</div>
     </section>
+  );
+}
+
+function MetaLine({ items }: { items: string[] }) {
+  const visible = items.filter(Boolean);
+  if (visible.length === 0) return null;
+
+  return (
+    <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+      {visible.join(" · ")}
+    </p>
   );
 }
 
@@ -121,7 +132,7 @@ function ContactLine({ data }: { data: ResumeAssetData }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-600">
+    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-zinc-600">
       {items.map((item, index) => (
         <span key={item.key} className="inline-flex items-center gap-3">
           {index > 0 ? (
@@ -145,6 +156,111 @@ function ContactLine({ data }: { data: ResumeAssetData }) {
       ))}
     </div>
   );
+}
+
+function ExperienceEntry({ entry }: { entry: ResumeExperience }) {
+  const jobTitle = entry.jobTitle.trim();
+  const company = entry.company.trim();
+  const dates = formatExperienceDates(entry);
+
+  return (
+    <article>
+      {jobTitle ? (
+        <h3 className="text-[15px] font-semibold leading-snug text-zinc-900">
+          {jobTitle}
+        </h3>
+      ) : null}
+      {company ? (
+        <p
+          className={cn(
+            "text-sm font-medium text-zinc-700",
+            jobTitle ? "mt-0.5" : "text-[15px] font-semibold text-zinc-900"
+          )}
+        >
+          {company}
+        </p>
+      ) : null}
+      <MetaLine
+        items={[entry.location.trim(), dates ?? ""].filter(Boolean)}
+      />
+      {hasText(entry.description) ? (
+        <p className="mt-2.5 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700">
+          {entry.description.trim()}
+        </p>
+      ) : null}
+    </article>
+  );
+}
+
+function EducationEntry({ entry }: { entry: ResumeEducation }) {
+  const degree = entry.degree.trim();
+  const institution = entry.institution.trim();
+  const dates = formatEducationDates(entry);
+
+  return (
+    <article>
+      {degree ? (
+        <h3 className="text-[15px] font-semibold leading-snug text-zinc-900">
+          {degree}
+        </h3>
+      ) : null}
+      {institution ? (
+        <p
+          className={cn(
+            "text-sm font-medium text-zinc-700",
+            degree ? "mt-0.5" : "text-[15px] font-semibold text-zinc-900"
+          )}
+        >
+          {institution}
+        </p>
+      ) : null}
+      <MetaLine
+        items={[entry.location.trim(), dates ?? ""].filter(Boolean)}
+      />
+      {hasText(entry.description) ? (
+        <p className="mt-2.5 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700">
+          {entry.description.trim()}
+        </p>
+      ) : null}
+    </article>
+  );
+}
+
+function LinkLine({ entry }: { entry: ResumeLink }) {
+  const label = entry.label.trim();
+  const url = entry.url.trim();
+
+  if (label && url) {
+    return (
+      <span className="text-sm leading-relaxed text-zinc-700">
+        <span className="font-medium text-zinc-800">{label}</span>
+        <span className="text-zinc-400"> — </span>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="break-all text-zinc-600 underline-offset-2 hover:text-zinc-900 hover:underline"
+        >
+          {url}
+        </a>
+      </span>
+    );
+  }
+
+  if (url) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="break-all text-sm text-zinc-600 underline-offset-2 hover:text-zinc-900 hover:underline"
+      >
+        {url}
+      </a>
+    );
+  }
+
+  return <span className="text-sm font-medium text-zinc-800">{label}</span>;
 }
 
 export function ResumePreviewContent({ data, className }: ResumePreviewContentProps) {
@@ -181,7 +297,7 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
   return (
     <article
       className={cn(
-        "mx-auto w-full max-w-[210mm] bg-white px-8 py-10 text-zinc-900 shadow-sm sm:px-10 sm:py-12",
+        "w-full min-w-0 bg-white px-7 py-9 text-zinc-900 shadow-sm sm:px-9 sm:py-11 lg:px-10 lg:py-12",
         className
       )}
     >
@@ -192,14 +308,14 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
       ) : (
         <>
           {(fullName || professionalTitle || hasContact) && (
-            <header className="border-b border-zinc-200 pb-5">
+            <header className="border-b border-zinc-200 pb-6">
               {fullName ? (
-                <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
+                <h1 className="text-[1.75rem] font-semibold leading-tight tracking-tight text-zinc-900 sm:text-[2rem]">
                   {fullName}
                 </h1>
               ) : null}
               {professionalTitle ? (
-                <p className="mt-1 text-base text-zinc-600">{professionalTitle}</p>
+                <p className="mt-1.5 text-base text-zinc-600">{professionalTitle}</p>
               ) : null}
               <ContactLine data={data} />
             </header>
@@ -215,65 +331,32 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
 
           {experience.length > 0 ? (
             <PreviewSection title="Experience">
-              {experience.map((entry) => {
-                const dates = formatExperienceDates(entry);
-                const titleLine = [entry.jobTitle.trim(), entry.company.trim()]
-                  .filter(Boolean)
-                  .join(" at ");
-
-                return (
-                  <div key={entry.id}>
-                    {titleLine ? (
-                      <h3 className="text-sm font-semibold text-zinc-900">{titleLine}</h3>
-                    ) : null}
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-zinc-500">
-                      {hasText(entry.location) ? <span>{entry.location.trim()}</span> : null}
-                      {dates ? <span>{dates}</span> : null}
-                    </div>
-                    {hasText(entry.description) ? (
-                      <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700">
-                        {entry.description.trim()}
-                      </p>
-                    ) : null}
-                  </div>
-                );
-              })}
+              {experience.map((entry) => (
+                <ExperienceEntry key={entry.id} entry={entry} />
+              ))}
             </PreviewSection>
           ) : null}
 
           {education.length > 0 ? (
             <PreviewSection title="Education">
-              {education.map((entry) => {
-                const dates = formatEducationDates(entry);
-                const titleLine = [entry.degree.trim(), entry.institution.trim()]
-                  .filter(Boolean)
-                  .join(" — ");
-
-                return (
-                  <div key={entry.id}>
-                    {titleLine ? (
-                      <h3 className="text-sm font-semibold text-zinc-900">{titleLine}</h3>
-                    ) : null}
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-zinc-500">
-                      {hasText(entry.location) ? <span>{entry.location.trim()}</span> : null}
-                      {dates ? <span>{dates}</span> : null}
-                    </div>
-                    {hasText(entry.description) ? (
-                      <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700">
-                        {entry.description.trim()}
-                      </p>
-                    ) : null}
-                  </div>
-                );
-              })}
+              {education.map((entry) => (
+                <EducationEntry key={entry.id} entry={entry} />
+              ))}
             </PreviewSection>
           ) : null}
 
           {skills.length > 0 ? (
             <PreviewSection title="Skills">
-              <p className="text-sm leading-relaxed text-zinc-700">
-                {skills.map((skill) => skill.name.trim()).join(", ")}
-              </p>
+              <ul className="flex flex-wrap gap-2">
+                {skills.map((skill) => (
+                  <li
+                    key={skill.id}
+                    className="rounded-md border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-sm text-zinc-700"
+                  >
+                    {skill.name.trim()}
+                  </li>
+                ))}
+              </ul>
             </PreviewSection>
           ) : null}
 
@@ -297,7 +380,7 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
               {certifications.map((entry) => (
                 <div key={entry.id}>
                   {hasText(entry.name) ? (
-                    <h3 className="text-sm font-semibold text-zinc-900">
+                    <h3 className="text-[15px] font-semibold text-zinc-900">
                       {entry.name.trim()}
                     </h3>
                   ) : null}
@@ -311,28 +394,12 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
 
           {links.length > 0 ? (
             <PreviewSection title="Links">
-              <ul className="space-y-1 text-sm">
-                {links.map((entry) => {
-                  const label = entry.label.trim() || entry.url.trim();
-                  const url = entry.url.trim();
-
-                  return (
-                    <li key={entry.id}>
-                      {url ? (
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-zinc-700 underline-offset-2 hover:text-zinc-900 hover:underline"
-                        >
-                          {label}
-                        </a>
-                      ) : (
-                        <span className="text-zinc-700">{label}</span>
-                      )}
-                    </li>
-                  );
-                })}
+              <ul className="space-y-2">
+                {links.map((entry) => (
+                  <li key={entry.id}>
+                    <LinkLine entry={entry} />
+                  </li>
+                ))}
               </ul>
             </PreviewSection>
           ) : null}
