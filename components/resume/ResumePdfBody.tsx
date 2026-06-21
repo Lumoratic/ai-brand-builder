@@ -27,6 +27,19 @@ import {
   isSkillVisible,
 } from "@/lib/resume/resume-display-utils";
 import type { ResumePdfTemplateStyles } from "@/lib/resume/pdf-template-styles";
+import { ModernPdfIcon, type ModernPdfIconName } from "@/components/resume/ModernPdfIcon";
+
+const MODERN_PDF_ICON_SIZE = 14;
+const MODERN_PDF_ICON_COLOR = "#2563eb";
+
+const MODERN_PDF_SECTION_ICON_BY_TITLE: Record<string, ModernPdfIconName> = {
+  Summary: "summary",
+  Experience: "experience",
+  Education: "education",
+  Skills: "skills",
+  Languages: "languages",
+  Links: "links",
+};
 
 const ENTRY_HEADER_MIN_PRESENCE = 48;
 const LONG_DESCRIPTION_MAX_CHARS = 480;
@@ -53,6 +66,25 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
   const isModern = styles.layout === "modern";
 
   function renderSectionTitle(title: string) {
+    const iconName = isModern ? MODERN_PDF_SECTION_ICON_BY_TITLE[title] : undefined;
+
+    if (iconName) {
+      return (
+        <View style={styles.sectionTitleRow}>
+          <View style={{ marginRight: 8 }}>
+            <ModernPdfIcon
+              name={iconName}
+              size={MODERN_PDF_ICON_SIZE}
+              color={MODERN_PDF_ICON_COLOR}
+            />
+          </View>
+          <Text style={[styles.sectionTitle, styles.sectionTitlePlain]}>
+            {title}
+          </Text>
+        </View>
+      );
+    }
+
     return <Text style={styles.sectionTitle}>{title}</Text>;
   }
 

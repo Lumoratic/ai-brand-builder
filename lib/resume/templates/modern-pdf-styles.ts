@@ -18,7 +18,15 @@ function withLayout<T extends Record<string, unknown>>(
 }
 
 const modernShared = {
-  sectionTitleRow: {},
+  sectionTitleRow: {
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+  },
+  sectionTitlePlain: {
+    borderBottomWidth: 0,
+    paddingBottom: 0,
+    marginBottom: 0,
+  },
   sectionIcon: {},
   contactLineRow: {},
   contactItem: {},
@@ -80,6 +88,13 @@ export function createModernProfessionalDensityPdfStyles() {
       ...modernShared,
       section: {
         marginTop: 18,
+      },
+      sectionTitleRow: {
+        ...modernShared.sectionTitleRow,
+        borderBottomWidth: 1,
+        borderBottomColor: ZINC_200,
+        paddingBottom: 4,
+        marginBottom: 8,
       },
       sectionTitle: {
         fontSize: 13,
@@ -218,6 +233,13 @@ export function createModernCompactDensityPdfStyles() {
       ...modernShared,
       section: {
         marginTop: 12,
+      },
+      sectionTitleRow: {
+        ...modernShared.sectionTitleRow,
+        borderBottomWidth: 1,
+        borderBottomColor: ZINC_200,
+        paddingBottom: 3,
+        marginBottom: 6,
       },
       sectionTitle: {
         fontSize: 12,

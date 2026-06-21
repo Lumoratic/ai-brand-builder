@@ -53,6 +53,7 @@ export function createClassicProfessionalDensityPdfStyles() {
       },
       sectionTitleRow: {},
       sectionIcon: {},
+      sectionTitlePlain: {},
       sectionTitle: {
         fontSize: 8,
         fontFamily: "Helvetica-Bold",
@@ -192,6 +193,7 @@ export function createClassicCompactDensityPdfStyles() {
       },
       sectionTitleRow: {},
       sectionIcon: {},
+      sectionTitlePlain: {},
       sectionTitle: {
         fontSize: 7,
         fontFamily: "Helvetica-Bold",
