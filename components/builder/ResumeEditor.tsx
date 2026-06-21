@@ -6,6 +6,7 @@ import { ResumeEducationEditor } from "@/components/builder/ResumeEducationEdito
 import { ResumeExperienceEditor } from "@/components/builder/ResumeExperienceEditor";
 import { ResumeLanguagesEditor } from "@/components/builder/ResumeLanguagesEditor";
 import { ResumeLinksEditor } from "@/components/builder/ResumeLinksEditor";
+import { ImproveResumeTextButton } from "@/components/builder/ImproveResumeTextButton";
 import {
   builderHelperClassName,
   builderInputClassName,
@@ -95,9 +96,16 @@ export function ResumeEditor() {
             Professional Summary
           </h2>
           <div className="mt-5 space-y-2">
-            <label htmlFor="resume-summary" className={builderLabelClassName}>
-              Summary
-            </label>
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="resume-summary" className={builderLabelClassName}>
+                Summary
+              </label>
+              <ImproveResumeTextButton
+                field="summary"
+                text={data.summary}
+                onAccept={setSummary}
+              />
+            </div>
             <textarea
               id="resume-summary"
               value={data.summary}

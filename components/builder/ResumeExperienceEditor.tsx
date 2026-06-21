@@ -8,6 +8,7 @@ import {
   builderSectionClassName,
 } from "@/components/builder/builder-styles";
 import { Button } from "@/components/ui/button";
+import { ImproveResumeTextButton } from "@/components/builder/ImproveResumeTextButton";
 import {
   useAddResumeExperience,
   useRemoveResumeExperience,
@@ -137,12 +138,27 @@ function ExperienceEntry({ entry, onUpdate, onRemove }: ExperienceEntryProps) {
         </label>
 
         <div className="space-y-2">
-          <label
-            htmlFor={`experience-description-${entry.id}`}
-            className={builderLabelClassName}
-          >
-            Description
-          </label>
+          <div className="flex items-center justify-between gap-3">
+            <label
+              htmlFor={`experience-description-${entry.id}`}
+              className={builderLabelClassName}
+            >
+              Description
+            </label>
+            <ImproveResumeTextButton
+              field="experience-description"
+              text={entry.description}
+              context={{
+                jobTitle: entry.jobTitle,
+                company: entry.company,
+                location: entry.location,
+                startDate: entry.startDate,
+                endDate: entry.endDate,
+                isCurrent: entry.isCurrent,
+              }}
+              onAccept={(value) => onUpdate(entry.id, "description", value)}
+            />
+          </div>
           <textarea
             id={`experience-description-${entry.id}`}
             value={entry.description}
