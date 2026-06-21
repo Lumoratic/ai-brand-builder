@@ -7,74 +7,24 @@ import type {
   ResumeLink,
   ResumeSkill,
 } from "@/lib/assets/resume-data";
+import {
+  formatEducationDates,
+  formatExperienceDates,
+  getResumeContactItems,
+  getResumeLinkItems,
+  hasResumeText,
+  isCertificationVisible,
+  isEducationVisible,
+  isExperienceVisible,
+  isLanguageVisible,
+  isSkillVisible,
+} from "@/lib/resume/resume-display-utils";
 import { cn } from "@/lib/utils";
 
 type ResumePreviewContentProps = {
   data: ResumeAssetData;
   className?: string;
 };
-
-function hasText(value: string): boolean {
-  return value.trim().length > 0;
-}
-
-function formatExperienceDates(entry: ResumeExperience): string | null {
-  const start = entry.startDate.trim();
-  const end = entry.isCurrent ? "Present" : entry.endDate.trim();
-
-  if (start && end) return `${start} — ${end}`;
-  if (start) return start;
-  if (end) return end;
-  return null;
-}
-
-function formatEducationDates(entry: ResumeEducation): string | null {
-  const start = entry.startDate.trim();
-  const end = entry.endDate.trim();
-
-  if (start && end) return `${start} — ${end}`;
-  if (start) return start;
-  if (end) return end;
-  return null;
-}
-
-function isExperienceVisible(entry: ResumeExperience): boolean {
-  return (
-    hasText(entry.jobTitle) ||
-    hasText(entry.company) ||
-    hasText(entry.location) ||
-    hasText(entry.startDate) ||
-    hasText(entry.endDate) ||
-    hasText(entry.description)
-  );
-}
-
-function isEducationVisible(entry: ResumeEducation): boolean {
-  return (
-    hasText(entry.degree) ||
-    hasText(entry.institution) ||
-    hasText(entry.location) ||
-    hasText(entry.startDate) ||
-    hasText(entry.endDate) ||
-    hasText(entry.description)
-  );
-}
-
-function isSkillVisible(entry: ResumeSkill): boolean {
-  return hasText(entry.name);
-}
-
-function isLanguageVisible(entry: ResumeLanguage): boolean {
-  return hasText(entry.name) || hasText(entry.level);
-}
-
-function isCertificationVisible(entry: ResumeCertification): boolean {
-  return hasText(entry.name) || hasText(entry.issuer) || hasText(entry.date);
-}
-
-function isLinkVisible(entry: ResumeLink): boolean {
-  return hasText(entry.label) || hasText(entry.url);
-}
 
 function PreviewSection({
   title,
@@ -105,30 +55,7 @@ function MetaLine({ items }: { items: string[] }) {
 }
 
 function ContactLine({ data }: { data: ResumeAssetData }) {
-  const items: { key: string; label: string; href?: string }[] = [];
-
-  if (hasText(data.personal.email)) {
-    items.push({
-      key: "email",
-      label: data.personal.email.trim(),
-      href: `mailto:${data.personal.email.trim()}`,
-    });
-  }
-  if (hasText(data.personal.phone)) {
-    items.push({ key: "phone", label: data.personal.phone.trim() });
-  }
-  if (hasText(data.personal.location)) {
-    items.push({ key: "location", label: data.personal.location.trim() });
-  }
-  if (hasText(data.personal.linkedin)) {
-    const url = data.personal.linkedin.trim();
-    items.push({ key: "linkedin", label: "LinkedIn", href: url });
-  }
-  if (hasText(data.personal.website)) {
-    const url = data.personal.website.trim();
-    items.push({ key: "website", label: "Website", href: url });
-  }
-
+  const items = getResumeContactItems(data);
   if (items.length === 0) return null;
 
   return (
@@ -183,7 +110,7 @@ function ExperienceEntry({ entry }: { entry: ResumeExperience }) {
       <MetaLine
         items={[entry.location.trim(), dates ?? ""].filter(Boolean)}
       />
-      {hasText(entry.description) ? (
+      {hasResumeText(entry.description) ? (
         <p className="mt-2.5 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700">
           {entry.description.trim()}
         </p>
@@ -217,7 +144,7 @@ function EducationEntry({ entry }: { entry: ResumeEducation }) {
       <MetaLine
         items={[entry.location.trim(), dates ?? ""].filter(Boolean)}
       />
-      {hasText(entry.description) ? (
+      {hasResumeText(entry.description) ? (
         <p className="mt-2.5 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700">
           {entry.description.trim()}
         </p>
@@ -273,15 +200,10 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
   const skills = data.skills.filter(isSkillVisible);
   const languages = data.languages.filter(isLanguageVisible);
   const certifications = data.certifications.filter(isCertificationVisible);
-  const links = data.links.filter(isLinkVisible);
+  const links = getResumeLinkItems(data);
 
   const hasHeader = fullName || professionalTitle;
-  const hasContact =
-    hasText(data.personal.email) ||
-    hasText(data.personal.phone) ||
-    hasText(data.personal.location) ||
-    hasText(data.personal.linkedin) ||
-    hasText(data.personal.website);
+  const hasContact = getResumeContactItems(data).length > 0;
 
   const hasContent =
     hasHeader ||
@@ -377,9 +299,9 @@ export function ResumePreviewContent({ data, className }: ResumePreviewContentPr
 
           {certifications.length > 0 ? (
             <PreviewSection title="Certifications">
-              {certifications.map((entry) => (
+              {certifications.map((entry: ResumeCertification) => (
                 <div key={entry.id}>
-                  {hasText(entry.name) ? (
+                  {hasResumeText(entry.name) ? (
                     <h3 className="text-[15px] font-semibold text-zinc-900">
                       {entry.name.trim()}
                     </h3>

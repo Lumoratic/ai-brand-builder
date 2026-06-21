@@ -34,16 +34,6 @@ const personalFields = [
   { id: "email" as const, label: "Email", placeholder: "alex@example.com" },
   { id: "phone" as const, label: "Phone", placeholder: "+1 (555) 123-4567" },
   { id: "location" as const, label: "Location", placeholder: "San Francisco, CA" },
-  {
-    id: "linkedin" as const,
-    label: "LinkedIn",
-    placeholder: "https://linkedin.com/in/yourprofile",
-  },
-  {
-    id: "website" as const,
-    label: "Website",
-    placeholder: "https://yourwebsite.com",
-  },
 ] as const;
 
 export function ResumeEditor() {
