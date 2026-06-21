@@ -27,19 +27,8 @@ import {
   isSkillVisible,
 } from "@/lib/resume/resume-display-utils";
 import type { ResumePdfTemplateStyles } from "@/lib/resume/pdf-template-styles";
-import { ModernPdfIcon, type ModernPdfIconName } from "@/components/resume/ModernPdfIcon";
-
-const MODERN_PDF_ICON_SIZE = 14;
-const MODERN_PDF_ICON_COLOR = "#2563eb";
-
-const MODERN_PDF_SECTION_ICON_BY_TITLE: Record<string, ModernPdfIconName> = {
-  Summary: "summary",
-  Experience: "experience",
-  Education: "education",
-  Skills: "skills",
-  Languages: "languages",
-  Links: "links",
-};
+import { ResumeSectionHeader } from "@/components/resume/ResumeSectionHeader";
+import type { ResumeModernSectionId } from "@/lib/resume/resume-modern-icons";
 
 const ENTRY_HEADER_MIN_PRESENCE = 48;
 const LONG_DESCRIPTION_MAX_CHARS = 480;
@@ -65,27 +54,15 @@ type ResumePdfBodyProps = {
 export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
   const isModern = styles.layout === "modern";
 
-  function renderSectionTitle(title: string) {
-    const iconName = isModern ? MODERN_PDF_SECTION_ICON_BY_TITLE[title] : undefined;
-
-    if (iconName) {
-      return (
-        <View style={styles.sectionTitleRow}>
-          <View style={{ marginRight: 8 }}>
-            <ModernPdfIcon
-              name={iconName}
-              size={MODERN_PDF_ICON_SIZE}
-              color={MODERN_PDF_ICON_COLOR}
-            />
-          </View>
-          <Text style={[styles.sectionTitle, styles.sectionTitlePlain]}>
-            {title}
-          </Text>
-        </View>
-      );
-    }
-
-    return <Text style={styles.sectionTitle}>{title}</Text>;
+  function renderSectionTitle(sectionId: ResumeModernSectionId, title: string) {
+    return (
+      <ResumeSectionHeader
+        mode="pdf"
+        sectionId={sectionId}
+        title={title}
+        styles={styles}
+      />
+    );
   }
 
   function PdfEntryTitle({ text }: { text: string }) {
@@ -104,10 +81,12 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
   }
 
   function PdfSection({
+    sectionId,
     title,
     children,
     keepTogether = false,
   }: {
+    sectionId: ResumeModernSectionId;
     title: string;
     children: ReactNode;
     keepTogether?: boolean;
@@ -117,7 +96,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
     if (items.length === 0) {
       return (
         <View style={styles.section} wrap>
-          {renderSectionTitle(title)}
+          {renderSectionTitle(sectionId, title)}
         </View>
       );
     }
@@ -126,7 +105,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
       return (
         <View style={styles.section} wrap>
           <View wrap={false}>
-            {renderSectionTitle(title)}
+            {renderSectionTitle(sectionId, title)}
             {items}
           </View>
         </View>
@@ -138,7 +117,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
     return (
       <View style={styles.section} wrap>
         <View wrap={false}>
-          {renderSectionTitle(title)}
+          {renderSectionTitle(sectionId, title)}
           {first}
         </View>
         {rest.length > 0 ? rest : null}
@@ -322,7 +301,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
         )}
 
         {summary ? (
-          <PdfSection title="Summary">
+          <PdfSection sectionId="summary" title="Summary">
             {keepSummaryTogether ? (
               <View wrap={false}>
                 <Text style={styles.bodyText}>{summary}</Text>
@@ -334,7 +313,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
         ) : null}
 
         {experience.length > 0 ? (
-          <PdfSection title="Experience">
+          <PdfSection sectionId="experience" title="Experience">
             {experience.map((entry, index) => (
               <PdfExperienceEntry
                 key={entry.id}
@@ -346,7 +325,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
         ) : null}
 
         {education.length > 0 ? (
-          <PdfSection title="Education">
+          <PdfSection sectionId="education" title="Education">
             {education.map((entry, index) => (
               <PdfEducationEntry
                 key={entry.id}
@@ -358,7 +337,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
         ) : null}
 
         {skills.length > 0 ? (
-          <PdfSection title="Skills">
+          <PdfSection sectionId="skills" title="Skills">
             <View style={styles.skillsRow} wrap={!keepSkillsTogether}>
               {skills.map((skill) => (
                 <View key={skill.id} style={styles.skillChip} wrap={false}>
@@ -370,7 +349,11 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
         ) : null}
 
         {languages.length > 0 ? (
-          <PdfSection title="Languages" keepTogether={keepLanguagesTogether}>
+          <PdfSection
+            sectionId="languages"
+            title="Languages"
+            keepTogether={keepLanguagesTogether}
+          >
             {languages.map((entry: ResumeLanguage, index) => {
               const name = entry.name.trim();
               const level = entry.level.trim();
@@ -396,6 +379,7 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
 
         {certifications.length > 0 ? (
           <PdfSection
+            sectionId="certifications"
             title="Certifications"
             keepTogether={keepCertificationsTogether}
           >
@@ -419,7 +403,11 @@ export function ResumePdfBody({ data, styles }: ResumePdfBodyProps) {
         ) : null}
 
         {links.length > 0 ? (
-          <PdfSection title="Links" keepTogether={keepLinksTogether}>
+          <PdfSection
+            sectionId="links"
+            title="Links"
+            keepTogether={keepLinksTogether}
+          >
             {links.map((entry, index) => (
               <View
                 key={entry.id}

@@ -18,10 +18,10 @@ import {
   isSkillVisible,
 } from "@/lib/resume/resume-display-utils";
 import type { ResumePreviewTemplateClasses } from "@/lib/resume/preview-template-styles";
+import { ResumeSectionHeader } from "@/components/resume/ResumeSectionHeader";
 import {
   isResumeModernContactIconId,
   RESUME_MODERN_CONTACT_ICONS,
-  RESUME_MODERN_SECTION_ICONS,
   type ResumeModernSectionId,
 } from "@/lib/resume/resume-modern-icons";
 import { cn } from "@/lib/utils";
@@ -43,18 +43,14 @@ function PreviewSection({
   children: React.ReactNode;
   classes: ResumePreviewTemplateClasses;
 }) {
-  const SectionIcon = RESUME_MODERN_SECTION_ICONS[sectionId];
-
   return (
     <section className={classes.section}>
-      {classes.layout === "modern" ? (
-        <div className={classes.sectionTitleRow}>
-          <SectionIcon className={classes.sectionIcon} aria-hidden />
-          <h2 className={classes.sectionTitle}>{title}</h2>
-        </div>
-      ) : (
-        <h2 className={classes.sectionTitle}>{title}</h2>
-      )}
+      <ResumeSectionHeader
+        mode="preview"
+        sectionId={sectionId}
+        title={title}
+        classes={classes}
+      />
       <div className={classes.sectionBody}>{children}</div>
     </section>
   );

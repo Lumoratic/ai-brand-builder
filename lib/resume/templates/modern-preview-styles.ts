@@ -1,4 +1,8 @@
 import type { ResumePreviewTemplateClasses } from "@/lib/resume/templates/preview-types";
+import {
+  RESUME_SECTION_HEADER_PREVIEW_GAP_CLASS,
+  RESUME_SECTION_HEADER_PREVIEW_ICON_BASE,
+} from "@/lib/resume/resume-section-header";
 
 /** Accent — name, section headings/icons, and links only */
 const accentText = "text-blue-600";
@@ -17,7 +21,7 @@ const metaTone = "text-zinc-500";
 const subtitleTone = "text-zinc-600";
 const contactIconTone = "text-zinc-600";
 
-const sectionIconSize = "h-[18px] w-[18px]";
+const sectionIconSize = RESUME_SECTION_HEADER_PREVIEW_ICON_BASE;
 
 const skillChipBase =
   "rounded border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-zinc-600";
@@ -32,8 +36,8 @@ const modernShared = {
   contactLink: accentLink,
   linkMuted: "text-zinc-400",
   linkUrl: `break-all ${accentLink}`,
-  sectionTitleRow: `flex items-center gap-2.5 ${neutralSectionRule} pb-2`,
-  sectionIcon: `${sectionIconSize} shrink-0 ${accentIcon}`,
+  sectionTitleRow: `flex items-center ${RESUME_SECTION_HEADER_PREVIEW_GAP_CLASS} ${neutralSectionRule} pb-2`,
+  sectionIcon: `${sectionIconSize} ${accentIcon}`,
   entryTitleRow: "flex items-start gap-2.5",
   entryDot: `mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full ${neutralDot}`,
 };

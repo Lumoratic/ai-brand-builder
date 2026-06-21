@@ -1,5 +1,9 @@
 import { StyleSheet } from "@react-pdf/renderer";
 import type { ResumePdfLayout } from "@/lib/resume/templates/pdf-types";
+import {
+  RESUME_SECTION_HEADER_GAP_PT,
+  RESUME_SECTION_HEADER_ICON_SIZE_PT,
+} from "@/lib/resume/resume-section-header";
 
 const ACCENT = "#2563eb";
 const ZINC_200 = "#e4e4e7";
@@ -27,7 +31,11 @@ const modernShared = {
     paddingBottom: 0,
     marginBottom: 0,
   },
-  sectionIcon: {},
+  sectionIcon: {
+    width: RESUME_SECTION_HEADER_ICON_SIZE_PT,
+    height: RESUME_SECTION_HEADER_ICON_SIZE_PT,
+    marginRight: RESUME_SECTION_HEADER_GAP_PT,
+  },
   contactLineRow: {},
   contactItem: {},
   contactIcon: {},
@@ -102,6 +110,7 @@ export function createModernProfessionalDensityPdfStyles() {
         color: ACCENT,
         letterSpacing: 1,
         textTransform: "uppercase",
+        lineHeight: 1,
         borderBottomWidth: 1,
         borderBottomColor: ZINC_200,
         paddingBottom: 4,
@@ -247,6 +256,7 @@ export function createModernCompactDensityPdfStyles() {
         color: ACCENT,
         letterSpacing: 0.85,
         textTransform: "uppercase",
+        lineHeight: 1,
         borderBottomWidth: 1,
         borderBottomColor: ZINC_200,
         paddingBottom: 3,
