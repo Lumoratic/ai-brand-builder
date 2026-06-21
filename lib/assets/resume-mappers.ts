@@ -1,5 +1,6 @@
 import type { Json } from "@/lib/database.types";
 import type { AssetRow } from "@/lib/assets/types";
+import { parseResumeRenderSettings } from "@/lib/resume/resume-templates";
 import {
   createEmptyResumeAssetData,
   isResumeAssetData,
@@ -167,9 +168,15 @@ export function parseResumeAssetData(value: Json | unknown): ResumeAssetData {
   const empty = createEmptyResumeAssetData();
   if (!isResumeAssetData(value)) return empty;
 
+  const renderSettings = isRecord(value)
+    ? parseResumeRenderSettings(value)
+    : parseResumeRenderSettings({});
+
   return {
     ...empty,
     version: value.version,
+    templateId: renderSettings.templateId,
+    density: renderSettings.density,
     personal: parsePersonal(value.personal),
     summary: typeof value.summary === "string" ? value.summary : "",
     experience: parseExperience(value.experience),

@@ -1,5 +1,15 @@
 export const RESUME_ASSET_DATA_VERSION = 1 as const;
 
+/** Visual resume design — controls layout identity and styling. */
+export const RESUME_TEMPLATE_IDS = ["classic", "modern", "sidebar"] as const;
+export type ResumeTemplateId = (typeof RESUME_TEMPLATE_IDS)[number];
+export const DEFAULT_RESUME_TEMPLATE_ID: ResumeTemplateId = "classic";
+
+/** Spacing mode — controls how much content fits per page. */
+export const RESUME_DENSITY_IDS = ["professional", "compact"] as const;
+export type ResumeDensityId = (typeof RESUME_DENSITY_IDS)[number];
+export const DEFAULT_RESUME_DENSITY_ID: ResumeDensityId = "professional";
+
 export type ResumePersonal = {
   fullName: string;
   professionalTitle: string;
@@ -65,6 +75,8 @@ export type ResumeLink = {
 /** Resume editor payload stored in assets.data (jsonb). */
 export type ResumeAssetData = {
   version: typeof RESUME_ASSET_DATA_VERSION;
+  templateId: ResumeTemplateId;
+  density: ResumeDensityId;
   personal: ResumePersonal;
   summary: string;
   experience: ResumeExperience[];
@@ -104,6 +116,8 @@ function emptyPersonal(): ResumePersonal {
 export function createEmptyResumeAssetData(): ResumeAssetData {
   return {
     version: RESUME_ASSET_DATA_VERSION,
+    templateId: DEFAULT_RESUME_TEMPLATE_ID,
+    density: DEFAULT_RESUME_DENSITY_ID,
     personal: emptyPersonal(),
     summary: "",
     experience: [],

@@ -9,6 +9,8 @@ import {
   type ResumeLink,
   type ResumePersonal,
   type ResumeSkill,
+  type ResumeTemplateId,
+  type ResumeDensityId,
 } from "@/lib/assets/resume-data";
 
 export type ResumeSyncStatus =
@@ -30,6 +32,8 @@ type ResumeState = {
     value: ResumePersonal[K]
   ) => void;
   setSummary: (summary: string) => void;
+  setTemplateId: (templateId: ResumeTemplateId) => void;
+  setDensity: (density: ResumeDensityId) => void;
   addExperience: () => void;
   updateExperience: (
     id: string,
@@ -149,6 +153,14 @@ export const useResumeStore = create<ResumeState>((set) => ({
   setSummary: (summary) =>
     set((state) => ({
       data: { ...state.data, summary },
+    })),
+  setTemplateId: (templateId) =>
+    set((state) => ({
+      data: { ...state.data, templateId },
+    })),
+  setDensity: (density) =>
+    set((state) => ({
+      data: { ...state.data, density },
     })),
   addExperience: () =>
     set((state) => ({
@@ -335,6 +347,12 @@ export const useSetResumePersonalField = () =>
 
 export const useSetResumeSummary = () =>
   useResumeStore((state) => state.setSummary);
+
+export const useSetResumeTemplateId = () =>
+  useResumeStore((state) => state.setTemplateId);
+
+export const useSetResumeDensity = () =>
+  useResumeStore((state) => state.setDensity);
 
 export const useAddResumeExperience = () =>
   useResumeStore((state) => state.addExperience);
